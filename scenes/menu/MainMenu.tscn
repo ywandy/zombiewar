@@ -1,21 +1,18 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/menu/main_menu.gd" id="1_menu"]
-[ext_resource type="PackedScene" path="res://scenes/menu/MenuBackdrop.tscn" id="2_backdrop"]
-[ext_resource type="AudioStream" path="res://assets/sfx/boxhead/ui_click.mp3" id="3_click"]
-[ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="6_cjk_font"]
-[ext_resource type="PackedScene" path="res://scenes/ui/MobileOrientationGuard.tscn" id="7_orientation_guard"]
-
-[sub_resource type="Gradient" id="Gradient_left_shade"]
-offsets = PackedFloat32Array(0, 0.48, 0.72, 1)
-colors = PackedColorArray(0.012, 0.017, 0.019, 0.98, 0.012, 0.017, 0.019, 0.86, 0.012, 0.017, 0.019, 0.28, 0.012, 0.017, 0.019, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_left_shade"]
-gradient = SubResource("Gradient_left_shade")
-width = 1024
-height = 2
-fill_from = Vector2(0, 0.5)
-fill_to = Vector2(1, 0.5)
+[ext_resource type="Texture2D" path="res://assets/ui/menu/bg.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/hero.png" id="3_hero"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_coin.png" id="4_coin"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_local.png" id="5_local"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_online.png" id="6_online"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_codex.png" id="7_codex"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_upgrade.png" id="8_upgrade"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_leaderboard.png" id="9_leaderboard"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/icon_settings.png" id="10_settings"]
+[ext_resource type="AudioStream" path="res://assets/sfx/boxhead/ui_click.mp3" id="11_click"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="12_font"]
+[ext_resource type="PackedScene" path="res://scenes/ui/MobileOrientationGuard.tscn" id="13_guard"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_button_normal"]
 bg_color = Color(0.075, 0.09, 0.095, 0.94)
@@ -28,23 +25,9 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-content_margin_left = 22.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_button_hover"]
 bg_color = Color(0.55, 0.09, 0.07, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.72, 0.2, 0.14, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-content_margin_left = 22.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBox_button_primary"]
-bg_color = Color(0.62, 0.12, 0.09, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -54,20 +37,31 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-content_margin_left = 22.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_button_disabled"]
-bg_color = Color(0.045, 0.052, 0.055, 0.9)
+[sub_resource type="StyleBoxFlat" id="StyleBox_button_primary"]
+bg_color = Color(0.62, 0.12, 0.09, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.31, 0.12, 0.1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-content_margin_left = 22.0
+border_color = Color(0.85, 0.32, 0.22, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_icon_btn"]
+bg_color = Color(0.05, 0.062, 0.066, 0.82)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_dialog_panel"]
 bg_color = Color(0.035, 0.043, 0.045, 0.98)
@@ -83,33 +77,46 @@ corner_radius_bottom_left = 5
 shadow_color = Color(0, 0, 0, 0.6)
 shadow_size = 18
 
-[node name="MainMenu" type="Node3D"]
-script = ExtResource("1_menu")
-
-[node name="MenuBackdrop" parent="." instance=ExtResource("2_backdrop")]
-
-[node name="SelectAudio" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_click")
-
-[node name="ConfirmAudio" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_click")
-
-[node name="BackAudio" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_click")
-
-[node name="MobileOrientationGuard" parent="." instance=ExtResource("7_orientation_guard")]
-
-[node name="MenuLayer" type="CanvasLayer" parent="."]
-
-[node name="MenuRoot" type="Control" parent="MenuLayer"]
+[node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_menu")
 
-[node name="LeftShade" type="TextureRect" parent="MenuLayer/MenuRoot"]
+[node name="BgTex" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HeroTex" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -615.0
+offset_right = 200.0
+offset_bottom = -135.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("3_hero")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UILayer" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,192 +124,186 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_left_shade")
-expand_mode = 1
-stretch_mode = 6
 
-[node name="TopAccent" type="ColorRect" parent="MenuLayer/MenuRoot"]
+[node name="TopBar" type="HBoxContainer" parent="UILayer"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 5.0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = -24.0
+offset_bottom = 72.0
 grow_horizontal = 2
-mouse_filter = 2
-color = Color(0.71, 0.16, 0.12, 1)
-
-[node name="LeftColumn" type="VBoxContainer" parent="MenuLayer/MenuRoot"]
-layout_mode = 1
-anchor_left = 0.07
-anchor_top = 0.17
-anchor_right = 0.43
-anchor_bottom = 0.88
-theme_override_constants/separation = 11
-
-[node name="Eyebrow" type="Label" parent="MenuLayer/MenuRoot/LeftColumn"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.47, 0.34, 1)
-theme_override_fonts/font_spacing_glyph = 5
-theme_override_font_sizes/font_size = 15
-text = "尸潮 · 肉鸽 · 生存"
-
-[node name="Title" type="Label" parent="MenuLayer/MenuRoot/LeftColumn"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_constants/line_spacing = -14
-theme_override_font_sizes/font_size = 92
-theme_override_fonts/font_variation = {"wght": 820, "wdth": 78}
-theme_override_fonts/font_spacing_glyph = -3
-text = "ZOMBIE\nWAR"
-vertical_alignment = 1
-
-[node name="RedRule" type="ColorRect" parent="MenuLayer/MenuRoot/LeftColumn"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(92, 5)
-layout_mode = 2
-size_flags_horizontal = 0
-mouse_filter = 2
-color = Color(0.71, 0.16, 0.12, 1)
-
-[node name="Subtitle" type="Label" parent="MenuLayer/MenuRoot/LeftColumn"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.73, 0.7, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 19
-text = "每一波都更强。你，也是。"
-
-[node name="Spacer" type="Control" parent="MenuLayer/MenuRoot/LeftColumn"]
-custom_minimum_size = Vector2(0, 8)
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="Actions" type="VBoxContainer" parent="MenuLayer/MenuRoot/LeftColumn"]
-layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="SinglePlayerButton" type="Button" parent="MenuLayer/MenuRoot/LeftColumn/Actions"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(390, 64)
+[node name="MaterialChip" type="HBoxContainer" parent="UILayer/TopBar"]
 layout_mode = 2
-focus_neighbor_bottom = NodePath("../LocalMultiplayerButton")
+theme_override_constants/separation = 8
+
+[node name="CoinIcon" type="TextureRect" parent="UILayer/TopBar/MaterialChip"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_coin")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MaterialValue" type="Label" parent="UILayer/TopBar/MaterialChip"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("12_font")
+theme_override_font_sizes/font_size = 26
+text = "0"
+vertical_alignment = 1
+
+[node name="Spring" type="Control" parent="UILayer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SettingsButton" type="Button" parent="UILayer/TopBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_icon_btn")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/focus = SubResource("StyleBox_button_hover")
+icon = ExtResource("10_settings")
+expand_icon = true
+
+[node name="LeftRail" type="VBoxContainer" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -130.0
+offset_right = 88.0
+offset_bottom = 130.0
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="LocalButton" type="Button" parent="UILayer/LeftRail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_icon_btn")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/focus = SubResource("StyleBox_button_hover")
+icon = ExtResource("5_local")
+expand_icon = true
+
+[node name="OnlineButton" type="Button" parent="UILayer/LeftRail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_icon_btn")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/focus = SubResource("StyleBox_button_hover")
+icon = ExtResource("6_online")
+expand_icon = true
+
+[node name="RightRail" type="VBoxContainer" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 6
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -170.0
+offset_right = -24.0
+offset_bottom = 170.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="CodexButton" type="Button" parent="UILayer/RightRail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_icon_btn")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/focus = SubResource("StyleBox_button_hover")
+icon = ExtResource("7_codex")
+expand_icon = true
+
+[node name="UpgradeButton" type="Button" parent="UILayer/RightRail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_icon_btn")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/focus = SubResource("StyleBox_button_hover")
+icon = ExtResource("8_upgrade")
+expand_icon = true
+
+[node name="LeaderboardButton" type="Button" parent="UILayer/RightRail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_icon_btn")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_hover")
+theme_override_styles/focus = SubResource("StyleBox_button_hover")
+icon = ExtResource("9_leaderboard")
+expand_icon = true
+
+[node name="StartButton" type="Button" parent="UILayer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 84)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -130.0
+offset_right = 160.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_colors/font_color = Color(1, 0.98, 0.96, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 27
+theme_override_fonts/font = ExtResource("12_font")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBox_button_primary")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
 theme_override_styles/pressed = SubResource("StyleBox_button_hover")
 theme_override_styles/focus = SubResource("StyleBox_button_primary")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
-text = "单人游戏"
-alignment = 0
+text = "开始游戏"
 
-[node name="LocalMultiplayerButton" type="Button" parent="MenuLayer/MenuRoot/LeftColumn/Actions"]
+[node name="ToastLabel" type="Label" parent="UILayer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(390, 64)
-layout_mode = 2
-focus_neighbor_top = NodePath("../SinglePlayerButton")
-focus_neighbor_bottom = NodePath("../OnlineMultiplayerButton")
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBox_button_normal")
-theme_override_styles/hover = SubResource("StyleBox_button_hover")
-theme_override_styles/pressed = SubResource("StyleBox_button_hover")
-theme_override_styles/focus = SubResource("StyleBox_button_hover")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
-text = "本地多人"
-alignment = 0
-
-[node name="OnlineMultiplayerButton" type="Button" parent="MenuLayer/MenuRoot/LeftColumn/Actions"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(390, 64)
-layout_mode = 2
-focus_neighbor_top = NodePath("../LocalMultiplayerButton")
-focus_neighbor_bottom = NodePath("../LeaderboardButton")
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBox_button_normal")
-theme_override_styles/hover = SubResource("StyleBox_button_hover")
-theme_override_styles/pressed = SubResource("StyleBox_button_hover")
-theme_override_styles/focus = SubResource("StyleBox_button_hover")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
-text = "联机多人"
-alignment = 0
-
-[node name="LeaderboardButton" type="Button" parent="MenuLayer/MenuRoot/LeftColumn/Actions"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(390, 64)
-layout_mode = 2
-focus_neighbor_top = NodePath("../OnlineMultiplayerButton")
-focus_neighbor_bottom = NodePath("../QuitButton")
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBox_button_normal")
-theme_override_styles/hover = SubResource("StyleBox_button_hover")
-theme_override_styles/pressed = SubResource("StyleBox_button_hover")
-theme_override_styles/focus = SubResource("StyleBox_button_hover")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
-text = "排行榜"
-alignment = 0
-
-[node name="QuitButton" type="Button" parent="MenuLayer/MenuRoot/LeftColumn/Actions"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(390, 64)
-layout_mode = 2
-focus_neighbor_top = NodePath("../LeaderboardButton")
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBox_button_normal")
-theme_override_styles/hover = SubResource("StyleBox_button_hover")
-theme_override_styles/pressed = SubResource("StyleBox_button_hover")
-theme_override_styles/focus = SubResource("StyleBox_button_hover")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
-text = "退出游戏"
-alignment = 0
-
-[node name="FooterHint" type="Label" parent="MenuLayer/MenuRoot"]
-unique_name_in_owner = true
+visible = false
 layout_mode = 1
-anchor_left = 0.07
-anchor_top = 0.91
-anchor_right = 0.55
-anchor_bottom = 0.97
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.64, 0.67, 0.65, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
-theme_override_font_sizes/font_size = 15
-text = "↑↓ / 左摇杆 选择 · ENTER / A 确认"
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = -196.0
+offset_right = 240.0
+offset_bottom = -152.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("12_font")
+theme_override_font_sizes/font_size = 22
+text = "敬请期待"
+horizontal_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="MenuLayer/MenuRoot"]
-unique_name_in_owner = true
-layout_mode = 1
-anchor_left = 0.72
-anchor_top = 0.91
-anchor_right = 0.93
-anchor_bottom = 0.97
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.48, 0.5, 0.49, 1)
-theme_override_font_sizes/font_size = 14
-text = "v0.1"
-horizontal_alignment = 2
-
-[node name="FadeOverlay" type="ColorRect" parent="MenuLayer/MenuRoot"]
+[node name="FadeOverlay" type="ColorRect" parent="UILayer"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -313,7 +314,18 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
-[node name="ExitDialog" type="Control" parent="MenuLayer/MenuRoot"]
+[node name="SelectAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_click")
+
+[node name="ConfirmAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_click")
+
+[node name="BackAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_click")
+
+[node name="MobileOrientationGuard" parent="." instance=ExtResource("13_guard")]
+
+[node name="ExitDialog" type="Control" parent="UILayer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -323,7 +335,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Dimmer" type="ColorRect" parent="MenuLayer/MenuRoot/ExitDialog"]
+[node name="Dimmer" type="ColorRect" parent="UILayer/ExitDialog"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -332,7 +344,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.005, 0.007, 0.008, 0.76)
 
-[node name="DialogPanel" type="PanelContainer" parent="MenuLayer/MenuRoot/ExitDialog"]
+[node name="DialogPanel" type="PanelContainer" parent="UILayer/ExitDialog"]
 custom_minimum_size = Vector2(520, 250)
 layout_mode = 1
 anchors_preset = 8
@@ -348,45 +360,45 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBox_dialog_panel")
 
-[node name="DialogMargin" type="MarginContainer" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel"]
+[node name="DialogMargin" type="MarginContainer" parent="UILayer/ExitDialog/DialogPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 34
 theme_override_constants/margin_top = 28
 theme_override_constants/margin_right = 34
 theme_override_constants/margin_bottom = 28
 
-[node name="DialogContent" type="VBoxContainer" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin"]
+[node name="DialogContent" type="VBoxContainer" parent="UILayer/ExitDialog/DialogPanel/DialogMargin"]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="DialogTitle" type="Label" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent"]
+[node name="DialogTitle" type="Label" parent="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
+theme_override_fonts/font = ExtResource("12_font")
 theme_override_font_sizes/font_size = 30
 text = "确认退出？"
 
-[node name="DialogMessage" type="Label" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent"]
+[node name="DialogMessage" type="Label" parent="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.73, 0.7, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
+theme_override_fonts/font = ExtResource("12_font")
 theme_override_font_sizes/font_size = 18
 text = "这一局的进度不会保存。"
 
-[node name="DialogActions" type="HBoxContainer" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent"]
+[node name="DialogActions" type="HBoxContainer" parent="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 14
 alignment = 2
 
-[node name="CancelExitButton" type="Button" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions"]
+[node name="CancelExitButton" type="Button" parent="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 54)
 layout_mode = 2
 focus_neighbor_right = NodePath("../ConfirmExitButton")
 size_flags_vertical = 8
 theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
+theme_override_fonts/font = ExtResource("12_font")
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBox_button_normal")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
@@ -394,14 +406,14 @@ theme_override_styles/pressed = SubResource("StyleBox_button_hover")
 theme_override_styles/focus = SubResource("StyleBox_button_hover")
 text = "返回"
 
-[node name="ConfirmExitButton" type="Button" parent="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions"]
+[node name="ConfirmExitButton" type="Button" parent="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 focus_neighbor_left = NodePath("../CancelExitButton")
 size_flags_vertical = 8
 theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("6_cjk_font")
+theme_override_fonts/font = ExtResource("12_font")
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBox_button_normal")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
@@ -409,20 +421,26 @@ theme_override_styles/pressed = SubResource("StyleBox_button_hover")
 theme_override_styles/focus = SubResource("StyleBox_button_hover")
 text = "确认退出"
 
-[connection signal="focus_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/SinglePlayerButton" to="." method="_on_action_focused"]
-[connection signal="mouse_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/SinglePlayerButton" to="." method="_on_action_focused"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/LeftColumn/Actions/SinglePlayerButton" to="." method="_on_single_player_button_pressed"]
-[connection signal="focus_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/LocalMultiplayerButton" to="." method="_on_action_focused"]
-[connection signal="mouse_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/LocalMultiplayerButton" to="." method="_on_action_focused"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/LeftColumn/Actions/LocalMultiplayerButton" to="." method="_on_local_multiplayer_button_pressed"]
-[connection signal="focus_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/OnlineMultiplayerButton" to="." method="_on_action_focused"]
-[connection signal="mouse_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/OnlineMultiplayerButton" to="." method="_on_action_focused"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/LeftColumn/Actions/OnlineMultiplayerButton" to="." method="_on_online_multiplayer_button_pressed"]
-[connection signal="focus_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/LeaderboardButton" to="." method="_on_action_focused"]
-[connection signal="mouse_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/LeaderboardButton" to="." method="_on_action_focused"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/LeftColumn/Actions/LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
-[connection signal="focus_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/QuitButton" to="." method="_on_action_focused"]
-[connection signal="mouse_entered" from="MenuLayer/MenuRoot/LeftColumn/Actions/QuitButton" to="." method="_on_action_focused"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/LeftColumn/Actions/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions/CancelExitButton" to="." method="_on_cancel_exit_button_pressed"]
-[connection signal="pressed" from="MenuLayer/MenuRoot/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions/ConfirmExitButton" to="." method="_on_confirm_exit_button_pressed"]
+[connection signal="focus_entered" from="UILayer/LeftRail/LocalButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/LeftRail/LocalButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/LeftRail/LocalButton" to="." method="_on_local_button_pressed"]
+[connection signal="focus_entered" from="UILayer/LeftRail/OnlineButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/LeftRail/OnlineButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/LeftRail/OnlineButton" to="." method="_on_online_button_pressed"]
+[connection signal="focus_entered" from="UILayer/RightRail/CodexButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/RightRail/CodexButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/RightRail/CodexButton" to="." method="_on_codex_button_pressed"]
+[connection signal="focus_entered" from="UILayer/RightRail/UpgradeButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/RightRail/UpgradeButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/RightRail/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="focus_entered" from="UILayer/RightRail/LeaderboardButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/RightRail/LeaderboardButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/RightRail/LeaderboardButton" to="." method="_on_leaderboard_button_pressed"]
+[connection signal="focus_entered" from="UILayer/TopBar/SettingsButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/TopBar/SettingsButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/TopBar/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="focus_entered" from="UILayer/StartButton" to="." method="_on_action_focused"]
+[connection signal="mouse_entered" from="UILayer/StartButton" to="." method="_on_action_focused"]
+[connection signal="pressed" from="UILayer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions/CancelExitButton" to="." method="_on_cancel_exit_button_pressed"]
+[connection signal="pressed" from="UILayer/ExitDialog/DialogPanel/DialogMargin/DialogContent/DialogActions/ConfirmExitButton" to="." method="_on_confirm_exit_button_pressed"]

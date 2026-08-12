@@ -1,4 +1,4 @@
-extends Node3D
+extends Control
 
 const MenuFlow = preload("res://scripts/menu/menu_flow.gd")
 
@@ -7,129 +7,116 @@ const MenuFlow = preload("res://scripts/menu/menu_flow.gd")
 @export_file("*.tscn") var online_lobby_scene_path := "res://scenes/menu/OnlineLobby.tscn"
 @export_file("*.tscn") var leaderboard_scene_path := "res://scenes/menu/LeaderboardPanel.tscn"
 
-@onready var single_player_button: Button = %SinglePlayerButton
-@onready var local_multiplayer_button: Button = %LocalMultiplayerButton
-@onready var online_multiplayer_button: Button = %OnlineMultiplayerButton
+@onready var start_button: Button = %StartButton
+@onready var local_button: Button = %LocalButton
+@onready var online_button: Button = %OnlineButton
 @onready var leaderboard_button: Button = %LeaderboardButton
-@onready var quit_button: Button = %QuitButton
+@onready var codex_button: Button = %CodexButton
+@onready var upgrade_button: Button = %UpgradeButton
+@onready var settings_button: Button = %SettingsButton
+@onready var material_value: Label = %MaterialValue
+@onready var hero_tex: TextureRect = %HeroTex
+@onready var toast_label: Label = %ToastLabel
 @onready var exit_dialog: Control = %ExitDialog
 @onready var confirm_exit_button: Button = %ConfirmExitButton
 @onready var fade_overlay: ColorRect = %FadeOverlay
 @onready var select_audio: AudioStreamPlayer = $SelectAudio
 @onready var confirm_audio: AudioStreamPlayer = $ConfirmAudio
 @onready var back_audio: AudioStreamPlayer = $BackAudio
-@onready var eyebrow: Label = %Eyebrow
-@onready var title: Label = %Title
-@onready var red_rule: ColorRect = %RedRule
-@onready var subtitle: Label = %Subtitle
-@onready var footer_hint: Label = %FooterHint
-@onready var version_label: Label = %VersionLabel
 
 var flow := MenuFlow.new()
+var _toast_tween: Tween = null
 
 func _ready() -> void:
-	single_player_button.grab_focus()
-	_play_boot_sequence()
-	_fit_left_column()
-	get_viewport().size_changed.connect(_fit_left_column)
-
-## 左列按可用高度整体缩放：视口越矮，列按比例收小，标题、按钮、间距一起缩，
-## 任何窗口高度下都不会把按钮顶到页脚上。1.0 为设计尺寸，只缩不放。
-func _fit_left_column() -> void:
-	var col := $MenuLayer/MenuRoot/LeftColumn as VBoxContainer
-	var viewport_height := get_viewport().get_visible_rect().size.y
-	var natural := col.get_combined_minimum_size().y
-	var available := (0.88 - 0.17) * viewport_height
-	var scale_factor: float = clampf(available / maxf(natural, 1.0), 0.55, 1.0)
-	col.scale = Vector2(scale_factor, scale_factor)
-
-## The menu opens like a boot sequence: each element wipes in from the left,
-## staggered, so the composition assembles instead of just appearing.
-func _play_boot_sequence() -> void:
-	MenuEntrance.play(self, _entrance_elements(), 1)
-	_breathe_title()
+	_refresh_material()
+	start_button.grab_focus()
+	MenuEntrance.play(self, _entrance_elements(), 0)
+	_breathe_hero()
 
 func _entrance_elements() -> Array:
 	return [
-		eyebrow, title, red_rule, subtitle,
-		single_player_button, local_multiplayer_button,
-		online_multiplayer_button, leaderboard_button, quit_button,
-		footer_hint, version_label,
+		material_value, codex_button, upgrade_button, settings_button,
+		local_button, online_button, leaderboard_button,
+		hero_tex, start_button,
 	]
 
-func _breathe_title() -> void:
-	# A faint warm pulse keeps the headline alive against the dark backdrop.
-	var pulse := create_tween().set_loops()
-	pulse.tween_property(title, "modulate", Color(1.0, 0.94, 0.9, 1.0), 2.6) \
+func _refresh_material() -> void:
+	var meta := get_node_or_null("/root/MetaProgression")
+	material_value.text = str(meta.get_banked_material() if meta != null else 0)
+
+## 主角轻微上下浮动，让静态画面不至于死板。
+func _breathe_hero() -> void:
+	var base := hero_tex.position.y
+	var t := create_tween().set_loops()
+	t.tween_property(hero_tex, "position:y", base - 8.0, 1.8) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	pulse.tween_property(title, "modulate", Color(1.0, 1.0, 1.0, 1.0), 2.6) \
+	t.tween_property(hero_tex, "position:y", base, 1.8) \
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
-func _unhandled_input(event: InputEvent) -> void:
-	var joy_button := event as InputEventJoypadButton
-	var joy_a_pressed := (
-		joy_button != null and joy_button.pressed and
-		joy_button.button_index == JOY_BUTTON_A
-	)
-	var joy_b_pressed := (
-		joy_button != null and joy_button.pressed and
-		joy_button.button_index == JOY_BUTTON_B
-	)
-	if (
-		(event.is_action_pressed("ui_cancel") or joy_b_pressed) and
-		flow.state == MenuFlow.State.EXIT_CONFIRM
-	):
-		_on_cancel_exit_button_pressed()
-		get_viewport().set_input_as_handled()
-	elif joy_a_pressed and _activate_focused_button():
-		get_viewport().set_input_as_handled()
+## 占位入口：图鉴/升级/设置尚未实现，点击提示「敬请期待」。
+func _show_toast(message: String) -> void:
+	toast_label.text = message
+	toast_label.modulate.a = 0.0
+	toast_label.show()
+	if _toast_tween != null:
+		_toast_tween.kill()
+	_toast_tween = create_tween()
+	_toast_tween.tween_property(toast_label, "modulate:a", 1.0, 0.15)
+	_toast_tween.tween_interval(1.2)
+	_toast_tween.tween_property(toast_label, "modulate:a", 0.0, 0.4)
 
-func _activate_focused_button() -> bool:
-	var focused_button := get_viewport().gui_get_focus_owner() as Button
-	if focused_button == null or focused_button.disabled:
-		return false
-	focused_button.pressed.emit()
-	return true
+# ---- 导航 ----
 
-func _on_single_player_button_pressed() -> void:
+func _on_start_button_pressed() -> void:
 	if not flow.request_single():
 		return
 	GameSession.begin_map_selection(GameSessionState.Mode.SINGLE)
 	_start_transition(map_selection_scene_path)
 
-func _on_local_multiplayer_button_pressed() -> void:
+func _on_local_button_pressed() -> void:
 	if not flow.request_local():
 		return
 	GameSession.begin_map_selection(GameSessionState.Mode.LOCAL_MULTIPLAYER)
 	_start_transition(map_selection_scene_path)
 
-func _on_online_multiplayer_button_pressed() -> void:
+func _on_online_button_pressed() -> void:
 	if not flow.request_local():
 		return
 	GameSession.clear()
 	_start_transition(online_lobby_scene_path)
 
-## 排行榜是只读页面，不开局，所以它不走 MenuFlow 的 STARTING 状态：
-## 走了的话从排行榜返回主菜单后所有按钮都会卡在禁用状态。
 func _on_leaderboard_button_pressed() -> void:
 	if flow.state != MenuFlow.State.READY:
 		return
 	confirm_audio.play()
 	get_tree().change_scene_to_file(leaderboard_scene_path)
 
+func _on_codex_button_pressed() -> void:
+	confirm_audio.play()
+	_show_toast("图鉴 · 敬请期待")
+
+func _on_upgrade_button_pressed() -> void:
+	confirm_audio.play()
+	_show_toast("升级 · 敬请期待")
+
+func _on_settings_button_pressed() -> void:
+	confirm_audio.play()
+	_show_toast("设置 · 敬请期待")
+
 func _start_transition(scene_path: String) -> void:
 	confirm_audio.play()
-	single_player_button.disabled = true
-	local_multiplayer_button.disabled = true
-	online_multiplayer_button.disabled = true
+	start_button.disabled = true
+	local_button.disabled = true
+	online_button.disabled = true
 	leaderboard_button.disabled = true
-	quit_button.disabled = true
 	var tween := create_tween()
 	tween.tween_property(fade_overlay, "color:a", 1.0, 0.32)
 	await tween.finished
 	get_tree().change_scene_to_file(scene_path)
 
-func _on_quit_button_pressed() -> void:
+# ---- 退出 ----
+
+func _on_quit_requested() -> void:
 	if not flow.request_exit():
 		return
 	confirm_audio.play()
@@ -145,7 +132,29 @@ func _on_cancel_exit_button_pressed() -> void:
 		return
 	back_audio.play()
 	exit_dialog.hide()
-	quit_button.grab_focus()
+
+func _unhandled_input(event: InputEvent) -> void:
+	var joy_button := event as InputEventJoypadButton
+	var joy_a := joy_button != null and joy_button.pressed and \
+		joy_button.button_index == JOY_BUTTON_A
+	var joy_b := joy_button != null and joy_button.pressed and \
+		joy_button.button_index == JOY_BUTTON_B
+	if (event.is_action_pressed("ui_cancel") or joy_b) and \
+			flow.state == MenuFlow.State.EXIT_CONFIRM:
+		_on_cancel_exit_button_pressed()
+		get_viewport().set_input_as_handled()
+	elif joy_a and _activate_focused_button():
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("ui_cancel") and flow.state == MenuFlow.State.READY:
+		_on_quit_requested()
+		get_viewport().set_input_as_handled()
+
+func _activate_focused_button() -> bool:
+	var focused_button := get_viewport().gui_get_focus_owner() as Button
+	if focused_button == null or focused_button.disabled:
+		return false
+	focused_button.pressed.emit()
+	return true
 
 func _on_action_focused() -> void:
 	if not select_audio.playing:
