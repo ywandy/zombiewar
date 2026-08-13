@@ -44,6 +44,8 @@ func _run() -> void:
 	_test_ledger_drives_equipment(arena, world, equipment)
 	_test_firing_frees_pickup_capacity(arena, world, equipment)
 	_test_shop_writes_the_ledger(arena, world, equipment)
+	_test_shop_signal_path_writes_the_ledger(arena, world, equipment)
+	_test_shop_weapon_mod_writes_the_ledger(arena, world)
 	_test_placing_oil_debits_the_ledger(arena, world, equipment)
 	_test_placement_arrives_over_the_frame_channel(arena, world, equipment)
 	_finish()
@@ -148,6 +150,81 @@ func _test_shop_writes_the_ledger(arena, world, equipment) -> void:
 	_check(
 		"buying an owned weapon must not charge for a single round",
 		world.get_player_material(0) == material_after_ammo
+	)
+
+
+## 上面那条测的是 _buy_equipment_local()，可玩家点的是卡片。真正跑的链路是
+## ShopPanel.buy_requested → _on_shop_buy(offer_index) → 按 offer_type 分派，
+## 中间那一层分派表漏掉一种类型，_buy_equipment_local 自己测得再绿也照样是
+## 「买了枪背包里没有」。所以这里从 offer_index 进。
+func _test_shop_signal_path_writes_the_ledger(arena, world, equipment) -> void:
+	var weapon_profile: int = world.inventory_weapon_profile_index(&"rifle")
+	if weapon_profile < 0:
+		_check("rifle must have an inventory profile", false)
+		return
+	world.add_player_material(0, 1000)
+	var offer := ShopOfferDefinition.new()
+	offer.offer_type = ShopOfferDefinition.OfferType.WEAPON
+	offer.weapon_id = &"rifle"
+	offer.price = 60
+	offer.display_name = "步枪"
+	# _shop_offers 是 Array[ShopOfferDefinition]，塞裸 Array 会在赋值处被拒
+	var weapon_offers: Array[ShopOfferDefinition] = [offer]
+	arena._shop_offers = weapon_offers
+	arena._on_shop_buy(0)
+	_check(
+		"a weapon bought through buy_requested must land in the ledger",
+		world.inventory_amount_of(0, weapon_profile) > 0
+	)
+	var rifle = equipment.get_item_by_id(&"rifle")
+	_check(
+		"a weapon bought through buy_requested must reach the equipment",
+		rifle != null and rifle.is_available()
+	)
+
+
+## 改装件走的是模拟命令通道，效果落在 player_mod_level 上。但背包面板读的是
+## **槽位**，拾取路径在 grant_weapon_mod() 之后还会写一次槽位；商店路径漏掉那一步，
+## 现象就是「改装买了有效果、背包里查不到、再买一次等级也不变」。
+func _test_shop_weapon_mod_writes_the_ledger(arena, world) -> void:
+	var mod_index: int = WeaponModTable.MOD_IDS.find(&"pierce")
+	_check("pierce must exist in WeaponModTable", mod_index >= 0)
+	if mod_index < 0:
+		return
+	var mod_profile: int = world.inventory_mod_profile_index(&"pierce")
+	_check("pierce must have an inventory profile", mod_profile >= 0)
+	world.add_player_material(0, 1000)
+	var level_before: int = world.get_weapon_mod_level(0, mod_index)
+	var offer := ShopOfferDefinition.new()
+	offer.offer_type = ShopOfferDefinition.OfferType.WEAPON_MOD
+	offer.weapon_mod_id = &"pierce"
+	offer.weapon_mod_stacks = 1
+	offer.price = 35
+	offer.display_name = "破甲镐"
+	var mod_offers: Array[ShopOfferDefinition] = [offer]
+	arena._shop_offers = mod_offers
+	arena._on_shop_buy(0)
+	world.step_tick()
+	_check(
+		"a bought weapon mod must raise its level",
+		world.get_weapon_mod_level(0, mod_index) == level_before + 1
+	)
+	if mod_profile < 0:
+		return
+	_check(
+		"a bought weapon mod must appear in the inventory ledger",
+		world.inventory_amount_of(0, mod_profile) == level_before + 1
+	)
+	# 再买一次，等级和背包里的层数都要跟着涨
+	arena._on_shop_buy(0)
+	world.step_tick()
+	_check(
+		"buying the same mod again must raise its level",
+		world.get_weapon_mod_level(0, mod_index) == level_before + 2
+	)
+	_check(
+		"buying the same mod again must raise the ledger amount",
+		world.inventory_amount_of(0, mod_profile) == level_before + 2
 	)
 
 

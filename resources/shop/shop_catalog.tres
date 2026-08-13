@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ShopCatalog" load_steps=16 format=3]
+[gd_resource type="Resource" script_class="ShopCatalog" load_steps=25 format=3]
 
 [ext_resource type="Script" path="res://scripts/shop/shop_catalog.gd" id="1_catalog"]
 [ext_resource type="Script" path="res://scripts/shop/shop_offer_definition.gd" id="2_offer"]
@@ -116,6 +116,68 @@ ammo_amount = 20
 price = 12
 display_name = "散弹枪弹药 ×20"
 
+[sub_resource type="Resource" id="offer_mod_damage"]
+script = ExtResource("2_offer")
+offer_type = 5
+weapon_mod_id = &"damage"
+weapon_mod_stacks = 1
+price = 30
+display_name = "磨利的斧刃"
+effect_text = "全武器伤害 +8%"
+
+[sub_resource type="Resource" id="offer_mod_pierce"]
+script = ExtResource("2_offer")
+offer_type = 5
+weapon_mod_id = &"pierce"
+weapon_mod_stacks = 1
+price = 35
+display_name = "破甲镐"
+effect_text = "穿透 +1 个目标"
+
+[sub_resource type="Resource" id="offer_mod_split"]
+script = ExtResource("2_offer")
+offer_type = 5
+weapon_mod_id = &"split"
+weapon_mod_stacks = 1
+price = 40
+display_name = "分裂弹膛"
+effect_text = "弹丸 +1，单颗伤害 -28%"
+
+[sub_resource type="Resource" id="offer_mod_compensator"]
+script = ExtResource("2_offer")
+offer_type = 5
+weapon_mod_id = &"compensator"
+weapon_mod_stacks = 1
+price = 28
+display_name = "枪口补偿器"
+effect_text = "连射散布增量 -40%"
+
+[sub_resource type="Resource" id="offer_mod_heavy_core"]
+script = ExtResource("2_offer")
+offer_type = 5
+weapon_mod_id = &"heavy_core"
+weapon_mod_stacks = 1
+price = 45
+display_name = "重型弹芯"
+effect_text = "伤害 +25%，代价：基础散布 +0.6°"
+
+[sub_resource type="Resource" id="offer_mod_hollow_point"]
+script = ExtResource("2_offer")
+offer_type = 5
+weapon_mod_id = &"hollow_point"
+weapon_mod_stacks = 1
+price = 45
+display_name = "空尖弹"
+effect_text = "伤害 +35%，代价：穿透 -1"
+
+[sub_resource type="Resource" id="offer_oil"]
+script = ExtResource("2_offer")
+offer_type = 6
+oil_amount = 30
+price = 20
+display_name = "油桶 ×30"
+effect_text = "可放置的爆炸桶"
+
 [resource]
 script = ExtResource("1_catalog")
-entries = [SubResource("offer_damage_small"), SubResource("offer_damage_mid"), SubResource("offer_damage_big"), SubResource("offer_health_small"), SubResource("offer_health_big"), SubResource("offer_speed"), SubResource("offer_heal_small"), SubResource("offer_heal_big"), SubResource("offer_smg"), SubResource("offer_shotgun"), SubResource("offer_rifle"), SubResource("offer_blast_armor"), SubResource("offer_medic_aura"), SubResource("offer_ammo_smg"), SubResource("offer_ammo_shotgun")]
+entries = [SubResource("offer_damage_small"), SubResource("offer_damage_mid"), SubResource("offer_damage_big"), SubResource("offer_health_small"), SubResource("offer_health_big"), SubResource("offer_speed"), SubResource("offer_heal_small"), SubResource("offer_heal_big"), SubResource("offer_smg"), SubResource("offer_shotgun"), SubResource("offer_rifle"), SubResource("offer_blast_armor"), SubResource("offer_medic_aura"), SubResource("offer_ammo_smg"), SubResource("offer_ammo_shotgun"), SubResource("offer_mod_damage"), SubResource("offer_mod_pierce"), SubResource("offer_mod_split"), SubResource("offer_mod_compensator"), SubResource("offer_mod_heavy_core"), SubResource("offer_mod_hollow_point"), SubResource("offer_oil")]

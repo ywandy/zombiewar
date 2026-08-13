@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="MapDefinition" load_steps=79 format=3]
+[gd_resource type="Resource" script_class="MapDefinition" load_steps=64 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/map/map_definition.gd" id="1_map_definition"]
 [ext_resource type="Script" path="res://scripts/gameplay/map/map_spawn_point_definition.gd" id="2_spawn_point_definition"]
@@ -10,21 +10,12 @@
 [ext_resource type="Script" path="res://scripts/gameplay/map/death_event_definition.gd" id="8_death_event_definition"]
 [ext_resource type="PackedScene" path="res://scenes/maps/demo/DemoMapContent.tscn" id="9_content_scene"]
 [ext_resource type="Resource" path="res://resources/zombies/normal_zombie.tres" id="10_normal_zombie"]
-[ext_resource type="Resource" path="res://resources/pickups/smg_pickup.tres" id="11_smg_pickup"]
 [ext_resource type="Resource" path="res://resources/pickups/smg_ammo_pickup.tres" id="12_smg_ammo_pickup"]
-[ext_resource type="Resource" path="res://resources/pickups/oil_barrel_pickup.tres" id="13_oil_barrel_pickup"]
 [ext_resource type="Resource" path="res://resources/zombies/runner_zombie.tres" id="14_runner_zombie"]
 [ext_resource type="Resource" path="res://resources/zombies/tank_zombie.tres" id="15_tank_zombie"]
-[ext_resource type="Resource" path="res://resources/pickups/shotgun_pickup.tres" id="16_shotgun_pickup"]
 [ext_resource type="Resource" path="res://resources/pickups/shotgun_ammo_pickup.tres" id="17_shotgun_ammo_pickup"]
-[ext_resource type="Resource" path="res://resources/pickups/rifle_pickup.tres" id="18_rifle_pickup"]
 [ext_resource type="Resource" path="res://resources/pickups/rifle_ammo_pickup.tres" id="19_rifle_ammo_pickup"]
-[ext_resource type="Resource" path="res://resources/mods/mod_damage_1.tres" id="20_mod_damage_1"]
-[ext_resource type="Resource" path="res://resources/mods/mod_pierce_1.tres" id="21_mod_pierce_1"]
-[ext_resource type="Resource" path="res://resources/mods/mod_split_1.tres" id="22_mod_split_1"]
-[ext_resource type="Resource" path="res://resources/mods/mod_compensator_1.tres" id="23_mod_compensator_1"]
-[ext_resource type="Resource" path="res://resources/mods/mod_heavy_core.tres" id="24_mod_heavy_core"]
-[ext_resource type="Resource" path="res://resources/mods/mod_hollow_point.tres" id="25_mod_hollow_point"]
+[ext_resource type="Resource" path="res://resources/pickups/medkit_pickup.tres" id="26_medkit_pickup"]
 
 [sub_resource type="Resource" id="Resource_spawn_north_west"]
 script = ExtResource("2_spawn_point_definition")
@@ -179,13 +170,21 @@ script = ExtResource("4_wave_definition")
 spawn_interval_ticks = 3
 zombie_entries = [SubResource("Resource_w8_normal"), SubResource("Resource_w8_runner"), SubResource("Resource_w8_tank")]
 
-[sub_resource type="Resource" id="Resource_fixed_smg"]
+[sub_resource type="Resource" id="Resource_fixed_medkit_a"]
 script = ExtResource("3_fixed_item_spawn_definition")
-spawn_id = &"01_smg"
-position_xz = Vector2(-4.5, 6)
-pickup = ExtResource("11_smg_pickup")
-amount = 60
-respawn_delay_ticks = 60
+spawn_id = &"03_medkit_a"
+position_xz = Vector2(4.5, 6)
+pickup = ExtResource("26_medkit_pickup")
+amount = 1
+respawn_delay_ticks = 600
+
+[sub_resource type="Resource" id="Resource_fixed_medkit_b"]
+script = ExtResource("3_fixed_item_spawn_definition")
+spawn_id = &"04_medkit_b"
+position_xz = Vector2(0, -6)
+pickup = ExtResource("26_medkit_pickup")
+amount = 1
+respawn_delay_ticks = 600
 
 [sub_resource type="Resource" id="Resource_fixed_smg_ammo"]
 script = ExtResource("3_fixed_item_spawn_definition")
@@ -195,92 +194,12 @@ pickup = ExtResource("12_smg_ammo_pickup")
 amount = 90
 respawn_delay_ticks = 60
 
-[sub_resource type="Resource" id="Resource_fixed_oil"]
-script = ExtResource("3_fixed_item_spawn_definition")
-spawn_id = &"03_oil"
-position_xz = Vector2(4.5, 6)
-pickup = ExtResource("13_oil_barrel_pickup")
-amount = 30
-respawn_delay_ticks = 60
-
-[sub_resource type="Resource" id="Resource_fixed_shotgun"]
-script = ExtResource("3_fixed_item_spawn_definition")
-spawn_id = &"04_shotgun"
-position_xz = Vector2(0, -6)
-pickup = ExtResource("16_shotgun_pickup")
-amount = 16
-respawn_delay_ticks = 600
-
-[sub_resource type="Resource" id="Resource_fixed_rifle"]
-script = ExtResource("3_fixed_item_spawn_definition")
-spawn_id = &"05_rifle"
-position_xz = Vector2(-8, -8)
-pickup = ExtResource("18_rifle_pickup")
-amount = 30
-respawn_delay_ticks = 600
-
-[sub_resource type="Resource" id="Resource_drop_mod_damage_1"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("20_mod_damage_1")
-amount = 1
-
-[sub_resource type="Resource" id="Resource_drop_mod_pierce_1"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("21_mod_pierce_1")
-amount = 1
-
-[sub_resource type="Resource" id="Resource_drop_mod_split_1"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("22_mod_split_1")
-amount = 1
-
-[sub_resource type="Resource" id="Resource_drop_mod_compensator_1"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("23_mod_compensator_1")
-amount = 1
-
-[sub_resource type="Resource" id="Resource_drop_mod_heavy_core"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("24_mod_heavy_core")
-amount = 1
-
-[sub_resource type="Resource" id="Resource_drop_mod_hollow_point"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("25_mod_hollow_point")
-amount = 1
-
-[sub_resource type="Resource" id="Resource_drop_smg"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("11_smg_pickup")
-amount = 60
-
 [sub_resource type="Resource" id="Resource_drop_smg_ammo"]
 script = ExtResource("8_death_event_definition")
 event_type = 0
 weight = 1
 pickup = ExtResource("12_smg_ammo_pickup")
 amount = 90
-
-[sub_resource type="Resource" id="Resource_drop_oil"]
-script = ExtResource("8_death_event_definition")
-event_type = 0
-weight = 1
-pickup = ExtResource("13_oil_barrel_pickup")
-amount = 30
 
 [sub_resource type="Resource" id="Resource_drop_shotgun_ammo"]
 script = ExtResource("8_death_event_definition")
@@ -317,6 +236,20 @@ weight = 1
 pickup = ExtResource("17_shotgun_ammo_pickup")
 amount = 12
 
+[sub_resource type="Resource" id="Resource_drop_medkit"]
+script = ExtResource("8_death_event_definition")
+event_type = 0
+weight = 1
+pickup = ExtResource("26_medkit_pickup")
+amount = 1
+
+[sub_resource type="Resource" id="Resource_tank_drop_medkit"]
+script = ExtResource("8_death_event_definition")
+event_type = 0
+weight = 2
+pickup = ExtResource("26_medkit_pickup")
+amount = 1
+
 [sub_resource type="Resource" id="Resource_drop_material_small"]
 script = ExtResource("8_death_event_definition")
 event_type = 1
@@ -335,13 +268,13 @@ material_drop_max = 18
 script = ExtResource("7_death_group_definition")
 group_id = &"common_drop"
 trigger_chance_per_10000 = 6000
-events = [SubResource("Resource_drop_smg"), SubResource("Resource_drop_smg_ammo"), SubResource("Resource_drop_oil"), SubResource("Resource_drop_shotgun_ammo"), SubResource("Resource_drop_rifle_ammo"), SubResource("Resource_drop_material_small"), SubResource("Resource_drop_material_medium"), SubResource("Resource_drop_mod_damage_1"), SubResource("Resource_drop_mod_pierce_1"), SubResource("Resource_drop_mod_split_1"), SubResource("Resource_drop_mod_compensator_1"), SubResource("Resource_drop_mod_heavy_core"), SubResource("Resource_drop_mod_hollow_point")]
+events = [SubResource("Resource_drop_smg_ammo"), SubResource("Resource_drop_shotgun_ammo"), SubResource("Resource_drop_rifle_ammo"), SubResource("Resource_drop_medkit"), SubResource("Resource_drop_material_small"), SubResource("Resource_drop_material_medium")]
 
 [sub_resource type="Resource" id="Resource_tank_drop_group"]
 script = ExtResource("7_death_group_definition")
 group_id = &"tank_drop"
 trigger_chance_per_10000 = 10000
-events = [SubResource("Resource_tank_drop_ammo"), SubResource("Resource_tank_drop_shotgun_ammo"), SubResource("Resource_tank_drop_rifle_ammo")]
+events = [SubResource("Resource_tank_drop_ammo"), SubResource("Resource_tank_drop_shotgun_ammo"), SubResource("Resource_tank_drop_rifle_ammo"), SubResource("Resource_tank_drop_medkit")]
 
 [sub_resource type="Resource" id="Resource_normal_death_rule"]
 script = ExtResource("6_death_rule_definition")
@@ -375,5 +308,5 @@ inter_wave_delay_ticks = 300
 player_spawn_positions = [Vector3(-1.2, 0, 6.2), Vector3(1.2, 0, 6.2), Vector3(-1.2, 0, 4.2), Vector3(1.2, 0, 4.2)]
 spawn_points = [SubResource("Resource_spawn_north_west"), SubResource("Resource_spawn_north_east"), SubResource("Resource_spawn_south_west"), SubResource("Resource_spawn_south_east")]
 waves = [SubResource("Resource_wave_01"), SubResource("Resource_wave_02"), SubResource("Resource_wave_03"), SubResource("Resource_wave_04"), SubResource("Resource_wave_05"), SubResource("Resource_wave_06"), SubResource("Resource_wave_07"), SubResource("Resource_wave_08")]
-fixed_item_spawns = [SubResource("Resource_fixed_smg"), SubResource("Resource_fixed_smg_ammo"), SubResource("Resource_fixed_oil"), SubResource("Resource_fixed_shotgun"), SubResource("Resource_fixed_rifle")]
+fixed_item_spawns = [SubResource("Resource_fixed_smg_ammo"), SubResource("Resource_fixed_medkit_a"), SubResource("Resource_fixed_medkit_b")]
 zombie_death_rules = [SubResource("Resource_normal_death_rule"), SubResource("Resource_runner_death_rule"), SubResource("Resource_tank_death_rule")]

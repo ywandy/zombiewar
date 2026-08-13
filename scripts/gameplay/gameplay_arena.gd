@@ -42,7 +42,6 @@ const PauseMenuScript = preload("res://scripts/ui/pause_menu.gd")
 
 @onready var game_over_audio: AudioStreamPlayer = $GameOverAudio
 
-var hit_confirm_tween: Tween
 var damage_flash_tween: Tween
 var sim_clock = SimClockScript.new()
 var sim_world = SimWorldScript.new()
@@ -55,6 +54,10 @@ var weapon_profile_indices: Dictionary = {}
 var barrel_views: Dictionary = {}
 ## 模拟层补给箱 id -> 表现节点，同上。
 var chest_views: Dictionary = {}
+## 伤害飘字生成序号，只用来给连续飘字取横向偏移错开，不参与任何判定。
+var _damage_popup_spawn_index := 0
+## 每个座位上一次弹出 MISS 的墙钟毫秒，用于限流（见 _spawn_miss_popup）。
+var _last_miss_popup_msec: Dictionary = {}
 var wave_number := 0
 var team_defeated := false
 var _ping_hud_timer := 0.0
@@ -141,6 +144,7 @@ func _process(delta: float) -> void:
 	):
 		request_restart()
 	_update_ping_hud(delta)
+	_sync_shop_hud()
 	hit_stop.advance(delta)
 	if zombie_renderer != null:
 		var frozen := hit_stop.is_frozen()
@@ -304,13 +308,16 @@ func _queue_online_event(slot: int, event: Dictionary) -> void:
 		return
 	if kind == LobbyProtocolScript.EVENT_SHOP_PURCHASE:
 		# 联机商店购买落地：各端从同一份确定性 _shop_offers 反查商品，应用同一效果。
-		# 属性/回血购买不走这里（它们进模拟命令）；这里只处理武器/被动/弹药。
+		# 属性/回血/改装件购买不走这里（它们进模拟命令）；这里只处理背包身份类：
+		# 武器/被动/弹药/油桶。新增 offer_type 时这份白名单要跟着加，漏了的表现是
+		# 「联机买了不生效、单机正常」。
 		var offer_index := int(event.get("si", -1))
 		if offer_index >= 0 and offer_index < _shop_offers.size():
 			var offer := _shop_offers[offer_index]
 			if offer.offer_type == ShopOfferDefinition.OfferType.WEAPON \
 					or offer.offer_type == ShopOfferDefinition.OfferType.PASSIVE \
-					or offer.offer_type == ShopOfferDefinition.OfferType.AMMO:
+					or offer.offer_type == ShopOfferDefinition.OfferType.AMMO \
+					or offer.offer_type == ShopOfferDefinition.OfferType.OIL:
 				_buy_equipment_local(slot, offer)
 		return
 	if kind == LobbyProtocolScript.EVENT_PLACE_ITEM:
@@ -513,13 +520,19 @@ func register_weapon_profiles() -> void:
 			definition.pellet_count,
 			# 模拟层靠这个 id 把开火扣到对应的背包弹药档案上。漏传不会报错，
 			# 只会让那把枪的弹药在背包里只增不减，捡满一次之后再也捡不到子弹。
-			definition.weapon_id
+			definition.weapon_id,
+			definition.crit_chance_percent,
+			definition.crit_multiplier
 		)
 
 ## 把某个座位当前的改装件摘要刷到它的头顶标签上。
 ##
 ## 数据源是 SimWorld 而不是表现层的缓存：改装层数逐 tick 进帧哈希，从它读就
 ## 不可能出现「显示的和实际生效的不是一回事」。
+## 上一次下发过的改装摘要，逐座位缓存。这个函数现在每 tick 都被调用，
+## 没有这层比较就是每 tick 往 UI 推一遍同样的字符串。
+var _weapon_mod_summaries := PackedStringArray()
+
 func _refresh_weapon_mod_summary(slot: int) -> void:
 	var player := _player_for_slot(slot)
 	if player == null:
@@ -530,10 +543,16 @@ func _refresh_weapon_mod_summary(slot: int) -> void:
 		if level <= 0:
 			continue
 		parts.append("%s%d" % [WeaponModTableScript.MOD_LABELS_CN[mod_id], level])
-	if parts.is_empty():
-		player.set_weapon_mod_summary("")
+	var summary := "" if parts.is_empty() else "改装 · " + " ".join(parts)
+	# 初值就是空串，和「一个改装都没有」同值——所以开局那次相同的空摘要不会下发，
+	# 而标签本来就是空的，结果一致。不要拿特殊字符当哨兵：
+	# validate_ui_font_coverage 扫的是源码里的字符串，会把它当成要渲染的字形。
+	while _weapon_mod_summaries.size() <= slot:
+		_weapon_mod_summaries.append("")
+	if _weapon_mod_summaries[slot] == summary:
 		return
-	player.set_weapon_mod_summary("改装 · " + " ".join(parts))
+	_weapon_mod_summaries[slot] = summary
+	player.set_weapon_mod_summary(summary)
 
 ## 把「哪个奖励下标是改装件、给几层」告诉模拟层。
 ##
@@ -546,7 +565,13 @@ func _refresh_weapon_mod_summary(slot: int) -> void:
 func register_reward_mods() -> void:
 	for profile_index in range(map_runtime.reward_definitions.size()):
 		var definition := map_runtime.reward_definitions[profile_index]
-		if definition == null or not definition.is_weapon_mod():
+		if definition == null:
+			continue
+		# 补血奖励没有背包身份，靠这张表让模拟层认出它（见 SimWorld.configure_reward_heal）。
+		if definition.is_heal():
+			sim_world.configure_reward_heal(profile_index, roundi(definition.heal_amount))
+			continue
+		if not definition.is_weapon_mod():
 			continue
 		var mod_id := WeaponModTableScript.mod_index_from_id(definition.weapon_mod_id)
 		if mod_id < 0:
@@ -711,17 +736,13 @@ func _on_sim_shot_event(event: Dictionary) -> void:
 			(weapon as RangedWeapon).show_tracer(
 				from_position, to_position, bool(event.get("hit_blocker", false))
 			)
-	if not bool(event["did_hit"]):
-		return
-	var label := get_node_or_null("HUD/HitConfirm") as Label
-	if label == null:
-		return
-	label.text = "KILL" if bool(event["killed"]) else "HIT"
-	label.modulate = Color.WHITE
-	if hit_confirm_tween != null and hit_confirm_tween.is_valid():
-		hit_confirm_tween.kill()
-	hit_confirm_tween = create_tween()
-	hit_confirm_tween.tween_property(label, "modulate:a", 0.0, 0.18)
+	if shot_event_is_true_miss(event):
+		# 打空：在弹道终点弹一个 MISS。多弹丸武器一次扣扳机会走这里 pellet_count 次，
+		# 限流器保证只出一个（霰弹枪六颗全落空时不该刷出六个 MISS）。
+		_spawn_miss_popup(int(event["slot"]), to_position)
+	# 命中确认不在这里做。屏幕中上曾经有一个固定位置的 HIT/KILL 文字，
+	# 它和僵尸头顶的伤害飘字说的是同一件事，只是说得更差：它离交火点很远，
+	# 不带数值，也不告诉你打的是哪一只。飘字上线之后它就只是重复的噪音。
 
 ## 运行时增删阻挡几何的统一入口。任何调用都会置脏对应 cell，
 ## 下一 tick 的 FlowField.update() 会同步重算。
@@ -951,6 +972,7 @@ func _consume_sim_events() -> void:
 		_on_sim_chest_event(event)
 	for event in sim_world.tick_hit_events:
 		_on_sim_hit_event(event)
+	_spawn_damage_popups(sim_world.tick_hit_events)
 	for event in sim_world.tick_player_damage_events:
 		_on_sim_player_damage_event(event)
 	for event in sim_world.tick_player_heal_events:
@@ -960,8 +982,12 @@ func _consume_sim_events() -> void:
 		call_deferred("_refresh_wave_state_after_deaths")
 	# 背包镜像每 tick 刷一次：拾取、购买、开火扣弹、放油桶都在这一步落到装备节点上。
 	# 内容没变时 EquipmentController 会自己跳过，所以这里不需要再判一次。
+	#
+	# 改装摘要也在这里刷：原来只有开箱拾取那条路径刷它，商店买的改装件走的是
+	# 模拟命令队列、下一 tick 才生效，永远碰不到那个刷新点。文本没变就不下发。
 	for slot in range(players.size()):
 		_push_inventory_mirror(slot)
+		_refresh_weapon_mod_summary(slot)
 	_update_wave_hud()
 	_sync_command_controls()
 
@@ -1035,38 +1061,100 @@ func _on_shop_buy(offer_index: int) -> void:
 		return
 	var offer := _shop_offers[offer_index]
 	var slot := _local_slot()
-	if offer.offer_type == ShopOfferDefinition.OfferType.STAT or offer.offer_type == ShopOfferDefinition.OfferType.HEAL:
+	# stat/heal/weapon_mod 的效果都落在进帧哈希的模拟状态上，走确定性购买队列；
+	# weapon/passive/ammo/oil 是背包与装备身份，走 _buy_equipment。
+	if offer.offer_type == ShopOfferDefinition.OfferType.STAT \
+			or offer.offer_type == ShopOfferDefinition.OfferType.HEAL \
+			or offer.offer_type == ShopOfferDefinition.OfferType.WEAPON_MOD:
 		_buy_sim_stat(slot, offer)
-	else:
-		_buy_equipment(slot, offer)
+		return
+	if _buy_equipment(slot, offer):
+		return
+	# 没成交就告诉面板，别让卡片放完「买到了」的动画。buy_requested 是同步 emit 的，
+	# 所以这一步一定发生在面板决定播哪套动画之前。
+	var panel := get_node_or_null("HUD/ShopPanel") as ShopPanel
+	if panel != null:
+		panel.notify_purchase_rejected(offer_index)
 
-## 属性/回血购买：发确定性命令进模拟层（扣费 + 生效进帧哈希）。
+## 属性/回血/改装件购买：发确定性命令进模拟层（扣费 + 生效进帧哈希）。
 ## 单机直接进模拟；联机走命令事件上行（T6 的协议层），这里统一走队列——
 ## 模拟层自己保证确定性应用。
+##
+## queue_shop_purchase 的 (stat_index, amount) 两个位置按 kind 各表各的意思：
+##   stat       —— (统计种类, 倍率/加值)
+##   heal       —— (忽略, 回血量)
+##   weapon_mod —— (WeaponModTable 下标, 层数)
+## 之前这里对三种 kind 一律传 stat_amount，于是回血商品全部按 stat_amount 的
+## 默认值 1.0 结算——「回血 +80」实际只回 1 点血，扣费却照收。
 func _buy_sim_stat(slot: int, offer: ShopOfferDefinition) -> void:
-	var kind: StringName
-	if offer.offer_type == ShopOfferDefinition.OfferType.HEAL:
-		kind = &"heal"
-	else:
-		kind = &"stat"
-	sim_world.queue_shop_purchase(
-		slot, kind, offer.stat_index, offer.stat_amount, offer.price
-	)
+	var kind := &"stat"
+	var index := offer.stat_index
+	var amount := offer.stat_amount
+	match offer.offer_type:
+		ShopOfferDefinition.OfferType.HEAL:
+			kind = &"heal"
+			amount = offer.heal_amount
+		ShopOfferDefinition.OfferType.WEAPON_MOD:
+			var mod_index := offer.weapon_mod_index()
+			if mod_index < 0:
+				push_warning("shop offer '%s' has unknown weapon_mod_id" % offer.display_name)
+				return
+			kind = &"weapon_mod"
+			index = mod_index
+			amount = float(offer.weapon_mod_stacks)
+	sim_world.queue_shop_purchase(slot, kind, index, amount, offer.price)
 	_refresh_shop_material(slot)
 
 ## 购买后刷新商店金钱显示。
+##
+## 这里**不能**再调 set_offers()：那会整排重建卡片，把正在播的选中动画连节点一起
+## 销毁；而且没必要——set_material_count() 里的 _refresh_cards() 已经重算了每张卡
+## 的可买状态。
 func _refresh_shop_material(slot: int) -> void:
 	var panel := get_node_or_null("HUD/ShopPanel") as ShopPanel
 	if panel == null:
 		return
 	panel.set_material_count(sim_world.get_player_material(slot))
-	panel.set_offers(_shop_offers)
+
+## 商店开着时逐帧同步材料数与波间倒计时。
+##
+## 逐帧同步不是偷懒：stat/heal/weapon_mod 三种购买走的是模拟命令队列，**下一 tick
+## 才真正扣费**，而买完当场调用的 _refresh_shop_material() 读到的还是扣费前的旧值。
+## 结果是材料数字永远不减，玩家照着旧数字点第二次，第二笔在模拟层被静默拒绝——
+## 表现就是「波间商店一次只能买一件」。
+func _sync_shop_hud() -> void:
+	var panel := get_node_or_null("HUD/ShopPanel") as ShopPanel
+	if panel == null or not panel.visible:
+		return
+	var slot := _local_slot()
+	panel.set_material_count(sim_world.get_player_material(slot))
+	panel.set_seconds_remaining(
+		float(sim_world.intermission_ticks_remaining()) * SimClockScript.TICK_SECONDS
+	)
+	panel.set_offer_levels(_shop_offer_levels(slot))
+
+## 每个商品买下去之后会到达的等级。只有改装件是真的会叠层的，其余一律 LV.1。
+func _shop_offer_levels(slot: int) -> PackedInt32Array:
+	var levels := PackedInt32Array()
+	for offer in _shop_offers:
+		if offer == null or offer.offer_type != ShopOfferDefinition.OfferType.WEAPON_MOD:
+			levels.append(1)
+			continue
+		var mod_index := offer.weapon_mod_index()
+		if mod_index < 0:
+			levels.append(1)
+			continue
+		levels.append(
+			sim_world.get_weapon_mod_level(slot, mod_index) + offer.weapon_mod_stacks
+		)
+	return levels
 
 ## 武器/被动/弹药购买。
 ## 单机：表现层直接处理（扣费 + grant/附加）。
 ## 联机：发购买事件走命令通道上行，服务端透传回各端，各端按 offer_index 反查
 ## 同一份 _shop_offers（确定性生成）应用同一效果——保证扣费与 grant 各端一致。
-func _buy_equipment(slot: int, offer: ShopOfferDefinition) -> void:
+## 返回这次购买有没有真的成交。联机下只是把请求发上去，当作已受理。
+func _buy_equipment(slot: int, offer: ShopOfferDefinition) -> bool:
 	if online_mode:
 		if pending_local_events.size() < 8:
 			pending_local_events.append(
@@ -1074,14 +1162,18 @@ func _buy_equipment(slot: int, offer: ShopOfferDefinition) -> void:
 					int(offer.offer_type), offer.price, _offer_index_of(offer)
 				)
 			)
-		return
-	_buy_equipment_local(slot, offer)
+		return true
+	return _buy_equipment_local(slot, offer)
 
 ## 联机收到购买事件后的落地（由 _on_online_shop_purchase 调用）。
-func _buy_equipment_local(slot: int, offer: ShopOfferDefinition) -> void:
+##
+## 返回 false = 这笔没成交（材料不够、已有这把枪、弹匣满、没空槽位……）。
+## 以前这些分支一律静默 return，玩家点了卡片什么都不发生，只能理解成「坏了」。
+## 现在把结果回给调用方，由商店面板给一个明确的拒绝反馈。
+func _buy_equipment_local(slot: int, offer: ShopOfferDefinition) -> bool:
 	var player := _player_for_slot(slot)
 	if player == null:
-		return
+		return false
 	# 买到的东西写进模拟层账本，不写进装备节点：钱早就是模拟层扣的，货也必须落在
 	# 同一本账上，否则买来的枪不进背包、买来的子弹背包不知道。装备节点由紧接着的
 	# 镜像刷新拿到结果。
@@ -1091,47 +1183,61 @@ func _buy_equipment_local(slot: int, offer: ShopOfferDefinition) -> void:
 				offer.weapon_id
 			)
 			if weapon_profile_index < 0:
-				return
+				return false
 			# 已经有这把枪就别收钱：重复武器在拾取语义里会折算成 1 发子弹，
 			# 拿整把枪的价钱换一发是坑。
 			if sim_world.inventory_amount_of(slot, weapon_profile_index) > 0:
-				return
+				return false
 			if not sim_world.spend_player_material(slot, offer.price):
-				return
+				return false
 			var weapon_result: Dictionary = sim_world.accept_inventory(
 				slot, weapon_profile_index, 1
 			)
 			if not bool(weapon_result.get("accepted", false)):
 				sim_world.add_player_material(slot, offer.price)  # 退款
-				return
+				return false
 			_push_inventory_mirror(slot)
 			player.equipment.equip_item(offer.weapon_id)
 		ShopOfferDefinition.OfferType.PASSIVE:
 			if not sim_world.spend_player_material(slot, offer.price):
-				return
+				return false
 			player.set_runtime_passive(offer.passive_id)
 		ShopOfferDefinition.OfferType.AMMO:
 			var ammo_profile_index := sim_world.inventory_ammo_profile_index(
 				offer.weapon_id
 			)
 			if ammo_profile_index < 0:
-				return
+				return false
 			# 没有这把枪就不卖它的子弹，与改造前 add_ammo() 要求 is_available() 一致。
 			var owner_profile_index := sim_world.inventory_weapon_profile_index(
 				offer.weapon_id
 			)
 			if sim_world.inventory_amount_of(slot, owner_profile_index) <= 0:
-				return
+				return false
 			if not sim_world.spend_player_material(slot, offer.price):
-				return
+				return false
 			var ammo_result: Dictionary = sim_world.accept_inventory(
 				slot, ammo_profile_index, offer.ammo_amount
 			)
 			if not bool(ammo_result.get("accepted", false)):
 				sim_world.add_player_material(slot, offer.price)  # 退款（弹匣已满）
-				return
+				return false
+			_push_inventory_mirror(slot)
+		ShopOfferDefinition.OfferType.OIL:
+			var oil_profile_index := sim_world.inventory_oil_profile_index()
+			if oil_profile_index < 0:
+				return false
+			if not sim_world.spend_player_material(slot, offer.price):
+				return false
+			var oil_result: Dictionary = sim_world.accept_inventory(
+				slot, oil_profile_index, offer.oil_amount
+			)
+			if not bool(oil_result.get("accepted", false)):
+				sim_world.add_player_material(slot, offer.price)  # 退款（槽位已满）
+				return false
 			_push_inventory_mirror(slot)
 	_refresh_shop_material(slot)
+	return true
 
 func _offer_index_of(offer: ShopOfferDefinition) -> int:
 	for i in range(_shop_offers.size()):
@@ -1166,12 +1272,98 @@ func _on_sim_hit_event(event: Dictionary) -> void:
 	# GroundBloodManager 的帧预算就是为这个场景准备的。
 	manager.spawn_blood_impact(hit_position, direction, 1.0)
 	manager.queue_hit_splat(foot_position, 1.0, bool(event["killed"]))
-	# 伤害数字飘字：肉鸽爽点核心。数值来自模拟层（已确定），表现层只负责飘升淡出。
-	var damage := float(event.get("damage", 0.0))
-	if damage > 0.0:
+
+## 伤害数字飘字：肉鸽爽点核心。数值来自模拟层（已确定），表现层只负责飘升淡出。
+##
+## 逐条命中事件各飘一个数字是错的：一次开火可以在同一 tick 内对同一只僵尸产生
+## 多条命中（霰弹枪 6 颗弹丸、步枪穿透、爆炸叠加），六个 "16" 会在同一个点互相
+## 遮挡，读出来是一团糊字而不是「这一枪很重」——而 6×16=96 恰恰是霰弹枪区别于
+## 手枪 35 的全部理由。按 zombie_id 合并到一条，数字才等于玩家感知到的那一击。
+func _spawn_damage_popups(events: Array) -> void:
+	if events.is_empty():
+		return
+	var merged := {}
+	var order: Array[int] = []
+	for event in events:
+		var damage := float(event.get("damage", 0.0))
+		if damage <= 0.0:
+			continue
+		var zombie := int(event["zombie_id"])
+		if not merged.has(zombie):
+			order.append(zombie)
+			merged[zombie] = {
+				"damage": damage,
+				"position": event["position"],
+				"height": float(event["height"]),
+				"max_health": float(event.get("max_health", 0.0)),
+				"critical": bool(event.get("critical", false)),
+				# 预埋：模拟层还不会填 element，缺省即普通伤害。等燃烧弹/毒之类做出来、
+				# 命中事件开始带 element，飘字这条链路不用再改一行就有颜色。
+				"element": StringName(event.get("element", DamagePopup.ELEMENT_NORMAL)),
+				"killed": bool(event["killed"]),
+			}
+			continue
+		var entry: Dictionary = merged[zombie]
+		entry["damage"] = float(entry["damage"]) + damage
+		entry["critical"] = bool(entry["critical"]) or bool(event.get("critical", false))
+		# 合并里出现过任何非普通伤害就用那一种：一次开火同时打出普通与燃烧时，
+		# 玩家要看见的是「这里有燃烧」，而不是被普通伤害盖回白色。
+		if StringName(entry["element"]) == DamagePopup.ELEMENT_NORMAL:
+			entry["element"] = StringName(event.get("element", DamagePopup.ELEMENT_NORMAL))
+		# 这一串命中里只要有一条打死了，合并后的数字就该显示成击杀。
+		entry["killed"] = bool(entry["killed"]) or bool(event["killed"])
+	for zombie in order:
+		var entry: Dictionary = merged[zombie]
+		var planar: Vector2 = entry["position"]
 		var popup := DAMAGE_POPUP_SCENE.instantiate() as DamagePopup
 		add_child(popup)
-		popup.setup(damage, hit_position, bool(event["killed"]))
+		popup.setup(
+			float(entry["damage"]),
+			Vector3(planar.x, float(entry["height"]), planar.y),
+			float(entry["max_health"]),
+			bool(entry["critical"]),
+			bool(entry["killed"]),
+			_damage_popup_spawn_index,
+			StringName(entry.get("element", DamagePopup.ELEMENT_NORMAL))
+		)
+		_damage_popup_spawn_index += 1
+
+## 这一枪算不算「打空」。
+##
+## `did_hit` 单独用是不够的：它只回答「有没有伤到僵尸或油桶」，对「子弹飞完全程
+## 什么都没碰到」和「子弹被墙截断」给出同一个 false。只看它就会在打中墙时飘 MISS——
+## 而同一帧 RangedWeapon.show_tracer() 正在用 `hit_blocker` 播墙面弹着音，
+## 于是音效说「打中墙」、文字说「打空」，自相矛盾。
+##
+## 打中墙不是打空：子弹确实撞上了东西，只是那东西不掉血。
+static func shot_event_is_true_miss(event: Dictionary) -> bool:
+	if bool(event.get("did_hit", false)):
+		return false
+	return not bool(event.get("hit_blocker", false))
+
+## 打空飘字。数据源是射击事件的 did_hit，不是命中事件——只有射击事件知道
+## 「这一枪存在过但没打到任何东西」。
+##
+## 【为什么要限流】
+## 这是个横扫僵尸潮的射击游戏，不是回合制 RPG：子弹打空是常态而不是事件。
+## 冲锋枪 10 发/秒对着空处扫一梭子，逐发飘字会在半秒内糊出十个 MISS，
+## 把真正要读的伤害数字全挤掉。所以每个座位设一个最小间隔，只让「你这一下
+## 打空了」这个信息露一次头。
+##
+## 限流用墙钟而不是 tick：它纯粹是显示节流，不产生任何模拟状态，
+## 各端节流得不一样也不会让对局分叉。
+const MISS_POPUP_INTERVAL_MSEC := 400
+
+func _spawn_miss_popup(slot: int, world_position: Vector3) -> void:
+	var now := Time.get_ticks_msec()
+	var last := int(_last_miss_popup_msec.get(slot, -MISS_POPUP_INTERVAL_MSEC))
+	if now - last < MISS_POPUP_INTERVAL_MSEC:
+		return
+	_last_miss_popup_msec[slot] = now
+	var popup := DAMAGE_POPUP_SCENE.instantiate() as DamagePopup
+	add_child(popup)
+	popup.setup_miss(world_position, _damage_popup_spawn_index)
+	_damage_popup_spawn_index += 1
 
 func _on_sim_player_damage_event(event: Dictionary) -> void:
 	var view := zombie_renderer.get_near_view(int(event["zombie_id"]))

@@ -2,6 +2,7 @@ extends WeaponBase
 class_name RangedWeapon
 
 const TRACER_SCENE := preload("res://scenes/fx/ShotTracer.tscn")
+const WALL_IMPACT_SPARK_SCENE := preload("res://scenes/fx/WallImpactSpark.tscn")
 const MuzzleFlash = preload("res://scripts/fx/muzzle_flash.gd")
 const WeaponTrigger = preload("res://scripts/combat/weapons/weapon_trigger.gd")
 const WALL_IMPACT_SOUNDS := [
@@ -17,6 +18,8 @@ const WALL_IMPACT_SOUNDS := [
 var weapon_trigger: WeaponTrigger
 var tracer_pool: Array[ShotTracer] = []
 var tracer_pool_cursor := 0
+var wall_spark_pool: Array[WallImpactSpark] = []
+var wall_spark_pool_cursor := 0
 var current_ammo := 0
 ## 模拟层账本里这把枪的弹药数。current_ammo 是它减去本地预扣后的显示值，
 ## 不是独立的第二本账。
@@ -45,6 +48,7 @@ func _ready() -> void:
 	audio_rng.randomize()
 	spatial_sfx_pool = SpatialSfxPool.find_for(self)
 	_prewarm_tracers()
+	_prewarm_wall_sparks()
 
 func bind_context(
 	value_wielder: CharacterBody3D,
@@ -228,7 +232,15 @@ func show_tracer(
 ) -> void:
 	var tracer := _acquire_tracer()
 	tracer.setup(from_position, to_position)
-	if not hit_blocker or spatial_sfx_pool == null:
+	if not hit_blocker:
+		return
+	# 打中墙的完整反馈：火花 + 弹着音，同一个判定、同一处代码。
+	# 火花朝弹道反面喷，方向取自曳光的起点->终点（与模拟层的射线严格同源，
+	# 表现层不另外求一次方向）。
+	var travel := to_position - from_position
+	if travel.length_squared() > 0.000001:
+		_acquire_wall_spark().setup(to_position, travel.normalized())
+	if spatial_sfx_pool == null:
 		return
 	spatial_sfx_pool.play_at(
 		WALL_IMPACT_SOUNDS[audio_rng.randi_range(0, WALL_IMPACT_SOUNDS.size() - 1)],
@@ -279,3 +291,26 @@ func _acquire_tracer() -> ShotTracer:
 	var tracer := tracer_pool[tracer_pool_cursor]
 	tracer_pool_cursor = (tracer_pool_cursor + 1) % tracer_pool.size()
 	return tracer
+
+## 火花池比曳光池小：每一枪都有曳光，但只有打中墙的那些才有火花。
+## 下限 4 是给霰弹枪那种「一次扣扳机多颗弹丸同时打墙」留的余量。
+func _prewarm_wall_sparks() -> void:
+	if not wall_spark_pool.is_empty():
+		return
+	var ranged_definition := definition as RangedWeaponDefinition
+	var pool_size := maxi(ranged_definition.tracer_pool_size / 2, 4)
+	for spark_index in range(pool_size):
+		var spark := WALL_IMPACT_SPARK_SCENE.instantiate() as WallImpactSpark
+		# top_level：火花留在命中点，不跟着枪走。漏了这一行，
+		# 火花会挂在枪口上跟着玩家平移，看起来像枪在漏火星。
+		spark.top_level = true
+		add_child(spark)
+		spark.set_pooled(true)
+		wall_spark_pool.append(spark)
+
+func _acquire_wall_spark() -> WallImpactSpark:
+	if wall_spark_pool.is_empty():
+		_prewarm_wall_sparks()
+	var spark := wall_spark_pool[wall_spark_pool_cursor]
+	wall_spark_pool_cursor = (wall_spark_pool_cursor + 1) % wall_spark_pool.size()
+	return spark

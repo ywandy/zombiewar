@@ -301,6 +301,9 @@ var slot_medic_strength := PackedFloat32Array()
 ## 与 weapon_profiles 同性质：装配期由表现层灌入，**不进帧哈希、reset() 不清空**。
 var reward_mod_id := PackedInt32Array()
 var reward_mod_stacks := PackedInt32Array()
+## 每个地图奖励下标对应的回血量（0 = 不是补血奖励）。
+## 补血不占背包槽，所以它没有 reward_inventory_profile 映射，只有这一张表。
+var reward_heal_amount := PackedInt32Array()
 var pending_events: Array = []
 
 func _init() -> void:
@@ -461,15 +464,17 @@ func accept_reward(slot: int, reward_profile_index: int, amount: int) -> Diction
 		tick_inventory_feedback.append(rejected)
 		return rejected
 	_apply_reward_acceptance(slot, plan)
+	# 补血奖励没有背包 profile / 槽位，这三项取 -1/0——直接下标取会 KeyError。
 	var accepted := {
 		"kind": &"inventory_accepted",
 		"accepted": true,
 		"slot": slot,
 		"reward_profile_index": reward_profile_index,
-		"inventory_profile_index": int(plan["inventory_profile_index"]),
-		"inventory_slot": int(plan["inventory_slot"]),
-		"amount": int(plan["accepted_amount"]),
+		"inventory_profile_index": int(plan.get("inventory_profile_index", -1)),
+		"inventory_slot": int(plan.get("inventory_slot", -1)),
+		"amount": int(plan.get("accepted_amount", 0)),
 		"weapon_mod_id": int(plan.get("weapon_mod_id", -1)),
+		"heal_amount": int(plan.get("heal_amount", 0)),
 	}
 	tick_inventory_events.append(accepted)
 	return accepted
@@ -535,6 +540,21 @@ func inventory_ammo_profile_index(weapon_id: StringName) -> int:
 func inventory_oil_profile_index() -> int:
 	return _find_inventory_profile(INVENTORY_CATEGORY_OIL, StringName())
 
+## 改装件 profile 按 mod_id 反查（改装件的 profile 不带 weapon_id，是全武器生效的）。
+func inventory_mod_profile_index(mod_id: StringName) -> int:
+	return _find_mod_profile_index(WeaponModTableScript.MOD_IDS.find(mod_id))
+
+func _find_mod_profile_index(mod_index: int) -> int:
+	if mod_index < 0:
+		return -1
+	for profile_index in range(inventory_profiles.size()):
+		var profile := _inventory_profile(profile_index)
+		if int(profile.get("category", -1)) != INVENTORY_CATEGORY_WEAPON_MOD:
+			continue
+		if int(profile.get("mod_id", -1)) == mod_index:
+			return profile_index
+	return -1
+
 func _find_inventory_profile(category: int, weapon_id: StringName) -> int:
 	for profile_index in range(inventory_profiles.size()):
 		var profile := _inventory_profile(profile_index)
@@ -551,6 +571,15 @@ func _plan_reward_acceptance(slot: int, reward_profile_index: int, amount: int) 
 		return {"accepted": false, "reason": &"invalid_slot"}
 	if amount <= 0:
 		return {"accepted": false, "reason": &"invalid_amount"}
+	# 补血先判：它没有背包身份，走 _inventory_profile_index_for_reward 必然是 -1，
+	# 会被当成 unknown_reward 拒掉。
+	#
+	# 这里不判「满血就别捡」：玩家血量不在模拟层（它在 PlayerController，回血靠
+	# tick_player_heal_events 下发），模拟层无从判断。满血捡到会浪费，和商店的
+	# 回血商品是同一套语义。
+	var heal := heal_amount_for_reward(reward_profile_index)
+	if heal > 0:
+		return {"accepted": true, "heal_amount": heal}
 	var inventory_profile_index := _inventory_profile_index_for_reward(reward_profile_index)
 	if inventory_profile_index < 0:
 		return {"accepted": false, "reason": &"unknown_reward"}
@@ -669,6 +698,13 @@ func _plan_weapon_mod_reward(
 	}
 
 func _apply_reward_acceptance(slot: int, plan: Dictionary) -> void:
+	# 补血奖励没有背包 profile / 槽位，直接下发回血事件走人。
+	if plan.has("heal_amount"):
+		tick_player_heal_events.append({
+			"slot": slot,
+			"amount": float(plan["heal_amount"]),
+		})
+		return
 	var profile_index := int(plan["inventory_profile_index"])
 	var inventory_slot := int(plan["inventory_slot"])
 	var profile := _inventory_profile(profile_index)
@@ -762,6 +798,14 @@ func get_flow_field() -> FlowField:
 
 func get_tick() -> int:
 	return tick_index
+
+## 波间还剩多少 tick（不在波间返回 0）。表现层拿它画商店倒计时。
+## 只读，不推进任何状态——倒计时是 tick 的函数，不需要第二个计时器，
+## 也就不会和模拟层跑出两套时间。
+func intermission_ticks_remaining() -> int:
+	if wave_director == null or not wave_director.can_advance():
+		return 0
+	return maxi(wave_director.intermission_end_tick - tick_index, 0)
 
 func get_zombie_count() -> int:
 	return zombie_id.size()
@@ -1197,7 +1241,8 @@ func apply_zombie_damage(
 	hit_position: Vector2,
 	hit_height: float,
 	direction: Vector2,
-	zone: StringName
+	zone: StringName,
+	critical: bool = false
 ) -> bool:
 	if index < 0 or index >= zombie_id.size():
 		return false
@@ -1229,7 +1274,12 @@ func apply_zombie_damage(
 		"height": hit_height,
 		"direction": direction,
 		"damage": float(applied) / float(HEALTH_SCALE),
+		# 表现层的伤害飘字按「打掉了最大生命的百分之多少」分档，所以基数得跟着
+		# 事件一起走：同样 14 点伤害打普通僵尸和打坦克是两种不同的读数。
+		# 只是随事件下发的展示数据，不进 SimHasher，也不产生新的模拟状态。
+		"max_health": float(zombie_max_health[index]) / float(HEALTH_SCALE),
 		"zone": zone,
+		"critical": critical,
 		"killed": killed,
 	})
 	if killed:
@@ -1972,7 +2022,9 @@ func configure_weapon_profile(
 	max_penetration_count: int,
 	penetration_damage_coefficient: float,
 	pellet_count: int = 1,
-	weapon_id: StringName = &""
+	weapon_id: StringName = &"",
+	crit_chance_percent: float = 0.0,
+	crit_multiplier: float = 1.0
 ) -> void:
 	if profile_index < 0:
 		return
@@ -1991,6 +2043,11 @@ func configure_weapon_profile(
 		"max_penetration_count": clampi(max_penetration_count, 0, 16),
 		"penetration_damage_coefficient": clampf(penetration_damage_coefficient, 0.0, 1.0),
 		"pellet_count": clampi(pellet_count, 1, 32),
+		# 百分比/倍率在这里一次性转成整数，之后判定与结算全走整数：
+		# 暴击掷点是 `uint32 % 10000 < chance`，伤害是 `points * permille / 1000`，
+		# 全程没有浮点比较也没有浮点连乘，四台机器逐位一致。
+		"crit_chance_per_10000": clampi(roundi(crit_chance_percent * 100.0), 0, 10000),
+		"crit_multiplier_permille": maxi(roundi(crit_multiplier * 1000.0), 1000),
 	}
 
 ## 已注册的武器档案数。profile 下标 0..count-1 都是合法武器。
@@ -2085,6 +2142,14 @@ func _resolve_shop_purchase(event: Dictionary) -> void:
 			"slot": slot,
 			"amount": maxf(float(event["amount"]), 0.0),
 		})
+	elif type == &"weapon_mod":
+		# 改装件层数进 player_mod_level，而那个数组逐 tick 进帧哈希——所以买改装件
+		# 必须和拾取改装件走同一条模拟入口，不能在表现层 grant 完事。
+		# stat_index 复用为 WeaponModTable 下标，amount 复用为层数。
+		if not _grant_weapon_mod_with_ledger(
+			slot, int(event["stat_index"]), int(event["amount"])
+		):
+			add_player_material(slot, int(event["price"]))  # 已满/无槽位，退款
 
 ## 登记某座位是否为医疗、及其光环强度。各端从同一份角色目录独立调用，
 ## 结果必然一致（无需进网络帧）；回血量取决于它，进帧哈希间接覆盖。
@@ -2229,6 +2294,28 @@ func _effective_weapon_profile(slot: int, profile_index: int) -> Dictionary:
 		base, player_mod_level, slot * WeaponModTableScript.COUNT
 	)
 
+## 加改装层数**并把层数写回背包槽**。成功返回 true；已满或没空槽返回 false（调用方退款）。
+##
+## 背包面板读的是槽位，不是 player_mod_level。只调 grant_weapon_mod() 的话，改装
+## 效果确实生效了，但背包里查无此物、再买一次显示的等级也不动——这正是拾取路径
+## 在 _apply_reward_acceptance() 的 WEAPON_MOD 分支里额外写一次 _set_inventory_slot
+## 的原因。商店必须和拾取写同一本账，否则两边各记各的。
+func _grant_weapon_mod_with_ledger(slot: int, mod_id: int, stacks: int) -> bool:
+	var profile_index := _find_mod_profile_index(mod_id)
+	if profile_index < 0:
+		return false
+	var inventory_slot := _find_inventory_slot(slot, profile_index)
+	if inventory_slot < 0:
+		inventory_slot = _find_empty_inventory_slot(slot)
+	if inventory_slot < 0:
+		return false
+	if grant_weapon_mod(slot, mod_id, stacks) <= 0:
+		return false
+	_set_inventory_slot(
+		slot, inventory_slot, profile_index, get_weapon_mod_level(slot, mod_id)
+	)
+	return true
+
 ## 给某个座位追加改装层数，夹到该改装件的上限。返回实际生效的层数（0 = 已满）。
 func grant_weapon_mod(slot: int, mod_id: int, stacks: int) -> int:
 	if slot < 0 or slot >= MAX_PLAYER_SLOTS:
@@ -2250,6 +2337,20 @@ func get_weapon_mod_level(slot: int, mod_id: int) -> int:
 	return int(player_mod_level[slot * WeaponModTableScript.COUNT + mod_id])
 
 ## 装配期登记：某个奖励下标对应哪种改装件、给几层。表现层在注册奖励目录时调用。
+## 登记某个地图奖励下标是「补血 N 点」。各端从同一份地图资源独立调用，
+## 结果必然一致；实际回血在 _resolve_chest_claims 那一 tick 进模拟并进帧哈希。
+func configure_reward_heal(reward_profile_index: int, amount: int) -> void:
+	if reward_profile_index < 0:
+		return
+	while reward_heal_amount.size() <= reward_profile_index:
+		reward_heal_amount.append(0)
+	reward_heal_amount[reward_profile_index] = maxi(amount, 0)
+
+func heal_amount_for_reward(reward_profile_index: int) -> int:
+	if reward_profile_index < 0 or reward_profile_index >= reward_heal_amount.size():
+		return 0
+	return reward_heal_amount[reward_profile_index]
+
 func configure_reward_mod(reward_profile_index: int, mod_id: int, stacks: int) -> void:
 	if reward_profile_index < 0:
 		return
@@ -2320,13 +2421,20 @@ func _resolve_shot_event(event: Dictionary) -> void:
 	var pellet_count := maxi(int(profile["pellet_count"]), 1)
 	# 伤害 = 武器档案 × 本命武器加成 × 属性成长（商店买的伤害升级）。
 	var damage_scale := get_player_signature_scale(slot, profile_index) * get_upgrade_scale(slot, STAT_DAMAGE)
+	# 暴击按「扣一次扳机」掷一次，不按弹丸掷（理由见 RangedWeaponDefinition
+	# 的 crit_chance_percent）。掷点无条件执行，不因为这把枪暴击率是 0 就跳过：
+	# WEAPON_CRIT 流的序列因此只取决于开了几枪，调武器数值不会移动它。
+	var crit_roll := rng.next_uint32(DeterministicRngScript.Stream.WEAPON_CRIT) % 10000
+	var critical := crit_roll < int(profile.get("crit_chance_per_10000", 0))
 	for pellet_index in range(pellet_count):
 		var pellet_direction := WeaponSpreadStateScript.spread_direction(
 			aim,
 			spread_degrees,
 			_pellet_spread_offset(pellet_index, pellet_count)
 		)
-		_resolve_pellet(slot, profile, origin, origin_height, pellet_direction, damage_scale)
+		_resolve_pellet(
+			slot, profile, origin, origin_height, pellet_direction, damage_scale, critical
+		)
 	# 散布按「扣一次扳机」增长一次，不按弹丸数增长：
 	# 否则一发霰弹就把散布顶到上限，第二枪起等于在盲射。
 	player_spread_degrees[slot] = WeaponSpreadStateScript.increased_degrees(
@@ -2398,7 +2506,8 @@ func _resolve_pellet(
 	origin: Vector2,
 	origin_height: float,
 	direction: Vector2,
-	damage_scale: float
+	damage_scale: float,
+	critical: bool = false
 ) -> void:
 	# 射程被第一堵墙截断：基线的物理射线命中层 1 静态体就 break，
 	# 未命中僵尸时曳光终点也停在墙上而不是穿墙飞满射程。
@@ -2421,6 +2530,7 @@ func _resolve_pellet(
 	var total_damage := 0.0
 	var zone: StringName = &""
 	var current_damage := float(profile["damage"]) * damage_scale
+	var crit_multiplier_permille := int(profile.get("crit_multiplier_permille", 1000))
 	for hit in hits:
 		var index := int(hit["index"])
 		var hit_zone: StringName = hit["zone"]
@@ -2439,9 +2549,13 @@ func _resolve_pellet(
 			break
 		var multiplier := SimHitGeometryScript.damage_multiplier(hit_zone)
 		var damage_points := roundi(current_damage * multiplier * float(HEALTH_SCALE))
+		# 暴击是整数千分比放大，落在**穿透衰减之后的这一段**上：
+		# 一颗暴击弹丸穿过去的每一个目标都吃暴击，衰减照旧逐层生效。
+		if critical:
+			damage_points = damage_points * crit_multiplier_permille / 1000
 		var before_health := zombie_health[index]
 		if apply_zombie_damage(
-			index, damage_points, hit["point"], hit["height"], direction, hit_zone
+			index, damage_points, hit["point"], hit["height"], direction, hit_zone, critical
 		):
 			did_hit = true
 			zone = hit_zone
@@ -2463,6 +2577,8 @@ func _resolve_pellet(
 		"killed": killed,
 		"damage": total_damage,
 		"zone": zone,
+		# 这一枪暴击了。表现层可以据此换曳光/枪声，判定本身留在模拟层。
+		"critical": critical,
 		# 射线被阻挡几何截断了：表现层据此播墙面弹着音。判定留在模拟层，
 		# 因为「打没打到墙」只有这里知道——表现层再补一次射线，就等于在
 		# 确定性解算之外又开了一条会分叉的判定路径。

@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/fx/damage_popup.gd" id="1_script"]
+[ext_resource type="FontFile" path="res://assets/fonts/display/Anton-Regular.ttf" id="2_font"]
 
 [node name="DamagePopup" type="Label3D"]
+font = ExtResource("2_font")
+font_size = 64
+outline_size = 7
+outline_modulate = Color(0, 0, 0, 0.8)
+pixel_size = 0.0008
 billboard = 1
 no_depth_test = true
 fixed_size = true

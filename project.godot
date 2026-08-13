@@ -13,17 +13,17 @@ config_version=5
 config/name="zombiewar"
 run/main_scene="res://scenes/menu/Boot.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
 boot_splash/show_image=false
-boot_splash/fullsize=false
+boot_splash/stretch_mode=0
 boot_splash/use_filter=false
+config/icon="res://icon.svg"
 
 [autoload]
 
-_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 GameSession="*res://scripts/gameplay/game_session.gd"
 NetSession="*res://scripts/net/net_session.gd"
 MetaProgression="*res://scripts/meta/meta_progression.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]
 

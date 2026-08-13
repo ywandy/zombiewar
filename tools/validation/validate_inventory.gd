@@ -133,7 +133,19 @@ func _test_profile_catalog(catalog, profile_script: Script, mod_table_script: Sc
 				oil_profiles += 1
 			profile_script.Category.WEAPON_MOD:
 				mod_profiles[profile.mod_id] = profile
-	_check("knife must occupy atlas row 0", ids.has(&"weapon_knife") and profiles[0].icon_region.position == Vector2.ZERO)
+	_check("catalog must contain the knife profile", ids.has(&"weapon_knife"))
+	# 图集第 0 行整行是武器。原来这里只断言「第一个条目落在 (0,0)」，而条目顺序和
+	# 图集画的顺序是两码事：profiles 按 匕首→手枪→冲锋枪→散弹枪→步枪 排，图集实际
+	# 画的是 手枪→冲锋枪→散弹枪→步枪→匕首，整行错位一格照样 PASS，背包里每把枪都
+	# 显示邻居的图标。改成断言「五把武器铺满第 0 行且各占一格」，与顺序无关。
+	var weapon_row_columns := {}
+	for weapon_profile in weapon_profiles.values():
+		_check(
+			"weapon '%s' icon must sit in atlas row 0" % weapon_profile.weapon_id,
+			weapon_profile.icon_region.position.y == 0.0
+		)
+		weapon_row_columns[weapon_profile.icon_region.position.x] = true
+	_check("weapons must fill every column of atlas row 0", weapon_row_columns.size() == 5)
 	_check("oil must occupy atlas row 1", ids.has(&"oil_barrel") and regions.has(Rect2(Vector2(256, 64), Vector2(64, 64))))
 	_check("catalog must have one oil profile", oil_profiles == 1)
 	_check("catalog must cover every weapon", weapon_profiles.size() == 5)
@@ -173,6 +185,15 @@ func _test_pickup_metadata(catalog, pickup_definition_script: Script, profile_sc
 		_check("%s must expose get_inventory_key()" % path, definition.has_method(&"get_inventory_key"))
 		_check("%s must expose get_inventory_max_stack()" % path, definition.has_method(&"get_inventory_max_stack"))
 		if not definition.has_method(&"get_inventory_key"):
+			continue
+		# 补血是即时效果，不占背包槽也不占图集格子，因此**故意**没有背包身份。
+		# 这里放行的是「没有 key」，不是「key 写错」：needs_inventory_profile() 为真的
+		# 奖励照旧必须有一个能解析到 profile 的 key。
+		if definition.has_method(&"needs_inventory_profile") and not definition.needs_inventory_profile():
+			_check(
+				"%s must not declare an inventory key: it has no inventory identity" % path,
+				definition.get_inventory_key().is_empty()
+			)
 			continue
 		var key: StringName = definition.get_inventory_key()
 		_check("%s must have a stable inventory key" % path, not key.is_empty())

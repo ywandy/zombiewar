@@ -50,6 +50,7 @@ const EditorLogBuffer := preload("res://addons/godot_ai/utils/editor_log_buffer.
 const SurfacedErrorTracker := preload("res://addons/godot_ai/utils/surfaced_error_tracker.gd")
 const Dock := preload("res://addons/godot_ai/mcp_dock.gd")
 const DebuggerPlugin := preload("res://addons/godot_ai/debugger/mcp_debugger_plugin.gd")
+const VisionRoutingScript := preload("res://addons/godot_ai/vision_routing.gd")
 const ExportPlugin := preload("res://addons/godot_ai/export/mcp_export_plugin.gd")
 const ClientConfigurator := preload("res://addons/godot_ai/client_configurator.gd")
 const WindowsPortReservation := preload("res://addons/godot_ai/utils/windows_port_reservation.gd")
@@ -150,6 +151,7 @@ var _surfaced_error_tracker
 var _editor_logger: Logger
 var _dock
 var _debugger_plugin
+var _vision_routing
 var _export_plugin
 ## Spawn / stop / adopt orchestration plus state machine; allocated in
 ## `_init` so test fixtures (which never enter the tree) can drive
@@ -289,6 +291,9 @@ func _enter_tree() -> void:
 	_telemetry = Telemetry.new(_connection)
 
 	_debugger_plugin = DebuggerPlugin.new(_log_buffer, _game_log_buffer, _editor_log_buffer, _surfaced_error_tracker)
+	_vision_routing = VisionRoutingScript.new()
+	_vision_routing.log_buffer = _log_buffer
+	_debugger_plugin.vision_routing = _vision_routing
 	add_debugger_plugin(_debugger_plugin)
 	_connection.debugger_plugin = _debugger_plugin
 	_ensure_game_helper_autoload()
@@ -302,7 +307,7 @@ func _enter_tree() -> void:
 	## all plugin-lifetime objects) and released by _dispatcher.clear() in
 	## _exit_tree.
 	var undo := get_undo_redo()
-	_dispatcher.register_lazy_handler("editor", HANDLERS_DIR + "editor_handler.gd", [_log_buffer, _connection, _debugger_plugin, _game_log_buffer, _editor_log_buffer, null, _surfaced_error_tracker])
+	_dispatcher.register_lazy_handler("editor", HANDLERS_DIR + "editor_handler.gd", [_log_buffer, _connection, _debugger_plugin, _game_log_buffer, _editor_log_buffer, null, _surfaced_error_tracker, _vision_routing])
 	_dispatcher.register_lazy_handler("scene", HANDLERS_DIR + "scene_handler.gd", [_connection])
 	_dispatcher.register_lazy_handler("node", HANDLERS_DIR + "node_handler.gd", [undo])
 	_dispatcher.register_lazy_handler("project", HANDLERS_DIR + "project_handler.gd", [_connection, _debugger_plugin, _editor_log_buffer])
@@ -334,6 +339,8 @@ func _enter_tree() -> void:
 	_dispatcher.register_lazy_handler("control_draw_recipe", HANDLERS_DIR + "control_draw_recipe_handler.gd", [undo])
 	_dispatcher.register_lazy_handler("tilemap", HANDLERS_DIR + "tilemap_handler.gd", [undo])
 	_dispatcher.register_lazy_handler("tileset", HANDLERS_DIR + "tileset_handler.gd", [])
+	_dispatcher.register_lazy_handler("gridmap", HANDLERS_DIR + "gridmap_handler.gd", [undo])
+	_dispatcher.register_lazy_handler("csg", HANDLERS_DIR + "csg_handler.gd", [undo])
 
 	_dispatcher.register_lazy("get_editor_state", "editor", &"get_editor_state")
 	_dispatcher.register_lazy("get_scene_tree", "scene", &"get_scene_tree")
@@ -470,6 +477,13 @@ func _enter_tree() -> void:
 	_dispatcher.register_lazy("tilemap_get_cells", "tilemap", &"get_used_cells")
 	_dispatcher.register_lazy("tileset_get_atlas_tiles", "tileset", &"get_atlas_tiles")
 	_dispatcher.register_lazy("tileset_get_atlas_image", "tileset", &"get_atlas_image")
+	_dispatcher.register_lazy("gridmap_set_item", "gridmap", &"set_item")
+	_dispatcher.register_lazy("gridmap_fill", "gridmap", &"fill")
+	_dispatcher.register_lazy("gridmap_clear", "gridmap", &"clear_layer")
+	_dispatcher.register_lazy("gridmap_get_used_cells", "gridmap", &"get_used_cells")
+	_dispatcher.register_lazy("gridmap_list_library_items", "gridmap", &"list_library_items")
+	_dispatcher.register_lazy("csg_create", "csg", &"create")
+	_dispatcher.register_lazy("csg_set_operation", "csg", &"set_operation")
 
 	_connection.dispatcher = _dispatcher
 	add_child(_connection)
@@ -477,6 +491,7 @@ func _enter_tree() -> void:
 
 	# Dock panel
 	_dock = Dock.new()
+	_dock.vision_routing = _vision_routing
 	_dock.name = "Godot AI"
 	_dock.setup(_connection, _log_buffer, self)
 	add_control_to_dock(DOCK_SLOT_RIGHT_BL, _dock)
@@ -548,6 +563,9 @@ func _exit_tree() -> void:
 	# destructors run here, while their scripts are still loaded.
 	if _dispatcher:
 		_dispatcher.clear()
+	if _vision_routing:
+		_vision_routing.shutdown()
+		_vision_routing = null
 
 	if _dock:
 		remove_control_from_docks(_dock)

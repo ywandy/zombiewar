@@ -1,289 +1,376 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/menu/map_selection.gd" id="1_selection"]
-[ext_resource type="PackedScene" path="res://scenes/menu/MenuBackdrop.tscn" id="2_backdrop"]
-[ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="3_font"]
-[ext_resource type="PackedScene" path="res://scenes/ui/MobileOrientationGuard.tscn" id="4_guard"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/bg.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/logo.png" id="3_logo"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="4_font"]
+[ext_resource type="Texture2D" path="res://assets/ui/mapselect/panel_frame.png" id="5_frame"]
+[ext_resource type="Texture2D" path="res://assets/ui/mapselect/panel_frame_hot.png" id="6_frame_hot"]
+[ext_resource type="Texture2D" path="res://assets/ui/mapselect/panel_interior.png" id="10_interior"]
+[ext_resource type="Texture2D" path="res://assets/ui/mapselect/button_dark.png" id="7_btn_dark"]
+[ext_resource type="Texture2D" path="res://assets/ui/mapselect/button_red.png" id="8_btn_red"]
+[ext_resource type="PackedScene" path="res://scenes/ui/MobileOrientationGuard.tscn" id="9_guard"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
-bg_color = Color(0.035, 0.043, 0.045, 0.94)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.72, 0.2, 0.14, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-shadow_color = Color(0, 0, 0, 0.6)
-shadow_size = 18
+[sub_resource type="StyleBoxTexture" id="StyleBox_dark_normal"]
+content_margin_left = 26.0
+content_margin_top = 12.0
+content_margin_right = 26.0
+content_margin_bottom = 14.0
+texture = ExtResource("7_btn_dark")
+modulate_color = Color(1.18, 1.08, 1.04, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_button"]
-bg_color = Color(0.075, 0.09, 0.095, 0.94)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.72, 0.2, 0.14, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxTexture" id="StyleBox_dark_hover"]
+content_margin_left = 26.0
+content_margin_top = 12.0
+content_margin_right = 26.0
+content_margin_bottom = 14.0
+texture = ExtResource("7_btn_dark")
+modulate_color = Color(1.45, 1.32, 1.28, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_button_primary"]
-bg_color = Color(0.62, 0.12, 0.09, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.85, 0.32, 0.22, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxTexture" id="StyleBox_dark_pressed"]
+content_margin_left = 26.0
+content_margin_top = 14.0
+content_margin_right = 26.0
+content_margin_bottom = 12.0
+texture = ExtResource("7_btn_dark")
+modulate_color = Color(0.72, 0.68, 0.66, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_button_disabled"]
-bg_color = Color(0.045, 0.052, 0.055, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.31, 0.12, 0.1, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxTexture" id="StyleBox_dark_disabled"]
+content_margin_left = 26.0
+content_margin_top = 12.0
+content_margin_right = 26.0
+content_margin_bottom = 14.0
+texture = ExtResource("7_btn_dark")
+modulate_color = Color(0.5, 0.5, 0.52, 0.75)
 
-[sub_resource type="StyleBoxFlat" id="StyleBox_cover"]
-bg_color = Color(0.012, 0.017, 0.019, 0.92)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.72, 0.2, 0.14, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="StyleBoxTexture" id="StyleBox_red_normal"]
+content_margin_left = 26.0
+content_margin_top = 12.0
+content_margin_right = 26.0
+content_margin_bottom = 14.0
+texture = ExtResource("8_btn_red")
 
-[node name="MapSelection" type="Node3D"]
-script = ExtResource("1_selection")
+[sub_resource type="StyleBoxTexture" id="StyleBox_red_hover"]
+content_margin_left = 26.0
+content_margin_top = 12.0
+content_margin_right = 26.0
+content_margin_bottom = 14.0
+texture = ExtResource("8_btn_red")
+modulate_color = Color(1.3, 1.16, 1.14, 1)
 
-[node name="MenuBackdrop" parent="." instance=ExtResource("2_backdrop")]
+[sub_resource type="StyleBoxTexture" id="StyleBox_red_pressed"]
+content_margin_left = 26.0
+content_margin_top = 14.0
+content_margin_right = 26.0
+content_margin_bottom = 12.0
+texture = ExtResource("8_btn_red")
+modulate_color = Color(0.74, 0.66, 0.66, 1)
 
-[node name="MobileOrientationGuard" parent="." instance=ExtResource("4_guard")]
-
-[node name="MenuLayer" type="CanvasLayer" parent="."]
-
-[node name="Root" type="Control" parent="MenuLayer"]
+[node name="MapSelection" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_selection")
 
-[node name="TopAccent" type="ColorRect" parent="MenuLayer/Root"]
+[node name="BgTex" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_bottom = 5.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="MobileOrientationGuard" parent="." instance=ExtResource("9_guard")]
+
+[node name="UILayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Logo" type="TextureRect" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -126.0
+offset_top = 22.0
+offset_right = 126.0
+offset_bottom = 130.0
 grow_horizontal = 2
 mouse_filter = 2
-color = Color(0.71, 0.16, 0.12, 1)
-
-[node name="Title" type="Label" parent="MenuLayer/Root"]
-layout_mode = 1
-anchors_preset = 10
-anchor_left = 0.08
-anchor_top = 0.08
-anchor_right = 0.92
-anchor_bottom = 0.16
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("3_font")
-theme_override_font_sizes/font_size = 42
-text = "选择地图"
-
-[node name="RedRule" type="ColorRect" parent="MenuLayer/Root"]
-layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.08
-anchor_top = 0.16
-anchor_right = 0.08
-anchor_bottom = 0.16
-offset_right = 82.0
-offset_bottom = 4.0
-mouse_filter = 2
-color = Color(0.71, 0.16, 0.12, 1)
-
-[node name="CoverPanel" type="PanelContainer" parent="MenuLayer/Root"]
-layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.08
-anchor_top = 0.24
-anchor_right = 0.48
-anchor_bottom = 0.7
-theme_override_styles/panel = SubResource("StyleBox_cover")
-
-[node name="Cover" type="TextureRect" parent="MenuLayer/Root"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.08
-anchor_top = 0.24
-anchor_right = 0.48
-anchor_bottom = 0.7
+texture = ExtResource("3_logo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="InfoPanel" type="PanelContainer" parent="MenuLayer/Root"]
+[node name="Title" type="Label" parent="UILayer"]
 layout_mode = 1
 anchors_preset = 0
-anchor_left = 0.52
-anchor_top = 0.24
-anchor_right = 0.92
-anchor_bottom = 0.7
-theme_override_styles/panel = SubResource("StyleBox_panel")
+offset_left = 108.0
+offset_top = 60.0
+offset_right = 520.0
+offset_bottom = 118.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.65)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 40
+text = "选择地图"
+vertical_alignment = 1
 
-[node name="Margin" type="MarginContainer" parent="MenuLayer/Root/InfoPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 28
+[node name="RedRule" type="ColorRect" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 108.0
+offset_top = 120.0
+offset_right = 270.0
+offset_bottom = 125.0
+mouse_filter = 2
+color = Color(0.71, 0.16, 0.12, 1)
 
-[node name="Info" type="VBoxContainer" parent="MenuLayer/Root/InfoPanel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 16
+[node name="CoverPanel" type="Control" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 107.0
+offset_top = 170.0
+offset_right = 620.0
+offset_bottom = 509.0
+mouse_filter = 2
 
-[node name="MapName" type="Label" parent="MenuLayer/Root"]
+[node name="Cover" type="TextureRect" parent="UILayer/CoverPanel"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 675.0
-offset_top = 214.0
-offset_right = 1120.0
-offset_bottom = 274.0
-theme_override_colors/font_color = Color(1, 0.54, 0.35, 1)
-theme_override_fonts/font = ExtResource("3_font")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Frame" type="TextureRect" parent="UILayer/CoverPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_frame")
+expand_mode = 1
+
+[node name="InfoPanel" type="Control" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 650.0
+offset_top = 170.0
+offset_right = 1181.0
+offset_bottom = 509.0
+mouse_filter = 2
+
+[node name="Interior" type="TextureRect" parent="UILayer/InfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+self_modulate = Color(1, 0.93, 0.88, 1)
+texture = ExtResource("10_interior")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Frame" type="TextureRect" parent="UILayer/InfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_frame_hot")
+expand_mode = 1
+
+[node name="Margin" type="MarginContainer" parent="UILayer/InfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="Info" type="VBoxContainer" parent="UILayer/InfoPanel/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 30
+
+[node name="MapName" type="Label" parent="UILayer/InfoPanel/Margin/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.89, 0.81, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 34
 text = "地图"
 autowrap_mode = 3
 
-[node name="Description" type="Label" parent="MenuLayer/Root"]
+[node name="Description" type="Label" parent="UILayer/InfoPanel/Margin/Info"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 675.0
-offset_top = 300.0
-offset_right = 1120.0
-offset_bottom = 440.0
-theme_override_colors/font_color = Color(0.78, 0.8, 0.77, 1)
-theme_override_fonts/font = ExtResource("3_font")
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.87, 0.87, 0.85, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/line_spacing = 6
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="PositionLabel" type="Label" parent="MenuLayer/Root"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 675.0
-offset_top = 505.0
-offset_right = 1120.0
-offset_bottom = 540.0
-theme_override_colors/font_color = Color(0.72, 0.74, 0.71, 1)
-theme_override_fonts/font = ExtResource("3_font")
-theme_override_font_sizes/font_size = 18
-horizontal_alignment = 2
-
-[node name="ErrorLabel" type="Label" parent="MenuLayer/Root"]
+[node name="ErrorLabel" type="Label" parent="UILayer/InfoPanel/Margin/Info"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.52
-anchor_top = 0.66
-anchor_right = 0.92
-anchor_bottom = 0.72
+layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.45, 0.31, 1)
-theme_override_fonts/font = ExtResource("3_font")
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 18
 text = "场景资源缺失，无法启动这张地图。"
-horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="Actions" type="HBoxContainer" parent="MenuLayer/Root"]
+[node name="PositionLabel" type="Label" parent="UILayer"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 0
-anchor_left = 0.25
-anchor_top = 0.78
-anchor_right = 0.75
-anchor_bottom = 0.87
-theme_override_constants/separation = 16
+offset_left = 880.0
+offset_top = 502.0
+offset_right = 1114.0
+offset_bottom = 528.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.86, 0.85, 0.82, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 20
+text = "0 / 0"
+horizontal_alignment = 2
+
+[node name="Actions" type="HBoxContainer" parent="UILayer"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 358.0
+offset_top = 560.0
+offset_right = 922.0
+offset_bottom = 613.0
+theme_override_constants/separation = 14
 alignment = 1
 
-[node name="PreviousButton" type="Button" parent="MenuLayer/Root/Actions"]
+[node name="PreviousButton" type="Button" parent="UILayer/Actions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(170, 56)
+custom_minimum_size = Vector2(168, 53)
 layout_mode = 2
 focus_mode = 0
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("3_font")
+theme_override_colors/font_color = Color(0.95, 0.93, 0.88, 1)
+theme_override_colors/font_hover_color = Color(1, 0.98, 0.94, 1)
+theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.6, 0.7)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBox_button")
-theme_override_styles/hover = SubResource("StyleBox_button_primary")
-theme_override_styles/pressed = SubResource("StyleBox_button_primary")
-theme_override_styles/focus = SubResource("StyleBox_button_primary")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
+theme_override_styles/normal = SubResource("StyleBox_dark_normal")
+theme_override_styles/hover = SubResource("StyleBox_dark_hover")
+theme_override_styles/pressed = SubResource("StyleBox_dark_pressed")
+theme_override_styles/focus = SubResource("StyleBox_dark_hover")
+theme_override_styles/disabled = SubResource("StyleBox_dark_disabled")
 text = "上一张"
 
-[node name="ConfirmButton" type="Button" parent="MenuLayer/Root/Actions"]
+[node name="ConfirmButton" type="Button" parent="UILayer/Actions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(190, 56)
+custom_minimum_size = Vector2(196, 53)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.98, 0.96, 1)
-theme_override_fonts/font = ExtResource("3_font")
+theme_override_colors/font_color = Color(1, 0.97, 0.93, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 0.98, 1)
+theme_override_colors/font_disabled_color = Color(0.62, 0.6, 0.6, 0.7)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBox_button_primary")
-theme_override_styles/hover = SubResource("StyleBox_button_primary")
-theme_override_styles/pressed = SubResource("StyleBox_button")
-theme_override_styles/focus = SubResource("StyleBox_button_primary")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
+theme_override_styles/normal = SubResource("StyleBox_red_normal")
+theme_override_styles/hover = SubResource("StyleBox_red_hover")
+theme_override_styles/pressed = SubResource("StyleBox_red_pressed")
+theme_override_styles/focus = SubResource("StyleBox_red_hover")
+theme_override_styles/disabled = SubResource("StyleBox_dark_disabled")
 text = "进入地图"
 
-[node name="NextButton" type="Button" parent="MenuLayer/Root/Actions"]
+[node name="NextButton" type="Button" parent="UILayer/Actions"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(170, 56)
+custom_minimum_size = Vector2(168, 53)
 layout_mode = 2
 focus_mode = 0
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("3_font")
+theme_override_colors/font_color = Color(0.95, 0.93, 0.88, 1)
+theme_override_colors/font_hover_color = Color(1, 0.98, 0.94, 1)
+theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.6, 0.7)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBox_button")
-theme_override_styles/hover = SubResource("StyleBox_button_primary")
-theme_override_styles/pressed = SubResource("StyleBox_button_primary")
-theme_override_styles/focus = SubResource("StyleBox_button_primary")
-theme_override_styles/disabled = SubResource("StyleBox_button_disabled")
+theme_override_styles/normal = SubResource("StyleBox_dark_normal")
+theme_override_styles/hover = SubResource("StyleBox_dark_hover")
+theme_override_styles/pressed = SubResource("StyleBox_dark_pressed")
+theme_override_styles/focus = SubResource("StyleBox_dark_hover")
+theme_override_styles/disabled = SubResource("StyleBox_dark_disabled")
 text = "下一张"
 
-[node name="BackButton" type="Button" parent="MenuLayer/Root"]
+[node name="BackButton" type="Button" parent="UILayer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 44)
 layout_mode = 1
 anchors_preset = 0
-anchor_left = 0.08
-anchor_top = 0.86
-anchor_right = 0.08
-anchor_bottom = 0.86
-offset_right = 140.0
-offset_bottom = 52.0
+offset_left = 108.0
+offset_top = 620.0
+offset_right = 248.0
+offset_bottom = 665.0
 focus_mode = 0
-theme_override_colors/font_color = Color(0.97, 0.95, 0.9, 1)
-theme_override_fonts/font = ExtResource("3_font")
+theme_override_colors/font_color = Color(0.95, 0.93, 0.88, 1)
+theme_override_colors/font_hover_color = Color(1, 0.98, 0.94, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBox_button")
-theme_override_styles/hover = SubResource("StyleBox_button_primary")
-theme_override_styles/pressed = SubResource("StyleBox_button_primary")
-theme_override_styles/focus = SubResource("StyleBox_button_primary")
+theme_override_styles/normal = SubResource("StyleBox_dark_normal")
+theme_override_styles/hover = SubResource("StyleBox_dark_hover")
+theme_override_styles/pressed = SubResource("StyleBox_dark_pressed")
+theme_override_styles/focus = SubResource("StyleBox_dark_hover")
 text = "返回"
 
-[connection signal="pressed" from="MenuLayer/Root/Actions/PreviousButton" to="." method="_on_previous_button_pressed"]
-[connection signal="pressed" from="MenuLayer/Root/Actions/ConfirmButton" to="." method="_on_confirm_button_pressed"]
-[connection signal="pressed" from="MenuLayer/Root/Actions/NextButton" to="." method="_on_next_button_pressed"]
-[connection signal="pressed" from="MenuLayer/Root/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="UILayer/Actions/PreviousButton" to="." method="_on_previous_button_pressed"]
+[connection signal="pressed" from="UILayer/Actions/ConfirmButton" to="." method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="UILayer/Actions/NextButton" to="." method="_on_next_button_pressed"]
+[connection signal="pressed" from="UILayer/BackButton" to="." method="_on_back_button_pressed"]

@@ -3,7 +3,9 @@ class_name PickupDefinition
 
 const InventoryProfile = preload("res://scripts/gameplay/inventory/inventory_profile.gd")
 
-enum RewardMode { EQUIPMENT, AMMO, WEAPON_MOD }
+## **只能末尾追加。** 枚举值以整数存进 resources/pickups/*.tres，往中间插一项
+## 会让已存的掉落静默变成另一种奖励——不报错，只是补血的箱子发了把枪。
+enum RewardMode { EQUIPMENT, AMMO, WEAPON_MOD, HEAL }
 
 @export var reward_mode := RewardMode.EQUIPMENT
 @export var item_id: StringName
@@ -28,6 +30,15 @@ enum RewardMode { EQUIPMENT, AMMO, WEAPON_MOD }
 @export var weapon_mod_id: StringName = &""
 @export_range(1, 8, 1) var weapon_mod_stacks := 1
 
+@export_group("Heal")
+## 回血量。只有 reward_mode == HEAL 时才读。
+##
+## 补血是即时效果，**没有背包身份**：它不占背包槽、不占图集格子，也就不需要
+## inventory_key/inventory_category 这一组字段（背包图集 5×4 二十格已经被
+## 5 武器 + 4 弹药 + 1 油桶 + 10 改装件占满，再塞就得扩图集）。
+## 兑现和改装件一样在模拟层拾取判定当场完成，表现层不参与。
+@export_range(1.0, 9999.0, 1.0) var heal_amount := 40.0
+
 @export_group("Presentation")
 ## 地上掉落物的外观。留空则用默认的补给箱模型。
 ## 纯表现字段：模拟层只认 reward_profile_index，永远不读这里。
@@ -41,6 +52,14 @@ enum RewardMode { EQUIPMENT, AMMO, WEAPON_MOD }
 
 func is_weapon_mod() -> bool:
 	return reward_mode == RewardMode.WEAPON_MOD and not weapon_mod_id.is_empty()
+
+func is_heal() -> bool:
+	return reward_mode == RewardMode.HEAL and heal_amount > 0.0
+
+## 这件奖励是否需要一个背包 profile。补血是即时效果、不进背包，
+## 所以 MapRuntime 不该为它去查 inventory_key（查不到会报 unknown inventory key）。
+func needs_inventory_profile() -> bool:
+	return not is_heal()
 
 func get_inventory_category() -> int:
 	return inventory_category
@@ -59,7 +78,7 @@ func grant_to(player: PlayerController, amount_override: int = -1) -> bool:
 	# 表现层这里什么都不做。这条路径顺带绕开了一个历史坑：表现层兑现是「可能失败
 	# 而模拟层不知情」的（SimWorld 刻意不提供 release_chest），把 gameplay 效果挂
 	# 在这里必然让各端分叉。返回 true 只是告诉调用方"这次拾取有效"。
-	if is_weapon_mod():
+	if is_weapon_mod() or is_heal():
 		return true
 	var grant_amount := amount if amount_override < 0 else amount_override
 	if player == null or not player.is_alive() or item_id.is_empty() or grant_amount <= 0:
@@ -76,5 +95,7 @@ func get_label_text(amount_override: int = -1) -> String:
 		if effect_text.is_empty():
 			return display_name
 		return "%s\n%s" % [display_name, effect_text]
+	if is_heal():
+		return "%s +%d" % [display_name, roundi(heal_amount)]
 	var label_amount := amount if amount_override < 0 else amount_override
 	return "%s +%d" % [display_name, label_amount]

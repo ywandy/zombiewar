@@ -1,4 +1,4 @@
-extends Node3D
+extends Control
 class_name MapSelection
 
 const CATALOG_PATH := "res://resources/maps/catalogs/map_catalog.tres"

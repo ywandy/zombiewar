@@ -3,15 +3,18 @@ class_name DeterministicRng
 
 ## 自实现 PCG32-XSH-RR。不使用 Godot 的 RandomNumberGenerator：
 ## 其内部实现不保证跨版本稳定，而帧同步要求逐位一致。
+## 只能在末尾追加：每条流的初始 state 由 room_seed 加流下标派生，
+## 往中间插一条会把它后面所有流的种子整体挪位，等于换了一局的随机序列。
 enum Stream {
 	ZOMBIE_WANDER,
 	ZOMBIE_SPAWN,
 	WEAPON_SPREAD,
 	LOOT_DROP,
 	SHOP,
+	WEAPON_CRIT,
 }
 
-const STREAM_COUNT := 5
+const STREAM_COUNT := 6
 const UINT32_MASK := 0xFFFFFFFF
 const INVERSE_UINT32 := 1.0 / 4294967296.0
 const STREAM_SALT := 0x9E3779B1
