@@ -12,10 +12,7 @@ func bind(
 	socket_name: StringName,
 	relative_transform: Transform3D
 ) -> Node3D:
-	if model_instance != null and is_instance_valid(model_instance):
-		model_instance.queue_free()
-	model_instance = null
-	socket = null
+	clear()
 	if visual_root == null or not is_instance_valid(visual_root):
 		_warn_missing_socket("visual root is invalid")
 		return null
@@ -35,6 +32,12 @@ func bind(
 	socket.add_child(model_instance)
 	model_instance.transform = relative_transform
 	return model_instance
+
+func clear() -> void:
+	if model_instance != null and is_instance_valid(model_instance):
+		model_instance.queue_free()
+	model_instance = null
+	socket = null
 
 func _find_socket(visual_root: Node3D, socket_name: StringName) -> Node3D:
 	var exact := visual_root.find_child(String(socket_name), true, false) as Node3D

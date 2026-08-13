@@ -11,12 +11,18 @@ enum TriggerMode {
 ## 旧字段保留给数据检查与 UI 显示；独立模型由 visual_model_scene 提供。
 @export var visual_node_name: StringName
 @export_group("独立模型绑定")
+## 旧版角色骨架使用的解耦模型与 WeaponSocket.L 绑定。
 @export var visual_model_scene: PackedScene
 @export var visual_socket_name: StringName = &"WeaponSocket.L"
 ## 四元数按 Vector4(x, y, z, w) 存储。manifest 的 rotation_quaternion 已转换为该顺序。
 @export var visual_relative_position := Vector3.ZERO
 @export var visual_relative_rotation := Vector4(0.0, 0.0, 0.0, 1.0)
 @export var visual_relative_scale := Vector3.ONE
+## 新生成角色使用 WeaponHandSocket；存在时优先使用这套生成武器。
+@export var visual_scene: PackedScene
+@export var visual_transform := Transform3D.IDENTITY
+
+@export_group("玩法")
 @export var trigger_mode := TriggerMode.PRESS
 @export_range(0.1, 30.0, 0.1) var attacks_per_second := 1.0
 @export_range(0.0, 500.0, 1.0) var damage := 1.0

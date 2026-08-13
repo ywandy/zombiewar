@@ -1,0 +1,26 @@
+{
+  "id": "male_gunner",
+  "kind": "kits",
+  "task_id": "c360f6d6-ec72-4e22-9baf-9d8945646bca",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c360f6d6-ec72-4e22-9baf-9d8945646bca/tripo_pbr_model_c360f6d6-ec72-4e22-9baf-9d8945646bca.glb?auth_key=1786665600-f1cb55572258b92b425adacbf2d26156-0-6d78d17232c904649e9484c23dae1b6c",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c360f6d6-ec72-4e22-9baf-9d8945646bca/legacy_mesh.webp?auth_key=1786665600-d798f0c0b0fde0bf71d741625201686f-0-04ee941f6e48b52c516c9403f81a9299",
+  "local_model": "assets/generated_models/tripo/kits/male_gunner/male_gunner_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/male_gunner/male_gunner_preview.webp",
+  "model_bytes": 2863140
+}

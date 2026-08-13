@@ -1,0 +1,26 @@
+{
+  "id": "male_assault",
+  "kind": "kits",
+  "task_id": "ab0f3a43-cad2-4769-b45e-b487436dfa5b",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ab0f3a43-cad2-4769-b45e-b487436dfa5b/tripo_pbr_model_ab0f3a43-cad2-4769-b45e-b487436dfa5b.glb?auth_key=1786665600-c3ea34effb03a9af53684e2be0dbfb16-0-3cc72c8701ff1e8fce305aa6dc9a17e9",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ab0f3a43-cad2-4769-b45e-b487436dfa5b/legacy_mesh.webp?auth_key=1786665600-d1af65671cd8c197dcfefad3e728db6a-0-ce20368419459bbeaa15c35a65ad4bc5",
+  "local_model": "assets/generated_models/tripo/kits/male_assault/male_assault_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/male_assault/male_assault_preview.webp",
+  "model_bytes": 2802912
+}

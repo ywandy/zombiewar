@@ -18,6 +18,11 @@ func _init() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
+	# 新选角流程拒绝没有 character_id 的描述符；本校验只关心库存接线，
+	# 因此显式建立一名目录默认角色，避免依赖其他校验留下的 GameSession 状态。
+	var session = root.get_node_or_null("GameSession")
+	if session != null:
+		session.configure_single()
 	var scene := load(DEMO_MAP_PATH) as PackedScene
 	_check("DemoMap scene must load", scene != null)
 	if scene == null:

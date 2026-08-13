@@ -1,0 +1,26 @@
+{
+  "id": "male_medic",
+  "kind": "kits",
+  "task_id": "44acecdf-0ba7-4a88-ab0f-1eb9a2631302",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/44acecdf-0ba7-4a88-ab0f-1eb9a2631302/tripo_pbr_model_44acecdf-0ba7-4a88-ab0f-1eb9a2631302.glb?auth_key=1786665600-0b2c39ed9fbd1e2aa5f2ded167b931d7-0-830ed1212b97365a1f74ebfd3558e3ad",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/44acecdf-0ba7-4a88-ab0f-1eb9a2631302/legacy_mesh.webp?auth_key=1786665600-46dd8c15d0dc2b21b01e6880d5da26b7-0-21623a75046e6d872182da8c3559bdd2",
+  "local_model": "assets/generated_models/tripo/kits/male_medic/male_medic_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/male_medic/male_medic_preview.webp",
+  "model_bytes": 2874932
+}

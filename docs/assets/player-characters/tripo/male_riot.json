@@ -1,0 +1,26 @@
+{
+  "id": "male_riot",
+  "kind": "kits",
+  "task_id": "1c06c4ff-7998-4716-9f41-b135b32d3713",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/1c06c4ff-7998-4716-9f41-b135b32d3713/tripo_pbr_model_1c06c4ff-7998-4716-9f41-b135b32d3713.glb?auth_key=1786665600-5cd4bbe882047acdb4e33a4b0097fead-0-5cf2197bf5fb8cb1910347adfe30523f",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/1c06c4ff-7998-4716-9f41-b135b32d3713/legacy_mesh.webp?auth_key=1786665600-554f95edeb471a57664d500dd4ae0d88-0-700d94108e1378f90b8cd0e3aaa0ed16",
+  "local_model": "assets/generated_models/tripo/kits/male_riot/male_riot_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/male_riot/male_riot_preview.webp",
+  "model_bytes": 2857720
+}

@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D, isolated modular character kit
+Input images: Image 1 is the approved male base registration reference. Image 2 is the approved assault kit front view and is authoritative for component count, identity, materials, colors, wear, and body-relative placement.
+Primary request: render the exact same separated assault kit components from the invisible body's exact rear. Change only the camera to a true orthographic back view.
+Parts invariant: preserve exactly one rear head-and-hair shell with the back of the red headband, one rear chest-rig harness, one backpack, two elbow guards, two waist pouches, and two knee pads. Keep every item a separate floating object with clear air gaps. Show coherent back construction, straps, and attachment surfaces; do not merge, hide, duplicate, or add parts.
+Camera and registration: rotate camera exactly 180 degrees around the stationary invisible A-pose registration; exact rear, eye-level, no perspective, no three-quarter angle; same 2048-square crop, body scale, vertical registration, and component centers as Image 2.
+Style: identical chunky 2.5D survival-game line work, purple-black materials, red identifiers, angular bevels, and hand-painted wear as Image 2.
+Backdrop: perfectly flat uniform light gray, no vignette, no gradient, no horizon, no floor, no shadow.
+Constraints: isolated equipment only; back of head only, no face; no base body; no weapon; no text; no watermark.
+Avoid: face visible, complete human silhouette, torso flesh, arms, hands, legs, feet, fused accessories, missing parts, front view, three-quarter view, scenery, photorealism.

@@ -16,6 +16,7 @@ var character_model: Node3D
 var missing_resource_warned := false
 var missing_animation_warned := false
 var preview_weapon_binding: WeaponVisualBinding
+var current_character_id: StringName = &""
 
 func _ready() -> void:
 	_instantiate_character()
@@ -34,6 +35,21 @@ func set_online(value: bool) -> void:
 func set_accent_color(value: Color) -> void:
 	accent_color = value
 	_apply_status()
+
+func set_character_definition(definition: CharacterDefinition) -> void:
+	var next_id: StringName = definition.character_id if definition != null else &""
+	if next_id != &"" and next_id == current_character_id and character_model != null:
+		return
+	if character_model != null and is_instance_valid(character_model):
+		character_model.free()
+	character_model = null
+	current_character_id = next_id
+	var selected := (
+		definition.model_scene
+		if definition != null and definition.model_scene != null
+		else character_scene
+	)
+	_instantiate_character(selected)
 
 ## 座位卡里名字由卡片自己的 2D 标签画，Label3D 要能关掉，
 ## 否则同一个名字会在卡里出现两次。
@@ -75,11 +91,12 @@ func _visible_within_preview(node: Node3D) -> bool:
 		cursor = cursor.get_parent()
 	return true
 
-func _instantiate_character() -> void:
-	if character_scene == null:
+func _instantiate_character(scene: PackedScene = null) -> void:
+	var selected := scene if scene != null else character_scene
+	if selected == null:
 		_warn_missing_resource()
 		return
-	var instance := character_scene.instantiate() as Node3D
+	var instance := selected.instantiate() as Node3D
 	if instance == null:
 		_warn_missing_resource()
 		return
@@ -93,11 +110,29 @@ func _configure_weapons() -> void:
 	if character_model == null:
 		return
 	preview_weapon_binding = WeaponVisualBindingScript.new()
+	var uses_generated_socket := character_model.find_child(
+		"WeaponHandSocket", true, false
+	) != null
+	var model_scene: PackedScene = (
+		DISPLAY_WEAPON_DEFINITION.visual_scene
+		if uses_generated_socket
+		else DISPLAY_WEAPON_DEFINITION.visual_model_scene
+	)
+	var socket_name: StringName = (
+		&"WeaponHandSocket"
+		if uses_generated_socket
+		else DISPLAY_WEAPON_DEFINITION.visual_socket_name
+	)
+	var model_transform := (
+		DISPLAY_WEAPON_DEFINITION.visual_transform
+		if uses_generated_socket
+		else DISPLAY_WEAPON_DEFINITION.get_visual_relative_transform()
+	)
 	preview_weapon_binding.bind(
 		character_model,
-		DISPLAY_WEAPON_DEFINITION.visual_model_scene,
-		DISPLAY_WEAPON_DEFINITION.visual_socket_name,
-		DISPLAY_WEAPON_DEFINITION.get_visual_relative_transform()
+		model_scene,
+		socket_name,
+		model_transform
 	)
 
 ## 待机动画必须循环播放。

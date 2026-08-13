@@ -1,0 +1,26 @@
+{
+  "id": "tactical_knife",
+  "kind": "weapons",
+  "task_id": "e8c6d53d-8de0-4bda-b2fb-02eed07574b3",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 5000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/e8c6d53d-8de0-4bda-b2fb-02eed07574b3/tripo_pbr_model_e8c6d53d-8de0-4bda-b2fb-02eed07574b3.glb?auth_key=1786665600-679fb9ea3588859c86d91d51856a1920-0-37ef07f032f7d09075fb27c987971fe9",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/e8c6d53d-8de0-4bda-b2fb-02eed07574b3/legacy_mesh.webp?auth_key=1786665600-e9fb8b175fb5263078b94b8397c2d1b3-0-7b9ebeaac827350f0ab2f875d5988d10",
+  "local_model": "assets/generated_models/tripo/weapons/tactical_knife/tactical_knife_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/weapons/tactical_knife/tactical_knife_preview.webp",
+  "model_bytes": 2469860
+}

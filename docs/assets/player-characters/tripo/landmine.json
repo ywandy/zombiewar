@@ -1,0 +1,26 @@
+{
+  "id": "landmine",
+  "kind": "weapons",
+  "task_id": "c0544340-1fa4-4968-99a6-9ebcb742d2b9",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 5000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c0544340-1fa4-4968-99a6-9ebcb742d2b9/tripo_pbr_model_c0544340-1fa4-4968-99a6-9ebcb742d2b9.glb?auth_key=1786665600-e4d9f0a2bdad8ad4894892d119b77196-0-3110998ff01a3f8e31a763737f026092",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c0544340-1fa4-4968-99a6-9ebcb742d2b9/legacy_mesh.webp?auth_key=1786665600-ba93f1200cd292b58346511dffc2126a-0-aa6067a39dd4ba90de7fd929246ba9da",
+  "local_model": "assets/generated_models/tripo/weapons/landmine/landmine_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/weapons/landmine/landmine_preview.webp",
+  "model_bytes": 2039644
+}

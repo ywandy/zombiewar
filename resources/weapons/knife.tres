@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="MeleeWeaponDefinition" format=3 uid="uid://ei1f7ve0w3yc"]
+[gd_resource type="Resource" script_class="MeleeWeaponDefinition" load_steps=4 format=3 uid="uid://ei1f7ve0w3yc"]
 
 [ext_resource type="Script" uid="uid://bmqg11tmgwcam" path="res://scripts/combat/weapons/melee_weapon_definition.gd" id="1_definition"]
 [ext_resource type="PackedScene" path="res://assets/weapons/decoupled/Knife/Knife.gltf" id="2_model"]
+[ext_resource type="PackedScene" path="res://assets/weapons/generated/tactical_knife.glb" id="2_visual"]
 
 [resource]
 script = ExtResource("1_definition")
@@ -13,6 +14,7 @@ visual_socket_name = &"WeaponSocket.L"
 visual_relative_position = Vector3(0.0577742, 0.02368594, 0.01348705)
 visual_relative_rotation = Vector4(-3.911555e-08, 1.18569e-07, 1.318404e-08, 1)
 visual_relative_scale = Vector3(0.99999994, 0.99999988, 0.99999994)
+visual_scene = ExtResource("2_visual")
 damage = 35.0
 attack_animation = &"Slash"
 attack_lock_duration = 0.55

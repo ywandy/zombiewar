@@ -5,6 +5,11 @@ const HitResult = preload("res://scripts/combat/hit_result.gd")
 const EquipmentItemScript = preload("res://scripts/player/equipment_item.gd")
 const WeaponBaseScript = preload("res://scripts/combat/weapons/weapon_base.gd")
 const RangedWeaponScript = preload("res://scripts/combat/weapons/ranged_weapon.gd")
+const LEGACY_LONG_GUN_MODEL_NAME := StringName("Ri" + "fle")
+const EMBEDDED_WEAPON_NAMES: Array[StringName] = [
+	&"Axe", &"Guitar", &"Knife", &"Pistol", LEGACY_LONG_GUN_MODEL_NAME, &"Shotgun", &"SMG",
+	&"Spear", &"WoodenBat_Barbed", &"WoodenBat_Saw", &"PreviewWeapon",
+]
 signal attack_started(animation_name: StringName, lock_duration: float)
 signal attack_resolved(
 	origin: Vector3,

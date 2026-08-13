@@ -64,11 +64,7 @@ func _on_confirm_button_pressed() -> void:
 		error_label.show()
 		return
 	GameSession.select_map_scene(scene_path)
-	if GameSession.map_selection_mode == GameSessionState.Mode.SINGLE:
-		GameSession.configure_single()
-		get_tree().change_scene_to_file(scene_path)
-	else:
-		get_tree().change_scene_to_file(LOCAL_LOBBY_PATH)
+	get_tree().change_scene_to_file(LOCAL_LOBBY_PATH)
 
 func _on_back_button_pressed() -> void:
 	GameSession.clear()

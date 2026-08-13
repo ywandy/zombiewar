@@ -1,0 +1,37 @@
+{
+  "Body": {
+    "vertices": 10816,
+    "polygons": 17996,
+    "vertex_groups": 43,
+    "unweighted": 0
+  },
+  "AssaultKit": {
+    "vertices": 8305,
+    "polygons": 11978,
+    "vertex_groups": 43,
+    "unweighted": 0
+  },
+  "actions": [
+    "Death",
+    "Duck",
+    "HitReact",
+    "Idle",
+    "Idle_Gun",
+    "Jump",
+    "Jump_Idle",
+    "Jump_Land",
+    "No",
+    "Punch",
+    "Run",
+    "Run_Gun",
+    "Run_Slash",
+    "Run_Stab",
+    "Slash",
+    "Stab",
+    "Walk",
+    "Walk_Gun",
+    "Wave",
+    "Yes"
+  ],
+  "bones": 43
+}

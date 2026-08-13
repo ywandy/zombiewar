@@ -1,6 +1,7 @@
 extends SceneTree
 
 const MAP_SELECTION_SCENE_PATH := "res://scenes/menu/MapSelection.tscn"
+const CHARACTER_SELECTION_SCENE_PATH := "res://scenes/menu/LocalMultiplayerLobby.tscn"
 const DEMO_MAP_SCENE_PATH := "res://scenes/maps/demo/DemoMap.tscn"
 
 var failures: Array[String] = []
@@ -32,7 +33,19 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check("Enter changes scene exactly once", scene_change_count == 1)
-	_check("Enter launches the selected demo map", current_scene != null)
+	_check("Enter launches character selection", current_scene != null)
+	var character_selection = current_scene
+	if character_selection != null:
+		_check(
+			"character selection is running",
+			character_selection.scene_file_path == CHARACTER_SELECTION_SCENE_PATH
+		)
+		character_selection._handle_key(enter)
+		await process_frame
+		await process_frame
+		await process_frame
+	_check("character confirmation changes scene once", scene_change_count == 1)
+	_check("character confirmation launches the selected demo map", current_scene != null)
 	if current_scene != null:
 		_check("selected demo map is running", current_scene.scene_file_path == DEMO_MAP_SCENE_PATH)
 		_check("gameplay spawns one player", current_scene.get_node_or_null("Players/P1") != null)

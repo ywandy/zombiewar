@@ -26,23 +26,23 @@ func _run() -> void:
 		_finish(failures)
 		return
 
-	# 防爆（survivor_green）：生命 +40 → 140，移速 ×0.8 → 4.0
-	var green = catalog.get_by_id(&"survivor_green")
-	_expect(green != null, "survivor_green 必须存在于目录", failures)
-	if green != null:
-		_check_player(green, 140.0, 4.0, "防爆", failures)
+	# 防爆（male_riot）：生命 +40 → 140，移速 ×0.8 → 4.0
+	var riot = catalog.get_by_id(&"male_riot")
+	_expect(riot != null, "male_riot 必须存在于目录", failures)
+	if riot != null:
+		_check_player(riot, 140.0, 4.0, "防爆", failures)
 
-	# 医疗（survivor_blue）：生命 -15 → 85，移速 ×1.05 → 5.25
-	var blue = catalog.get_by_id(&"survivor_blue")
-	_expect(blue != null, "survivor_blue 必须存在于目录", failures)
-	if blue != null:
-		_check_player(blue, 85.0, 5.25, "医疗", failures)
+	# 医疗（male_medic）：生命 -15 → 85，移速 ×1.05 → 5.25
+	var medic = catalog.get_by_id(&"male_medic")
+	_expect(medic != null, "male_medic 必须存在于目录", failures)
+	if medic != null:
+		_check_player(medic, 85.0, 5.25, "医疗", failures)
 
-	# 突击（survivor_red）：生命 +0 → 100，移速 ×0.92 → 4.6
-	var red = catalog.get_by_id(&"survivor_red")
-	_expect(red != null, "survivor_red 必须存在于目录", failures)
-	if red != null:
-		_check_player(red, 100.0, 4.6, "突击", failures)
+	# 突击（male_assault）：生命 +0 → 100，移速 ×0.92 → 4.6
+	var assault = catalog.get_by_id(&"male_assault")
+	_expect(assault != null, "male_assault 必须存在于目录", failures)
+	if assault != null:
+		_check_player(assault, 100.0, 4.6, "突击", failures)
 
 	# 防爆减伤：防爆角色 apply_damage(100) 只掉 70%（100×0.7），剩 130/140。
 	_check_blast_armor(catalog, failures)
@@ -51,12 +51,12 @@ func _run() -> void:
 
 ## 防爆甲：passive_strength=0.3 时，100 点伤害被减到 70，140 血剩 70。
 func _check_blast_armor(catalog, failures: Array[String]) -> void:
-	var green = catalog.get_by_id(&"survivor_green")
-	if green == null:
-		_expect(false, "防爆减伤：survivor_green 不存在", failures)
+	var riot = catalog.get_by_id(&"male_riot")
+	if riot == null:
+		_expect(false, "防爆减伤：male_riot 不存在", failures)
 		return
 	var player := PLAYER_SCENE.instantiate()
-	player.apply_character_definition(green)
+	player.apply_character_definition(riot)
 	root.add_child(player)
 	var before: float = player.health.current
 	player.apply_damage(100.0, Vector3.ZERO)
@@ -71,9 +71,9 @@ func _check_blast_armor(catalog, failures: Array[String]) -> void:
 	player.queue_free()
 
 	# 对照：无 blast_armor 的角色吃满 100。
-	var red = catalog.get_by_id(&"survivor_red")
+	var assault = catalog.get_by_id(&"male_assault")
 	var control := PLAYER_SCENE.instantiate()
-	control.apply_character_definition(red)
+	control.apply_character_definition(assault)
 	root.add_child(control)
 	var control_before: float = control.health.current
 	control.apply_damage(100.0, Vector3.ZERO)

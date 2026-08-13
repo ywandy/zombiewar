@@ -1,0 +1,26 @@
+{
+  "id": "mp5",
+  "kind": "weapons",
+  "task_id": "fa6a87bc-5be6-47c1-bcb5-aa8754c595e3",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 5000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/fa6a87bc-5be6-47c1-bcb5-aa8754c595e3/tripo_pbr_model_fa6a87bc-5be6-47c1-bcb5-aa8754c595e3.glb?auth_key=1786665600-cd4cadafc65ba4ba1d1cd66a9844b382-0-c8faa20fc34fa43f778e5a89ec23bb56",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/fa6a87bc-5be6-47c1-bcb5-aa8754c595e3/legacy_mesh.webp?auth_key=1786665600-713723efc90f45678f78dd3c65d5ab20-0-d850839aad5984b07d55d8631fb074e9",
+  "local_model": "assets/generated_models/tripo/weapons/mp5/mp5_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/weapons/mp5/mp5_preview.webp",
+  "model_bytes": 2766704
+}

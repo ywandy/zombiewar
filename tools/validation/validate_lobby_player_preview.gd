@@ -87,13 +87,18 @@ func _run() -> void:
 	await process_frame
 
 	var lobby_scene := load("res://scenes/menu/LocalMultiplayerLobby.tscn") as PackedScene
+	var session := root.get_node_or_null("GameSession")
+	if session != null:
+		session.begin_map_selection(session.Mode.LOCAL_MULTIPLAYER)
 	var lobby = lobby_scene.instantiate()
 	root.add_child(lobby)
 	await process_frame
 	_expect(lobby.get_node_or_null("LobbyWorld/Slots/P1/LobbyPlayerPreview") == null, "empty lobby slot must not contain a character preview", failures)
-	lobby.join_state.try_join(0)
+	lobby.selection_state.try_join(0)
 	lobby._sync_slots()
 	_expect(lobby.get_node_or_null("LobbyWorld/Slots/P1/LobbyPlayerPreview") != null, "joined lobby slot must instantiate a character preview", failures)
+	if session != null:
+		session.clear()
 	lobby.queue_free()
 	await process_frame
 
