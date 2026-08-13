@@ -1,0 +1,212 @@
+{
+  "character": "male_gunner",
+  "bones": 43,
+  "actions": 20,
+  "base_triangles": 16500,
+  "budget": 30000,
+  "parts": [
+    {
+      "name": "male_gunner_part00_Shoulder.R",
+      "bone": "Shoulder.R",
+      "triangles": 354
+    },
+    {
+      "name": "male_gunner_part01_UpperLeg.L",
+      "bone": "UpperLeg.L",
+      "triangles": 142
+    },
+    {
+      "name": "male_gunner_part02_UpperLeg.L",
+      "bone": "UpperLeg.L",
+      "triangles": 295
+    },
+    {
+      "name": "male_gunner_part03_Hips",
+      "bone": "Hips",
+      "triangles": 350
+    },
+    {
+      "name": "male_gunner_part04_Hips",
+      "bone": "Hips",
+      "triangles": 80
+    },
+    {
+      "name": "male_gunner_part05_LowerLeg.L",
+      "bone": "LowerLeg.L",
+      "triangles": 424
+    },
+    {
+      "name": "male_gunner_part06_UpperLeg.L",
+      "bone": "UpperLeg.L",
+      "triangles": 155
+    },
+    {
+      "name": "male_gunner_part07_LowerLeg.L",
+      "bone": "LowerLeg.L",
+      "triangles": 157
+    },
+    {
+      "name": "male_gunner_part08_LowerLeg.L",
+      "bone": "LowerLeg.L",
+      "triangles": 139
+    },
+    {
+      "name": "male_gunner_part09_UpperLeg.R",
+      "bone": "UpperLeg.R",
+      "triangles": 569
+    },
+    {
+      "name": "male_gunner_part10_Abdomen",
+      "bone": "Abdomen",
+      "triangles": 1123
+    },
+    {
+      "name": "male_gunner_part11_UpperLeg.L",
+      "bone": "UpperLeg.L",
+      "triangles": 149
+    },
+    {
+      "name": "male_gunner_part12_Torso",
+      "bone": "Torso",
+      "triangles": 5493
+    },
+    {
+      "name": "male_gunner_part13_Head",
+      "bone": "Head",
+      "triangles": 224
+    },
+    {
+      "name": "male_gunner_part14_Shoulder.R",
+      "bone": "Shoulder.R",
+      "triangles": 299
+    },
+    {
+      "name": "male_gunner_part15_LowerLeg.L",
+      "bone": "LowerLeg.L",
+      "triangles": 235
+    },
+    {
+      "name": "male_gunner_part16_UpperLeg.L",
+      "bone": "UpperLeg.L",
+      "triangles": 254
+    },
+    {
+      "name": "male_gunner_part17_LowerLeg.L",
+      "bone": "LowerLeg.L",
+      "triangles": 441
+    },
+    {
+      "name": "male_gunner_part18_Hips",
+      "bone": "Hips",
+      "triangles": 301
+    },
+    {
+      "name": "male_gunner_part19_Hips",
+      "bone": "Hips",
+      "triangles": 36
+    },
+    {
+      "name": "male_gunner_part20_Neck",
+      "bone": "Neck",
+      "triangles": 73
+    },
+    {
+      "name": "male_gunner_part21_LowerLeg.L",
+      "bone": "LowerLeg.L",
+      "triangles": 174
+    },
+    {
+      "name": "male_gunner_part22_Head",
+      "bone": "Head",
+      "triangles": 321
+    },
+    {
+      "name": "male_gunner_part23_Neck",
+      "bone": "Neck",
+      "triangles": 195
+    },
+    {
+      "name": "male_gunner_part24_UpperLeg.L",
+      "bone": "UpperLeg.L",
+      "triangles": 126
+    },
+    {
+      "name": "male_gunner_part25_Shoulder.L",
+      "bone": "Shoulder.L",
+      "triangles": 42
+    },
+    {
+      "name": "male_gunner_part26_Abdomen",
+      "bone": "Abdomen",
+      "triangles": 105
+    },
+    {
+      "name": "male_gunner_part27_Hips",
+      "bone": "Hips",
+      "triangles": 116
+    },
+    {
+      "name": "male_gunner_part28_Hips",
+      "bone": "Hips",
+      "triangles": 102
+    },
+    {
+      "name": "male_gunner_part29_Shoulder.R",
+      "bone": "Shoulder.R",
+      "triangles": 371
+    },
+    {
+      "name": "male_gunner_part30_UpperLeg.R",
+      "bone": "UpperLeg.R",
+      "triangles": 128
+    },
+    {
+      "name": "male_gunner_part31_Torso",
+      "bone": "Torso",
+      "triangles": 80
+    },
+    {
+      "name": "male_gunner_part32_Neck",
+      "bone": "Neck",
+      "triangles": 59
+    },
+    {
+      "name": "male_gunner_part33_Head",
+      "bone": "Head",
+      "triangles": 60
+    },
+    {
+      "name": "male_gunner_part34_Hips",
+      "bone": "Hips",
+      "triangles": 87
+    },
+    {
+      "name": "male_gunner_part35_Head",
+      "bone": "Head",
+      "triangles": 123
+    },
+    {
+      "name": "male_gunner_part36_UpperLeg.R",
+      "bone": "UpperLeg.R",
+      "triangles": 63
+    },
+    {
+      "name": "male_gunner_part37_Abdomen",
+      "bone": "Abdomen",
+      "triangles": 24
+    },
+    {
+      "name": "male_gunner_part38_Head",
+      "bone": "Head",
+      "triangles": 1
+    },
+    {
+      "name": "male_gunner_part39_Abdomen",
+      "bone": "Abdomen",
+      "triangles": 1
+    }
+  ],
+  "total_triangles": 29971,
+  "part_count": 40,
+  "out": "assets/characters/assembled/male_gunner.glb"
+}

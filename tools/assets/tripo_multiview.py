@@ -27,8 +27,6 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-import boto3
-
 SETTINGS = Path.home() / "Library/Application Support/43Coding/settings.json"
 LUMEN_ENV = Path("/Users/liangpingbo/Desktop/4399/frontend/lumen/.env")
 TRIPO_BASE = "https://aihub.gz4399.com/api/aihub/v1/rawproxy/tripo3d/v2/openapi"
@@ -71,6 +69,8 @@ def get(path: str) -> dict:
 
 
 def upload_views(name: str, view_dir: Path, env: dict[str, str]) -> list[str]:
+    import boto3  # 惰性导入：--resume-task 只下载，不该因为缺 boto3 而失败
+
     s3 = boto3.client(
         "s3",
         endpoint_url=env["S3_ENDPOINT"],
@@ -89,7 +89,7 @@ def upload_views(name: str, view_dir: Path, env: dict[str, str]) -> list[str]:
     return urls
 
 
-def submit(name: str, urls: list[str]) -> str:
+def submit(name: str, urls: list[str], attempts: int = 8) -> str:
     payload = {
         "type": "multiview_to_model",
         # 四个独立文件对象，不能把四视图拼成一张图提交。
@@ -98,10 +98,28 @@ def submit(name: str, urls: list[str]) -> str:
         "texture": True,
         "texture_quality": "detailed",
     }
-    res = post("/task", payload)
-    if res.get("code") != 0:
-        raise SystemExit(f"[{name}] 提交失败: {res}")
-    return res["data"]["task_id"]
+    # 全量并发时会撞并发/额度上限。撞上就退避重排队，不能让任务直接失败丢掉。
+    delay = 15
+    for attempt in range(1, attempts + 1):
+        try:
+            res = post("/task", payload)
+        except Exception as exc:  # 网关 429/5xx 也走同一条退避路径
+            if attempt == attempts:
+                raise SystemExit(f"[{name}] 提交失败（{attempts} 次）: {exc}")
+            print(f"[{name}] 提交异常，{delay}s 后重试 ({attempt}/{attempts}): {exc}", flush=True)
+            time.sleep(delay)
+            delay = min(delay * 2, 180)
+            continue
+        if res.get("code") == 0:
+            return res["data"]["task_id"]
+        msg = str(res)
+        throttled = any(k in msg for k in ("concurren", "limit", "quota", "rate", "too many", "busy"))
+        if not throttled or attempt == attempts:
+            raise SystemExit(f"[{name}] 提交失败: {res}")
+        print(f"[{name}] 被限流，{delay}s 后重排队 ({attempt}/{attempts})", flush=True)
+        time.sleep(delay)
+        delay = min(delay * 2, 180)
+    raise SystemExit(f"[{name}] 提交失败：重试用尽")
 
 
 def wait(name: str, task_id: str, timeout_s: int = 1800) -> dict:
@@ -127,9 +145,33 @@ def download(name: str, data: dict, out: Path) -> Path:
     if not url:
         raise SystemExit(f"[{name}] 结果里没有模型地址: {output}")
     out.parent.mkdir(parents=True, exist_ok=True)
-    with urllib.request.urlopen(url, timeout=600) as r, out.open("wb") as f:
-        f.write(r.read())
-    return out
+    # 先写 .part 再改名：下载被中断时不会留下一个 0 字节的文件冒充成功产物。
+    part = out.with_suffix(out.suffix + ".part")
+    # 高并发下 CDN 会重置连接，单次失败不该让整个任务作废。
+    for attempt in range(1, 6):
+        written = 0
+        try:
+            with urllib.request.urlopen(url, timeout=900) as r, part.open("wb") as f:
+                while True:
+                    chunk = r.read(1 << 20)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+                    written += len(chunk)
+                    if written % (16 << 20) < (1 << 20):
+                        print(f"[{name}] 下载 {written / 1048576:.0f} MB", flush=True)
+        except Exception as exc:
+            print(f"[{name}] 下载中断于 {written / 1048576:.0f} MB，重试 {attempt}/5: {exc}", flush=True)
+            part.unlink(missing_ok=True)
+            time.sleep(min(10 * attempt, 60))
+            continue
+        if written == 0:
+            part.unlink(missing_ok=True)
+            time.sleep(min(10 * attempt, 60))
+            continue
+        part.replace(out)
+        return out
+    raise SystemExit(f"[{name}] 下载失败：重试用尽")
 
 
 def run_one(name: str, view_dir: Path, out: Path, env: dict[str, str]) -> dict:
@@ -148,9 +190,20 @@ def main() -> None:
     ap.add_argument("--dir")
     ap.add_argument("--out")
     ap.add_argument("--batch", help="TSV: name<TAB>view_dir<TAB>out_glb")
+    ap.add_argument("--resume-task", help="已成功的 task_id，只重新下载，不重跑生成")
     ap.add_argument("--concurrency", type=int, default=3, help="Tripo 同时运行任务数，建议 2-3")
     ap.add_argument("--record", default="docs/assets/player-characters/tripo-tasks.jsonl")
     args = ap.parse_args()
+
+    if args.resume_task:
+        if not args.out:
+            ap.error("--resume-task 需要 --out")
+        name = args.name or args.resume_task[:8]
+        data = get(f"/task/{args.resume_task}")["data"]
+        if data.get("status") != "success":
+            raise SystemExit(f"[{name}] 任务状态是 {data.get('status')}，无法下载")
+        print(f"[{name}] 完成 -> {download(name, data, Path(args.out))}")
+        return
 
     env = load_env(LUMEN_ENV)
     jobs: list[tuple[str, Path, Path]] = []
@@ -172,7 +225,7 @@ def main() -> None:
             name = futures[fut]
             try:
                 results.append(fut.result())
-            except SystemExit as exc:
+            except (SystemExit, Exception) as exc:
                 print(f"[{name}] 失败: {exc}", file=sys.stderr, flush=True)
                 failures.append(name)
 
