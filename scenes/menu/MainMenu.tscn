@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/menu/main_menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" path="res://assets/ui/menu/bg.png" id="2_bg"]
-[ext_resource type="Texture2D" path="res://assets/ui/menu/hero.png" id="3_hero"]
+[ext_resource type="Texture2D" path="res://assets/ui/menu/hero_cartoon.png" id="3_hero"]
 [ext_resource type="Texture2D" path="res://assets/ui/menu/logo.png" id="4_logo"]
 [ext_resource type="Texture2D" path="res://assets/ui/menu/icon_coin.png" id="5_coin"]
 [ext_resource type="AudioStream" path="res://assets/sfx/boxhead/ui_click.mp3" id="6_click"]
@@ -76,17 +76,16 @@ stretch_mode = 6
 
 [node name="HeroTex" type="TextureRect" parent="."]
 unique_name_in_owner = true
-modulate = Color(1, 1, 1, 0.9)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -190.0
-offset_top = -140.0
-offset_right = 190.0
-offset_bottom = 330.0
+offset_left = -215.0
+offset_top = -150.0
+offset_right = 215.0
+offset_bottom = 340.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_hero")
