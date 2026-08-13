@@ -24,6 +24,7 @@ var accent_color := Color(1.0, 0.43, 0.24, 1.0)
 var character_model: Node3D
 var missing_resource_warned := false
 var missing_animation_warned := false
+var current_character_id: StringName = &""
 
 func _ready() -> void:
 	_instantiate_character()
@@ -44,9 +45,13 @@ func set_accent_color(value: Color) -> void:
 	_apply_status()
 
 func set_character_definition(definition: CharacterDefinition) -> void:
+	var next_id: StringName = definition.character_id if definition != null else &""
+	if next_id != &"" and next_id == current_character_id and character_model != null:
+		return
 	if character_model != null and is_instance_valid(character_model):
 		character_model.free()
 	character_model = null
+	current_character_id = next_id
 	var selected := (
 		definition.model_scene
 		if definition != null and definition.model_scene != null
