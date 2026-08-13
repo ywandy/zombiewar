@@ -47,7 +47,7 @@ func _configure_mode() -> void:
 	if is_single_mode:
 		selection_state.initialize_single()
 		title.text = "选择角色"
-		join_hint.text = "A / D 或 ← / → 或 LB / RB 选择角色"
+		join_hint.text = "A / D 或 左 / 右 或 LB / RB 选择角色"
 	else:
 		selection_state.clear()
 		title.text = "本地多人 · 加入并选择角色"
@@ -289,7 +289,7 @@ func _selection_hint(descriptor) -> String:
 		LocalPlayerDescriptorScript.SourceKind.KEYBOARD_WASD:
 			return "A / D 选择"
 		LocalPlayerDescriptorScript.SourceKind.KEYBOARD_ARROWS:
-			return "← / → 选择"
+			return "左 / 右 选择"
 		LocalPlayerDescriptorScript.SourceKind.GAMEPAD:
 			return "LB / RB 选择"
 		_:

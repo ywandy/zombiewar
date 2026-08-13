@@ -52,10 +52,22 @@ func _initialize() -> void:
 
 	var weapons := _collect_weapons(equipment)
 	_check("player loadout must contain weapons", not weapons.is_empty())
+	var independent_visual_probe := CharacterProbeScene.instantiate() as Node3D
+	root.add_child(independent_visual_probe)
 	for weapon in weapons:
+		# Player.tscn 的 fallback 仍是只含内嵌武器的旧角色；它没有新角色契约里的
+		# WeaponHandSocket。独立表现必须在带 socket 的角色上验证，legacy 表现则继续
+		# 保持原绑定，以覆盖旧模型节点名的兼容路径。
+		if weapon.definition != null and weapon.definition.visual_scene != null:
+			weapon.bind_context(
+				player,
+				independent_visual_probe,
+				player.get_node("FunctionalRayOrigin") as Marker3D
+			)
 		_test_weapon(weapon, model_node_names)
 	_test_independent_visual_mount(player)
 	_test_simulation_registration(weapons)
+	independent_visual_probe.free()
 
 	_report(player)
 
