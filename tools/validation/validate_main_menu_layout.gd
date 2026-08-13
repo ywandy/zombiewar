@@ -15,11 +15,11 @@ func _run() -> void:
 	var menu: Node = packed.instantiate()
 	root.add_child(menu)
 	var ok := true
-	for path: String in ["BgTex", "HeroTex", "UILayer/TopBar", "UILayer/LeftRail",
-			"UILayer/RightRail", "UILayer/StartButton", "UILayer/FadeOverlay",
-			"UILayer/ToastLabel"]:
+	for path: String in ["BgTex", "HeroTex", "UILayer/Logo", "UILayer/Tagline",
+			"UILayer/MenuColumn", "UILayer/RightLinks", "UILayer/FadeOverlay",
+			"UILayer/ToastLabel", "UILayer/VersionLabel", "UILayer/FooterHint"]:
 		ok = ok and _c(menu.get_node_or_null(path) != null, "缺节点 %s" % path)
-	var start := menu.get_node_or_null("UILayer/StartButton") as Button
+	var start := menu.get_node_or_null("UILayer/MenuColumn/StartButton") as Button
 	ok = ok and _c(start != null and start.text == "开始游戏", "开始游戏按钮文案")
 	var mv := menu.get_node_or_null("%MaterialValue") as Label
 	ok = ok and _c(mv != null, "货币数值 Label 存在")

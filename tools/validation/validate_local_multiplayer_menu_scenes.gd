@@ -22,17 +22,22 @@ func _run() -> void:
 	_expect(main_scene != null, "MainMenu scene must load", failures)
 	if main_scene != null:
 		var main = main_scene.instantiate()
-		var start_button := main.get_node_or_null("UILayer/StartButton") as Button
-		var local_button := main.get_node_or_null("UILayer/LeftRail/LocalButton") as Button
-		var online_button := main.get_node_or_null("UILayer/LeftRail/OnlineButton") as Button
-		var leaderboard_button := main.get_node_or_null("UILayer/RightRail/LeaderboardButton") as Button
+		var start_button := main.get_node_or_null("UILayer/MenuColumn/StartButton") as Button
+		var local_button := main.get_node_or_null("UILayer/MenuColumn/LocalButton") as Button
+		var online_button := main.get_node_or_null("UILayer/MenuColumn/OnlineButton") as Button
+		var leaderboard_button := main.get_node_or_null("UILayer/RightLinks/LeaderboardLink") as Button
 		_expect(start_button != null, "MainMenu must contain StartButton", failures)
 		_expect(local_button != null, "MainMenu must contain LocalButton", failures)
 		_expect(online_button != null, "MainMenu must contain OnlineButton", failures)
 		_expect(leaderboard_button != null, "MainMenu must contain LeaderboardButton", failures)
+		var codex_button := main.get_node_or_null("UILayer/MenuColumn/CodexButton") as Button
+		var options_button := main.get_node_or_null("UILayer/MenuColumn/OptionsButton") as Button
+		var quit_button := main.get_node_or_null("UILayer/MenuColumn/QuitButton") as Button
 		# 焦点链必须是一条不断的链：手柄用户只有方向键，链上少一环就等于
 		# 那个按钮在手柄下不可达。逐段断言而不是只测两端。
-		var focus_chain: Array = [local_button, online_button]
+		var focus_chain: Array = [
+			start_button, local_button, online_button, codex_button, options_button, quit_button
+		]
 		var chain_is_complete := true
 		for button in focus_chain:
 			if button == null:

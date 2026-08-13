@@ -10,10 +10,11 @@ const MenuFlow = preload("res://scripts/menu/menu_flow.gd")
 @onready var start_button: Button = %StartButton
 @onready var local_button: Button = %LocalButton
 @onready var online_button: Button = %OnlineButton
-@onready var leaderboard_button: Button = %LeaderboardButton
 @onready var codex_button: Button = %CodexButton
-@onready var upgrade_button: Button = %UpgradeButton
-@onready var settings_button: Button = %SettingsButton
+@onready var options_button: Button = %OptionsButton
+@onready var quit_button: Button = %QuitButton
+@onready var upgrade_link: Button = %UpgradeLink
+@onready var leaderboard_link: Button = %LeaderboardLink
 @onready var material_value: Label = %MaterialValue
 @onready var hero_tex: TextureRect = %HeroTex
 @onready var toast_label: Label = %ToastLabel
@@ -35,25 +36,22 @@ func _ready() -> void:
 
 func _entrance_elements() -> Array:
 	return [
-		material_value, codex_button, upgrade_button, settings_button,
-		local_button, online_button, leaderboard_button,
-		hero_tex, start_button,
+		%Logo, %Tagline, material_value,
+		start_button, local_button, online_button,
+		codex_button, options_button, quit_button,
+		upgrade_link, leaderboard_link,
+		hero_tex, %VersionLabel, %FooterHint,
 	]
 
 func _refresh_material() -> void:
 	var meta := get_node_or_null("/root/MetaProgression")
 	material_value.text = str(meta.get_banked_material() if meta != null else 0)
 
-## 主角轻微上下浮动，让静态画面不至于死板。
+## 主角清晰呈现在聚光下，自然嵌入背景（Brotato 式：主体实色、背景虚化环绕）。
 func _breathe_hero() -> void:
-	var base := hero_tex.position.y
-	var t := create_tween().set_loops()
-	t.tween_property(hero_tex, "position:y", base - 8.0, 1.8) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	t.tween_property(hero_tex, "position:y", base, 1.8) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	hero_tex.modulate.a = 1.0
 
-## 占位入口：图鉴/升级/设置尚未实现，点击提示「敬请期待」。
+## 占位入口：图鉴/选项/升级尚未实现，点击提示「敬请期待」。
 func _show_toast(message: String) -> void:
 	toast_label.text = message
 	toast_label.modulate.a = 0.0
@@ -95,20 +93,19 @@ func _on_codex_button_pressed() -> void:
 	confirm_audio.play()
 	_show_toast("图鉴 · 敬请期待")
 
+func _on_options_button_pressed() -> void:
+	confirm_audio.play()
+	_show_toast("选项 · 敬请期待")
+
 func _on_upgrade_button_pressed() -> void:
 	confirm_audio.play()
 	_show_toast("升级 · 敬请期待")
-
-func _on_settings_button_pressed() -> void:
-	confirm_audio.play()
-	_show_toast("设置 · 敬请期待")
 
 func _start_transition(scene_path: String) -> void:
 	confirm_audio.play()
 	start_button.disabled = true
 	local_button.disabled = true
 	online_button.disabled = true
-	leaderboard_button.disabled = true
 	var tween := create_tween()
 	tween.tween_property(fade_overlay, "color:a", 1.0, 0.32)
 	await tween.finished
@@ -132,6 +129,7 @@ func _on_cancel_exit_button_pressed() -> void:
 		return
 	back_audio.play()
 	exit_dialog.hide()
+	quit_button.grab_focus()
 
 func _unhandled_input(event: InputEvent) -> void:
 	var joy_button := event as InputEventJoypadButton
