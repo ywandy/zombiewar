@@ -8,7 +8,7 @@ const RangedWeaponScript = preload("res://scripts/combat/weapons/ranged_weapon.g
 const LEGACY_LONG_GUN_MODEL_NAME := StringName("Ri" + "fle")
 const EMBEDDED_WEAPON_NAMES: Array[StringName] = [
 	&"Axe", &"Guitar", &"Knife", &"Pistol", LEGACY_LONG_GUN_MODEL_NAME, &"Shotgun", &"SMG",
-	&"Spear", &"WoodenBat_Barbed", &"WoodenBat_Saw",
+	&"Spear", &"WoodenBat_Barbed", &"WoodenBat_Saw", &"PreviewWeapon",
 ]
 
 signal attack_started(animation_name: StringName, lock_duration: float)

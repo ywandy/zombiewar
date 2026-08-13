@@ -9,6 +9,12 @@ enum TriggerMode {
 @export var weapon_id: StringName
 @export var display_name: String
 @export var visual_node_name: StringName
+
+@export_group("表现")
+@export var visual_scene: PackedScene
+@export var visual_transform := Transform3D.IDENTITY
+
+@export_group("玩法")
 @export var trigger_mode := TriggerMode.PRESS
 @export_range(0.1, 30.0, 0.1) var attacks_per_second := 1.0
 @export_range(0.0, 500.0, 1.0) var damage := 1.0
