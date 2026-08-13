@@ -83,6 +83,7 @@ func _on_next_button_pressed() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_echo():
 		return
+	var viewport := get_viewport()
 	if event.is_action_pressed("ui_left"):
 		_select_previous()
 	elif event.is_action_pressed("ui_right"):
@@ -93,7 +94,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_on_back_button_pressed()
 	else:
 		return
-	get_viewport().set_input_as_handled()
+	viewport.set_input_as_handled()
 
 func _is_joy_button_pressed(event: InputEvent, button: JoyButton) -> bool:
 	var joy_button := event as InputEventJoypadButton
