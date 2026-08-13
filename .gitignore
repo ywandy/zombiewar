@@ -19,3 +19,6 @@ assets/characters/generated/
 assets/source_art/player_characters/bases_tinted/
 docs/assets/player-characters/recolor-qa/*.png
 !docs/assets/player-characters/recolor-qa/_all10.png
+
+# 派生基体：由 derive_base_girth.py 从现有基体几何派生，可随时重跑
+assets/characters/derived/
