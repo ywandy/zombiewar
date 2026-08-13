@@ -1,0 +1,14 @@
+{
+  "weapon": "tactical_knife",
+  "length_before": 0.9894,
+  "length_after": 0.3,
+  "target_length": 0.3,
+  "scale": 0.30321,
+  "grip_along_axis": 0.15,
+  "origin_offset": [
+    0.0,
+    0.0,
+    -0.1066
+  ],
+  "out": "assets/weapons/generated/tactical_knife.glb"
+}

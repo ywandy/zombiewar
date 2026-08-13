@@ -1,0 +1,14 @@
+{
+  "weapon": "landmine",
+  "length_before": 1.0004,
+  "length_after": 0.32,
+  "target_length": 0.32,
+  "scale": 0.31989,
+  "grip_along_axis": 0.5,
+  "origin_offset": [
+    -0.0,
+    -0.0006,
+    0.0
+  ],
+  "out": "assets/weapons/generated/landmine.glb"
+}

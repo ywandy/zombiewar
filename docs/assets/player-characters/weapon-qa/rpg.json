@@ -1,0 +1,14 @@
+{
+  "weapon": "rpg",
+  "length_before": 0.9896,
+  "length_after": 0.95,
+  "target_length": 0.95,
+  "scale": 0.95999,
+  "grip_along_axis": 0.35,
+  "origin_offset": [
+    -0.0001,
+    0.0006,
+    -0.1372
+  ],
+  "out": "assets/weapons/generated/rpg.glb"
+}

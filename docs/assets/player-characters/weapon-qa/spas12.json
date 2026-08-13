@@ -1,0 +1,14 @@
+{
+  "weapon": "spas12",
+  "length_before": 1.0003,
+  "length_after": 0.85,
+  "target_length": 0.85,
+  "scale": 0.84974,
+  "grip_along_axis": 0.28,
+  "origin_offset": [
+    -0.0011,
+    -0.0012,
+    -0.187
+  ],
+  "out": "assets/weapons/generated/spas12.glb"
+}

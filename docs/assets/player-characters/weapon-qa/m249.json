@@ -1,0 +1,14 @@
+{
+  "weapon": "m249",
+  "length_before": 1.0002,
+  "length_after": 1.04,
+  "target_length": 1.04,
+  "scale": 1.03975,
+  "grip_along_axis": 0.28,
+  "origin_offset": [
+    -0.0006,
+    -0.0012,
+    -0.2287
+  ],
+  "out": "assets/weapons/generated/m249.glb"
+}

@@ -1,0 +1,14 @@
+{
+  "weapon": "flamethrower",
+  "length_before": 1.0,
+  "length_after": 0.9,
+  "target_length": 0.9,
+  "scale": 0.89996,
+  "grip_along_axis": 0.3,
+  "origin_offset": [
+    0.0002,
+    -0.0006,
+    -0.1799
+  ],
+  "out": "assets/weapons/generated/flamethrower.glb"
+}

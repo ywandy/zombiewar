@@ -1,0 +1,14 @@
+{
+  "weapon": "mp5",
+  "length_before": 0.9996,
+  "length_after": 0.6,
+  "target_length": 0.6,
+  "scale": 0.60026,
+  "grip_along_axis": 0.3,
+  "origin_offset": [
+    0.0,
+    0.0009,
+    -0.1198
+  ],
+  "out": "assets/weapons/generated/mp5.glb"
+}

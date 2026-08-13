@@ -1,0 +1,14 @@
+{
+  "weapon": "chainsaw",
+  "length_before": 0.9936,
+  "length_after": 0.75,
+  "target_length": 0.75,
+  "scale": 0.75486,
+  "grip_along_axis": 0.2,
+  "origin_offset": [
+    0.0015,
+    0.1128,
+    -0.2276
+  ],
+  "out": "assets/weapons/generated/chainsaw.glb"
+}

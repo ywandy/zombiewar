@@ -1,0 +1,14 @@
+{
+  "weapon": "frag_grenade",
+  "length_before": 0.997,
+  "length_after": 0.11,
+  "target_length": 0.11,
+  "scale": 0.11033,
+  "grip_along_axis": 0.5,
+  "origin_offset": [
+    -0.0007,
+    0.0002,
+    -0.0002
+  ],
+  "out": "assets/weapons/generated/frag_grenade.glb"
+}
