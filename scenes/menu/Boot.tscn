@@ -1,0 +1,82 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/menu/boot.gd" id="1_boot"]
+[ext_resource type="AudioStream" path="res://assets/sfx/ui/heartbeat.mp3" id="2_heartbeat"]
+[ext_resource type="AudioStream" path="res://assets/sfx/ui/drone.mp3" id="3_drone"]
+[ext_resource type="Shader" path="res://assets/ui/boot/boot_glitch.gdshader" id="4_glitch"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glitch"]
+shader = ExtResource("4_glitch")
+shader_parameter/intensity = 0.0
+shader_parameter/slice_strength = 0.06
+shader_parameter/rgb_split = 0.012
+shader_parameter/static_strength = 0.35
+
+[node name="Boot" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_boot")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.012, 0.017, 0.019, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Aspect" type="AspectRatioContainer" parent="Center"]
+custom_minimum_size = Vector2(520, 520)
+layout_mode = 2
+ratio = 1.0
+stretch_mode = 2
+
+[node name="Logo" type="TextureRect" parent="Center/Aspect"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_glitch")
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SkipHint" type="Label" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -52.0
+offset_right = 60.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.62, 0.66, 0.66, 1)
+theme_override_font_sizes/font_size = 15
+text = "按任意键继续"
+horizontal_alignment = 1
+
+[node name="Heartbeat" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_heartbeat")
+volume_db = -2.0
+
+[node name="Drone" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_drone")
+volume_db = -8.0
