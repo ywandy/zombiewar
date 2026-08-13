@@ -33,14 +33,25 @@ var _player: PlayerController = null
 func setup(
 	sim_world,
 	player_slot: int,
-	profile_catalog: Array[InventoryProfile],
-	player: PlayerController = null
+	profile_catalog: Array[InventoryProfile]
 ) -> void:
 	_sim_world = sim_world
 	_player_slot = player_slot
 	_profile_catalog = profile_catalog
-	_player = player
+	# 玩家对象从 arena 的 players 数组读（避免 setup 签名变更的缓存问题）。
+	# arena 挂在场景根，名字可能是 DemoMap 或 GameplayArena，用 find 兜底。
+	_player = _find_player(player_slot)
 	_refresh()
+
+func _find_player(slot: int) -> PlayerController:
+	# 从场景树找 arena（GameplayArena 或 DemoMap），读它的 players 数组。
+	var root := get_tree().root
+	for child in root.get_children():
+		if child is Node3D and child.get("players") != null:
+			var players: Array = child.get("players")
+			if slot >= 0 and slot < players.size():
+				return players[slot] as PlayerController
+	return null
 
 func _refresh() -> void:
 	if _sim_world == null:

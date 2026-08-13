@@ -1116,8 +1116,10 @@ func _toggle_inventory_panel() -> void:
 	if panel.visible:
 		panel.hide()
 		return
-	# 打开时 setup 当前数据：模拟层 + 本机座位 + 背包物品目录 + 玩家（角色属性）。
-	panel.setup(sim_world, _local_slot(), map_runtime.inventory_profiles(), _player_for_slot(_local_slot()))
+	# 打开时 setup 当前数据：模拟层 + 本机座位 + 背包物品目录。
+	# 玩家对象（角色属性）在背包面板内部从 PlayerRegistry 读，不在这里传——
+	# 避免 setup 签名变更导致的编辑器缓存问题。
+	panel.setup(sim_world, _local_slot(), map_runtime.inventory_profiles())
 	panel.show()
 
 ## 离线休整可被跳过时返回 1；其余情况（含联机仅上行请求）返回 0。
