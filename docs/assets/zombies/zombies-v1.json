@@ -109,6 +109,23 @@
       "palette_note_en": "swollen brown-ochre skin stretched tight, dark brown rags, dried blood dark red",
       "silhouette_en": "the widest and heaviest shape in the roster. Must read as a wall at a glance, the opposite extreme from the runner.",
       "clothing_note": "必须穿衣覆盖。裸露大面积肿胀伤口皮肉的版本连续四次被 Tripo 以 error_code 2008 拒绝（内容审核），换成被撑破的工装覆盖后一次通过。四视图宽高比不一致不是原因——通过那版的 right 视图比失败版本更不一致。"
+    },
+    {
+      "id": "zombie_exploder",
+      "type": "exploder",
+      "display_name": "爆破僵尸",
+      "stats_ref": "resources/zombies/exploder_zombie.tres",
+      "answer": "接触即爆，应对方式是远距离击杀、绝不近身",
+      "build_en": "swollen and unstable, a normal-height frame with a hugely distended chest and belly stretched to bursting, thin spindly arms and legs that look too small for the body, head lolling back",
+      "clothing_en": "a straining chemical hazard suit with the front seam split open, thick rubber collar and cuffs, heavy tank harness straps across the torso; only head and hands show skin",
+      "palette": {
+        "skin": "#8C9A6A",
+        "clothing": "#B8892A",
+        "accent": "#7A2318"
+      },
+      "palette_note_en": "sickly yellow-ochre hazard suit, rotted olive skin, dried blood dark red",
+      "silhouette_en": "a walking bomb: the chest and belly are the widest part of the body while the limbs stay thin, so the mass sits high and forward. Must be instantly separable from both the runner (thin all over) and the tank (huge all over) — it is thin limbs plus a swollen middle.",
+      "clothing_note": "同壮硕僵尸：必须穿衣覆盖，裸露大面积肿胀皮肉会被 Tripo 内容审核拒绝。"
     }
   ]
 }

@@ -275,18 +275,21 @@ func _test_definition_values(definition, failures: Array[String]) -> void:
 			failures
 		)
 
-	_expect(definition.zombie_death_rules.size() == 3, "one death rule per zombie type", failures)
+	# 六种：普通三个外观变体各算一种，加疾行、壮硕、爆破。旧的 normal 已不再被引用。
+	_expect(definition.zombie_death_rules.size() == 6, "one death rule per zombie type", failures)
 	var death_rules_by_type := {}
 	for rule in definition.zombie_death_rules:
 		if rule != null and rule.zombie != null:
 			death_rules_by_type[rule.zombie.type_id] = rule
-	_expect(
-		death_rules_by_type.has(&"normal")
-			and death_rules_by_type.has(&"runner")
-			and death_rules_by_type.has(&"tank"),
-		"every authored zombie type must have a death rule",
-		failures
-	)
+	for required_type in [
+		&"normal_civilian", &"normal_worker", &"normal_police",
+		&"runner", &"tank", &"exploder",
+	]:
+		_expect(
+			death_rules_by_type.has(required_type),
+			"every authored zombie type must have a death rule: %s" % required_type,
+			failures
+		)
 	if death_rules_by_type.has(&"tank"):
 		# 壮硕僵尸血量是普通僵尸的五倍以上，击杀成本高，因此掉落必须是确定的：
 		# 让一个需要专门集火的目标掉不出东西，玩家下次就直接绕开它了。
@@ -399,11 +402,17 @@ func _test_wave_curve(definition, failures: Array[String]) -> void:
 			"the final wave must be several times the opening wave, not a slow drift",
 			failures
 		)
-	_expect(
-		seen_types.has(&"normal") and seen_types.has(&"runner") and seen_types.has(&"tank"),
-		"the wave curve must introduce every authored zombie type",
-		failures
-	)
+	# 普通僵尸的三个外观变体共享同一套数值，多样性由波次编排决定而非运行时随机，
+	# 因此三者都必须真的出现在波次里，否则人群仍然是克隆体。
+	for required_type in [
+		&"normal_civilian", &"normal_worker", &"normal_police",
+		&"runner", &"tank", &"exploder",
+	]:
+		_expect(
+			seen_types.has(required_type),
+			"the wave curve must introduce every authored zombie type: %s" % required_type,
+			failures
+		)
 
 func _expect_pickup_semantics(
 	pickup,
@@ -533,12 +542,17 @@ func _test_runtime_assembly(definition, failures: Array[String]) -> void:
 	_expect(errors.is_empty(), "; ".join(errors), failures)
 	if errors.is_empty():
 		_expect(runtime.content_root != null, "runtime content root", failures)
-		_expect(runtime.zombie_definitions.size() == 3, "three runtime zombie profiles", failures)
+		# 六个：普通僵尸的三个外观变体各占一个档案（共享数值，多样性由波次编排决定），
+		# 加上疾行、壮硕、爆破。旧的 normal 已不再被任何波次引用，因此不进运行时档案。
+		_expect(runtime.zombie_definitions.size() == 6, "six runtime zombie profiles", failures)
 		var profile_type_ids: Array[StringName] = []
 		for zombie_definition in runtime.zombie_definitions:
 			profile_type_ids.append(zombie_definition.type_id)
 		_expect(
-			profile_type_ids == [&"normal", &"runner", &"tank"],
+			profile_type_ids == [
+				&"exploder", &"normal_civilian", &"normal_police",
+				&"normal_worker", &"runner", &"tank",
+			],
 			"zombie profiles sorted by type id",
 			failures
 		)

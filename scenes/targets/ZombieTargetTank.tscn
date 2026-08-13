@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/zombie_target.gd" id="1_target"]
+[ext_resource type="PackedScene" path="res://assets/enemies/generated/zombie_tank.glb" id="2_model"]
+[ext_resource type="AudioStream" path="res://assets/sfx/boxhead/zombie_attack.mp3" id="4_attack_audio"]
+[ext_resource type="AudioStream" path="res://assets/sfx/boxhead/creature_fall.mp3" id="5_death_audio"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_blocker"]
+radius = 0.5
+height = 1.9
+
+[node name="ZombieTarget" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_target")
+
+[node name="BlockerCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.95, 0)
+shape = SubResource("CapsuleShape3D_blocker")
+
+[node name="VoiceAudio" type="AudioStreamPlayer3D" parent="."]
+volume_db = -5.0
+max_distance = 24.0
+
+[node name="AttackAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_attack_audio")
+volume_db = -4.0
+max_distance = 24.0
+
+[node name="DeathAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_death_audio")
+volume_db = -4.0
+max_distance = 24.0
+
+[node name="VisualRoot" type="Node3D" parent="."]
+
+[node name="zombie_tank" parent="VisualRoot" instance=ExtResource("2_model")]
+
+[node name="HealthLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.35, 0)
+text = "50 / 50"
+font_size = 32
+outline_size = 8
+billboard = 1

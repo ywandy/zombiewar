@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ZombieDefinition" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/map/zombie_definition.gd" id="1_definition"]
-[ext_resource type="PackedScene" path="res://scenes/targets/ZombieTargetChubby.tscn" id="2_zombie_target"]
+[ext_resource type="PackedScene" path="res://scenes/targets/ZombieTargetTank.tscn" id="2_zombie_target"]
 
 [resource]
 script = ExtResource("1_definition")
