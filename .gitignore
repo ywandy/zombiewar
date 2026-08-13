@@ -15,7 +15,8 @@ node_modules/
 .env.*.local
 
 # 玩家角色 v6 过渡产物：新图落地后模型要重做，不入库
-assets/characters/generated/
+# 最终角色 GLB 是交付物，入库；中间的 Tripo 重建产物不入库
+assets/generated_models/
 assets/source_art/player_characters/bases_tinted/
 docs/assets/player-characters/recolor-qa/*.png
 !docs/assets/player-characters/recolor-qa/_all10.png
@@ -24,4 +25,3 @@ docs/assets/player-characters/recolor-qa/*.png
 assets/characters/derived/
 
 # Tripo 重建产物：可由 tripo_multiview.py 重跑，task_id 记录在 tripo-tasks.jsonl
-assets/generated_models/

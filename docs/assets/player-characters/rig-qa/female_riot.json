@@ -1,0 +1,111 @@
+{
+  "character": "female_riot",
+  "bones": 43,
+  "actions": 20,
+  "action_names": [
+    "Death",
+    "Duck",
+    "HitReact",
+    "Idle",
+    "Idle_Gun",
+    "Jump",
+    "Jump_Idle",
+    "Jump_Land",
+    "No",
+    "Punch",
+    "Run",
+    "Run_Gun",
+    "Run_Slash",
+    "Run_Stab",
+    "Slash",
+    "Stab",
+    "Walk",
+    "Walk_Gun",
+    "Wave",
+    "Yes"
+  ],
+  "triangles_before": 845672,
+  "triangles_after": 29999,
+  "budget": 30000,
+  "weight_method": "geometric_smoothed",
+  "facing": {
+    "yaw_deg": 90.0,
+    "flipped_180": true
+  },
+  "within_budget": true,
+  "weight_regions": [
+    {
+      "region": "arm_left",
+      "verts": 1001,
+      "top_bones": [
+        [
+          "LowerArm.L",
+          1001
+        ],
+        [
+          "UpperArm.L",
+          1001
+        ],
+        [
+          "Shoulder.L",
+          13
+        ]
+      ]
+    },
+    {
+      "region": "arm_right",
+      "verts": 992,
+      "top_bones": [
+        [
+          "LowerArm.R",
+          992
+        ],
+        [
+          "UpperArm.R",
+          992
+        ],
+        [
+          "Shoulder.R",
+          19
+        ]
+      ]
+    },
+    {
+      "region": "torso",
+      "verts": 10665,
+      "top_bones": [
+        [
+          "Neck",
+          8980
+        ],
+        [
+          "Head",
+          8302
+        ],
+        [
+          "UpperArm.R",
+          3970
+        ]
+      ]
+    },
+    {
+      "region": "legs",
+      "verts": 6611,
+      "top_bones": [
+        [
+          "LowerLeg.R",
+          2242
+        ],
+        [
+          "LowerLeg.L",
+          2196
+        ],
+        [
+          "UpperLeg.L",
+          2130
+        ]
+      ]
+    }
+  ],
+  "out": "assets/characters/generated/female_riot.glb"
+}

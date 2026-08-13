@@ -24,9 +24,88 @@
     "Wave",
     "Yes"
   ],
-  "triangles_before": 975414,
+  "triangles_before": 817398,
   "triangles_after": 30000,
   "budget": 30000,
+  "weight_method": "geometric_smoothed",
+  "facing": {
+    "yaw_deg": -90.0,
+    "flipped_180": false
+  },
   "within_budget": true,
+  "weight_regions": [
+    {
+      "region": "arm_left",
+      "verts": 905,
+      "top_bones": [
+        [
+          "LowerArm.L",
+          905
+        ],
+        [
+          "UpperArm.L",
+          905
+        ],
+        [
+          "Shoulder.L",
+          36
+        ]
+      ]
+    },
+    {
+      "region": "arm_right",
+      "verts": 866,
+      "top_bones": [
+        [
+          "LowerArm.R",
+          866
+        ],
+        [
+          "UpperArm.R",
+          866
+        ],
+        [
+          "Shoulder.R",
+          46
+        ]
+      ]
+    },
+    {
+      "region": "torso",
+      "verts": 10725,
+      "top_bones": [
+        [
+          "Neck",
+          9620
+        ],
+        [
+          "Head",
+          8714
+        ],
+        [
+          "UpperArm.R",
+          4054
+        ]
+      ]
+    },
+    {
+      "region": "legs",
+      "verts": 7026,
+      "top_bones": [
+        [
+          "LowerLeg.R",
+          2445
+        ],
+        [
+          "LowerLeg.L",
+          2414
+        ],
+        [
+          "UpperLeg.R",
+          2403
+        ]
+      ]
+    }
+  ],
   "out": "assets/characters/generated/female_demolition.glb"
 }

@@ -1,0 +1,111 @@
+{
+  "character": "female_gunner",
+  "bones": 43,
+  "actions": 20,
+  "action_names": [
+    "Death",
+    "Duck",
+    "HitReact",
+    "Idle",
+    "Idle_Gun",
+    "Jump",
+    "Jump_Idle",
+    "Jump_Land",
+    "No",
+    "Punch",
+    "Run",
+    "Run_Gun",
+    "Run_Slash",
+    "Run_Stab",
+    "Slash",
+    "Stab",
+    "Walk",
+    "Walk_Gun",
+    "Wave",
+    "Yes"
+  ],
+  "triangles_before": 790930,
+  "triangles_after": 29999,
+  "budget": 30000,
+  "weight_method": "geometric_smoothed",
+  "facing": {
+    "yaw_deg": 90.0,
+    "flipped_180": true
+  },
+  "within_budget": true,
+  "weight_regions": [
+    {
+      "region": "arm_left",
+      "verts": 899,
+      "top_bones": [
+        [
+          "LowerArm.L",
+          899
+        ],
+        [
+          "UpperArm.L",
+          899
+        ],
+        [
+          "Shoulder.L",
+          178
+        ]
+      ]
+    },
+    {
+      "region": "arm_right",
+      "verts": 802,
+      "top_bones": [
+        [
+          "LowerArm.R",
+          802
+        ],
+        [
+          "UpperArm.R",
+          802
+        ],
+        [
+          "Shoulder.R",
+          139
+        ]
+      ]
+    },
+    {
+      "region": "torso",
+      "verts": 12845,
+      "top_bones": [
+        [
+          "Neck",
+          11779
+        ],
+        [
+          "Head",
+          11106
+        ],
+        [
+          "UpperArm.L",
+          5040
+        ]
+      ]
+    },
+    {
+      "region": "legs",
+      "verts": 5881,
+      "top_bones": [
+        [
+          "UpperLeg.R",
+          2258
+        ],
+        [
+          "UpperLeg.L",
+          2062
+        ],
+        [
+          "Body",
+          2015
+        ]
+      ]
+    }
+  ],
+  "out": "assets/characters/generated/female_gunner.glb"
+}

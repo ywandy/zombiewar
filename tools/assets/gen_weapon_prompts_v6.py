@@ -24,9 +24,12 @@ OUT = ROOT / "docs/assets/player-characters/prompts-v6/weapons"
 VIEWS = ["front", "left", "back", "right"]
 
 RENDERING = (
-    "Rendering: rough uneven thick black ink outer line, scratchy internal ink, flat two-step "
-    "cel shading, hand-painted grime, scratches, chipped paint and rust streaks, angular "
-    "simplified readable shapes. Match the drawing effect of the style reference, not its props."
+    "Rendering: match the ink weight and shading language of the style reference exactly. Draw a "
+    "VERY THICK, uneven, hand-drawn black contour around the whole silhouette and around every "
+    "major part boundary. Use FLAT two-tone cel shading only: one base tone plus one darker shadow "
+    "tone separated by a HARD edge. Wear is hand-painted as flat shapes and scratchy ink hatching: "
+    "chipped paint edges, rust flecks, scuffs. This is a bold inked cartoon game prop, not a "
+    "rendered product photo."
 )
 
 BACKDROP = (
@@ -36,8 +39,10 @@ BACKDROP = (
 
 AVOID = (
     "purple, violet, magenta, purple-black metal, hands, arms, character, sling, loose "
-    "ammunition, smoke, muzzle flash, photorealism, glossy 3D render, smooth vector art, soft "
-    "airbrush, perspective distortion, three-quarter view, letters or typographic glyphs"
+    "ammunition, smoke, muzzle flash, fire, flame, photorealism, glossy 3D render, smooth vector "
+    "art, soft airbrush, smooth gradient shading, soft falloff, photographic specular highlight, "
+    "blurred metallic reflection, thin delicate line art, semi-realistic illustration, "
+    "perspective distortion, three-quarter view, letters or typographic glyphs"
 )
 
 

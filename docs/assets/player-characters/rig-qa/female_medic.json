@@ -1,0 +1,111 @@
+{
+  "character": "female_medic",
+  "bones": 43,
+  "actions": 20,
+  "action_names": [
+    "Death",
+    "Duck",
+    "HitReact",
+    "Idle",
+    "Idle_Gun",
+    "Jump",
+    "Jump_Idle",
+    "Jump_Land",
+    "No",
+    "Punch",
+    "Run",
+    "Run_Gun",
+    "Run_Slash",
+    "Run_Stab",
+    "Slash",
+    "Stab",
+    "Walk",
+    "Walk_Gun",
+    "Wave",
+    "Yes"
+  ],
+  "triangles_before": 783803,
+  "triangles_after": 30000,
+  "budget": 30000,
+  "weight_method": "geometric_smoothed",
+  "facing": {
+    "yaw_deg": -90.0,
+    "flipped_180": false
+  },
+  "within_budget": true,
+  "weight_regions": [
+    {
+      "region": "arm_left",
+      "verts": 790,
+      "top_bones": [
+        [
+          "LowerArm.L",
+          790
+        ],
+        [
+          "UpperArm.L",
+          790
+        ],
+        [
+          "Shoulder.L",
+          455
+        ]
+      ]
+    },
+    {
+      "region": "arm_right",
+      "verts": 806,
+      "top_bones": [
+        [
+          "LowerArm.R",
+          806
+        ],
+        [
+          "UpperArm.R",
+          806
+        ],
+        [
+          "Shoulder.R",
+          466
+        ]
+      ]
+    },
+    {
+      "region": "torso",
+      "verts": 10001,
+      "top_bones": [
+        [
+          "Neck",
+          8552
+        ],
+        [
+          "Head",
+          7864
+        ],
+        [
+          "Torso",
+          4583
+        ]
+      ]
+    },
+    {
+      "region": "legs",
+      "verts": 6588,
+      "top_bones": [
+        [
+          "UpperLeg.L",
+          2258
+        ],
+        [
+          "LowerLeg.R",
+          2094
+        ],
+        [
+          "UpperLeg.R",
+          2075
+        ]
+      ]
+    }
+  ],
+  "out": "assets/characters/generated/female_medic.glb"
+}

@@ -235,7 +235,7 @@
       "priority": 3,
       "role": "锥形持续伤害 / 群体控制 / 对单体弱",
       "gap": "锥形角色目前只有霰弹枪的瞬发版本。持续型锥形是另一种玩法：不是清一次场，是封住一条通路。",
-      "body": "compact nozzle unit with pilot flame tip, thick corrugated fuel hose, twin pressure tanks",
+      "body": "compact nozzle unit with a bare igniter tip and no visible flame, thick corrugated fuel hose, twin pressure tanks",
       "accent": {
         "name": "hazard yellow tank band",
         "hex": "#D9A521"
