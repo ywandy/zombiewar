@@ -4,20 +4,20 @@
   "character_budget_triangles": 30000,
   "weapon_budget_triangles": 5000,
   "bases": [
-    {"id":"male_base","sex":"male","views":{},"tripo":{},"qa":"pending"},
-    {"id":"female_base","sex":"female","views":{},"tripo":{},"qa":"pending"}
+    {"id":"male_base","sex":"male","views":{"front":"assets/source_art/player_characters/bases/male_base/front.png","left":"assets/source_art/player_characters/bases/male_base/left.png","back":"assets/source_art/player_characters/bases/male_base/back.png","right":"assets/source_art/player_characters/bases/male_base/right.png"},"tripo":{"status":"success"},"qa":"passed"},
+    {"id":"female_base","sex":"female","views":{"front":"assets/source_art/player_characters/bases/female_base/front.png","left":"assets/source_art/player_characters/bases/female_base/left.png","back":"assets/source_art/player_characters/bases/female_base/back.png","right":"assets/source_art/player_characters/bases/female_base/right.png"},"tripo":{"status":"success"},"qa":"passed"}
   ],
   "kits": [
-    {"id":"male_gunner_kit","character_id":"male_gunner","views":{},"tripo":{},"qa":"pending"},
-    {"id":"female_gunner_kit","character_id":"female_gunner","views":{},"tripo":{},"qa":"pending"},
-    {"id":"male_assault_kit","character_id":"male_assault","views":{},"tripo":{},"qa":"pending"},
-    {"id":"female_assault_kit","character_id":"female_assault","views":{},"tripo":{},"qa":"pending"},
-    {"id":"male_medic_kit","character_id":"male_medic","views":{},"tripo":{},"qa":"pending"},
-    {"id":"female_medic_kit","character_id":"female_medic","views":{},"tripo":{},"qa":"pending"},
-    {"id":"male_demolition_kit","character_id":"male_demolition","views":{},"tripo":{},"qa":"pending"},
-    {"id":"female_demolition_kit","character_id":"female_demolition","views":{},"tripo":{},"qa":"pending"},
-    {"id":"male_riot_kit","character_id":"male_riot","views":{},"tripo":{},"qa":"pending"},
-    {"id":"female_riot_kit","character_id":"female_riot","views":{},"tripo":{},"qa":"pending"}
+    {"id":"male_gunner_kit","character_id":"male_gunner","views_dir":"assets/source_art/player_characters/kits/male_gunner","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"female_gunner_kit","character_id":"female_gunner","views_dir":"assets/source_art/player_characters/kits/female_gunner","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"male_assault_kit","character_id":"male_assault","views_dir":"assets/source_art/player_characters/kits/male_assault","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"female_assault_kit","character_id":"female_assault","views_dir":"assets/source_art/player_characters/kits/female_assault","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"male_medic_kit","character_id":"male_medic","views_dir":"assets/source_art/player_characters/kits/male_medic","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"female_medic_kit","character_id":"female_medic","views_dir":"assets/source_art/player_characters/kits/female_medic","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"male_demolition_kit","character_id":"male_demolition","views_dir":"assets/source_art/player_characters/kits/male_demolition","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"female_demolition_kit","character_id":"female_demolition","views_dir":"assets/source_art/player_characters/kits/female_demolition","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"male_riot_kit","character_id":"male_riot","views_dir":"assets/source_art/player_characters/kits/male_riot","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"female_riot_kit","character_id":"female_riot","views_dir":"assets/source_art/player_characters/kits/female_riot","tripo":{"status":"success"},"qa":"passed"}
   ],
   "characters": [
     {"id":"male_gunner","sex":"male","class":"gunner","display_name":"男·机枪手","preview_weapon":"mp5","accent":"#C04A3D"},
@@ -32,12 +32,12 @@
     {"id":"female_riot","sex":"female","class":"riot","display_name":"女·防爆兵","preview_weapon":"tactical_knife","accent":"#55BD72"}
   ],
   "weapons": [
-    {"id":"rpg","display_name":"RPG","gameplay_id":null},
-    {"id":"ak47","display_name":"AK-47","gameplay_id":"rifle"},
-    {"id":"m4a1","display_name":"M4A1 卡宾枪","gameplay_id":null},
-    {"id":"tactical_knife","display_name":"战术匕首","gameplay_id":"knife"},
-    {"id":"hk45c","display_name":"HK-45C 紧凑型战术手枪","gameplay_id":"pistol"},
-    {"id":"landmine","display_name":"地雷","gameplay_id":null},
-    {"id":"mp5","display_name":"MP-5 冲锋枪","gameplay_id":"smg"}
+    {"id":"rpg","display_name":"RPG","gameplay_id":null,"views_dir":"assets/source_art/weapons/rpg","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"ak47","display_name":"AK-47","gameplay_id":"rifle","views_dir":"assets/source_art/weapons/ak47","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"m4a1","display_name":"M4A1 卡宾枪","gameplay_id":null,"views_dir":"assets/source_art/weapons/m4a1","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"tactical_knife","display_name":"战术匕首","gameplay_id":"knife","views_dir":"assets/source_art/weapons/tactical_knife","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"hk45c","display_name":"HK-45C 紧凑型战术手枪","gameplay_id":"pistol","views_dir":"assets/source_art/weapons/hk45c","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"landmine","display_name":"地雷","gameplay_id":null,"views_dir":"assets/source_art/weapons/landmine","tripo":{"status":"success"},"qa":"passed"},
+    {"id":"mp5","display_name":"MP-5 冲锋枪","gameplay_id":"smg","views_dir":"assets/source_art/weapons/mp5","tripo":{"status":"success"},"qa":"passed"}
   ]
 }

@@ -1,0 +1,503 @@
+{
+  "generated_at": "2026-08-13T05:42:58Z",
+  "max_concurrency": 3,
+  "count": 19,
+  "failed_count": 0,
+  "results": [
+    {
+      "id": "female_base",
+      "kind": "bases",
+      "task_id": "83381270-5a8f-4583-95c0-3bd3d5647020",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 18000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/83381270-5a8f-4583-95c0-3bd3d5647020/tripo_pbr_model_83381270-5a8f-4583-95c0-3bd3d5647020.glb?auth_key=1786665600-c531ec042da5657148bd206f1dfd1a75-0-0da6c8f5d6fe8a325c8b258ed89b7a7c",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/83381270-5a8f-4583-95c0-3bd3d5647020/legacy_mesh.webp?auth_key=1786665600-afc3e319b0c2e7d37a9ced7a0fef6c58-0-ee3bebc7f82faf06ec315d007a274cd5",
+      "local_model": "assets/generated_models/tripo/bases/female_base/female_base_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/bases/female_base/female_base_preview.webp",
+      "model_bytes": 2550380
+    },
+    {
+      "id": "male_base",
+      "kind": "bases",
+      "task_id": "8bfcb9e1-5ddf-4900-9c40-05d58598d869",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 18000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/8bfcb9e1-5ddf-4900-9c40-05d58598d869/tripo_pbr_model_8bfcb9e1-5ddf-4900-9c40-05d58598d869.glb?auth_key=1786665600-3779e2dbfc1a8f9104b40c7035ab0f66-0-9a56030111b381366eb469d64c4a8f6f",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/8bfcb9e1-5ddf-4900-9c40-05d58598d869/legacy_mesh.webp?auth_key=1786665600-f0956a88fcbe438530e0744266f2c15c-0-d6d700cfffb6168abc047dcc428d068c",
+      "local_model": "assets/generated_models/tripo/bases/male_base/male_base_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/bases/male_base/male_base_preview.webp",
+      "model_bytes": 2556852
+    },
+    {
+      "id": "female_assault",
+      "kind": "kits",
+      "task_id": "ba1c48f8-d239-4095-8096-bdd5f17fdcbc",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ba1c48f8-d239-4095-8096-bdd5f17fdcbc/tripo_pbr_model_ba1c48f8-d239-4095-8096-bdd5f17fdcbc.glb?auth_key=1786665600-70632f936e4640b89cc8d133db49d14d-0-d9d0fc1ebace35c46acab703f1f23f88",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ba1c48f8-d239-4095-8096-bdd5f17fdcbc/legacy_mesh.webp?auth_key=1786665600-c94ac6ff12f1151d38def7c60262a78a-0-d9c5666ed960a76b50f3d53f11d199bb",
+      "local_model": "assets/generated_models/tripo/kits/female_assault/female_assault_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/female_assault/female_assault_preview.webp",
+      "model_bytes": 2725180
+    },
+    {
+      "id": "female_demolition",
+      "kind": "kits",
+      "task_id": "41f65d55-0880-4a63-b0be-535aacb8cb32",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/41f65d55-0880-4a63-b0be-535aacb8cb32/tripo_pbr_model_41f65d55-0880-4a63-b0be-535aacb8cb32.glb?auth_key=1786665600-b2f16c956607ab206547091a5118e611-0-45b786fcd76a8a90cf5e4fd7c22c7748",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/41f65d55-0880-4a63-b0be-535aacb8cb32/legacy_mesh.webp?auth_key=1786665600-271a89abafe7a8ae4cf3c86309c23bf1-0-ef2a8b5ea0c502f21c27ccfad13de9f7",
+      "local_model": "assets/generated_models/tripo/kits/female_demolition/female_demolition_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/female_demolition/female_demolition_preview.webp",
+      "model_bytes": 2876232
+    },
+    {
+      "id": "female_gunner",
+      "kind": "kits",
+      "task_id": "d6be34b3-0888-4830-adcb-585fdd4e5715",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d6be34b3-0888-4830-adcb-585fdd4e5715/tripo_pbr_model_d6be34b3-0888-4830-adcb-585fdd4e5715.glb?auth_key=1786665600-0593d31dd0313472388cfa43d1447e2c-0-47ddef0b933af97497b3d368cc94de68",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d6be34b3-0888-4830-adcb-585fdd4e5715/legacy_mesh.webp?auth_key=1786665600-ba69d8a70c5a3cac135a1680135862f1-0-15dc548b53834387c6d6e12c509c00bc",
+      "local_model": "assets/generated_models/tripo/kits/female_gunner/female_gunner_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/female_gunner/female_gunner_preview.webp",
+      "model_bytes": 2432376
+    },
+    {
+      "id": "female_medic",
+      "kind": "kits",
+      "task_id": "a56ef5bc-4304-46bf-938f-7bbf165efcbc",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/a56ef5bc-4304-46bf-938f-7bbf165efcbc/tripo_pbr_model_a56ef5bc-4304-46bf-938f-7bbf165efcbc.glb?auth_key=1786665600-58d116ba3ff6efa3b0e4f1dd8f571787-0-359c0cdada88a03035709e30f93a4686",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/a56ef5bc-4304-46bf-938f-7bbf165efcbc/legacy_mesh.webp?auth_key=1786665600-369fb7e697f088bdf77d2805569dbc4b-0-fdc01dd5dca044b3a463afde36b903e0",
+      "local_model": "assets/generated_models/tripo/kits/female_medic/female_medic_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/female_medic/female_medic_preview.webp",
+      "model_bytes": 3071680
+    },
+    {
+      "id": "female_riot",
+      "kind": "kits",
+      "task_id": "15356876-c38f-4c89-8598-ed35d66c8c16",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/15356876-c38f-4c89-8598-ed35d66c8c16/tripo_pbr_model_15356876-c38f-4c89-8598-ed35d66c8c16.glb?auth_key=1786665600-2104902a4839c284ec1652e52107e690-0-956e781ab7ce607861ae737846e0e3af",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/15356876-c38f-4c89-8598-ed35d66c8c16/legacy_mesh.webp?auth_key=1786665600-ddd98bb9203eebd231f0faebabffe38e-0-7f6c07cf965d63578f1b584867c6af3e",
+      "local_model": "assets/generated_models/tripo/kits/female_riot/female_riot_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/female_riot/female_riot_preview.webp",
+      "model_bytes": 2968252
+    },
+    {
+      "id": "male_assault",
+      "kind": "kits",
+      "task_id": "ab0f3a43-cad2-4769-b45e-b487436dfa5b",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ab0f3a43-cad2-4769-b45e-b487436dfa5b/tripo_pbr_model_ab0f3a43-cad2-4769-b45e-b487436dfa5b.glb?auth_key=1786665600-c3ea34effb03a9af53684e2be0dbfb16-0-3cc72c8701ff1e8fce305aa6dc9a17e9",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ab0f3a43-cad2-4769-b45e-b487436dfa5b/legacy_mesh.webp?auth_key=1786665600-d1af65671cd8c197dcfefad3e728db6a-0-ce20368419459bbeaa15c35a65ad4bc5",
+      "local_model": "assets/generated_models/tripo/kits/male_assault/male_assault_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/male_assault/male_assault_preview.webp",
+      "model_bytes": 2802912
+    },
+    {
+      "id": "male_demolition",
+      "kind": "kits",
+      "task_id": "3767e08d-d208-4be6-a5c6-4101b8e3169f",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/3767e08d-d208-4be6-a5c6-4101b8e3169f/tripo_pbr_model_3767e08d-d208-4be6-a5c6-4101b8e3169f.glb?auth_key=1786665600-65db8fefbf12ed9d6c43c38bb3d769b6-0-8f55c22c158df1c963997aa12a8666d3",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/3767e08d-d208-4be6-a5c6-4101b8e3169f/legacy_mesh.webp?auth_key=1786665600-bf68c4941a422d3dec8ec38806800f19-0-621a4b08f9f77e4f4b1f6d2ee237b2d0",
+      "local_model": "assets/generated_models/tripo/kits/male_demolition/male_demolition_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/male_demolition/male_demolition_preview.webp",
+      "model_bytes": 2705756
+    },
+    {
+      "id": "male_gunner",
+      "kind": "kits",
+      "task_id": "c360f6d6-ec72-4e22-9baf-9d8945646bca",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c360f6d6-ec72-4e22-9baf-9d8945646bca/tripo_pbr_model_c360f6d6-ec72-4e22-9baf-9d8945646bca.glb?auth_key=1786665600-f1cb55572258b92b425adacbf2d26156-0-6d78d17232c904649e9484c23dae1b6c",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c360f6d6-ec72-4e22-9baf-9d8945646bca/legacy_mesh.webp?auth_key=1786665600-d798f0c0b0fde0bf71d741625201686f-0-04ee941f6e48b52c516c9403f81a9299",
+      "local_model": "assets/generated_models/tripo/kits/male_gunner/male_gunner_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/male_gunner/male_gunner_preview.webp",
+      "model_bytes": 2863140
+    },
+    {
+      "id": "male_medic",
+      "kind": "kits",
+      "task_id": "44acecdf-0ba7-4a88-ab0f-1eb9a2631302",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/44acecdf-0ba7-4a88-ab0f-1eb9a2631302/tripo_pbr_model_44acecdf-0ba7-4a88-ab0f-1eb9a2631302.glb?auth_key=1786665600-0b2c39ed9fbd1e2aa5f2ded167b931d7-0-830ed1212b97365a1f74ebfd3558e3ad",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/44acecdf-0ba7-4a88-ab0f-1eb9a2631302/legacy_mesh.webp?auth_key=1786665600-46dd8c15d0dc2b21b01e6880d5da26b7-0-21623a75046e6d872182da8c3559bdd2",
+      "local_model": "assets/generated_models/tripo/kits/male_medic/male_medic_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/male_medic/male_medic_preview.webp",
+      "model_bytes": 2874932
+    },
+    {
+      "id": "male_riot",
+      "kind": "kits",
+      "task_id": "1c06c4ff-7998-4716-9f41-b135b32d3713",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 12000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/1c06c4ff-7998-4716-9f41-b135b32d3713/tripo_pbr_model_1c06c4ff-7998-4716-9f41-b135b32d3713.glb?auth_key=1786665600-5cd4bbe882047acdb4e33a4b0097fead-0-5cf2197bf5fb8cb1910347adfe30523f",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/1c06c4ff-7998-4716-9f41-b135b32d3713/legacy_mesh.webp?auth_key=1786665600-554f95edeb471a57664d500dd4ae0d88-0-700d94108e1378f90b8cd0e3aaa0ed16",
+      "local_model": "assets/generated_models/tripo/kits/male_riot/male_riot_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/kits/male_riot/male_riot_preview.webp",
+      "model_bytes": 2857720
+    },
+    {
+      "id": "ak47",
+      "kind": "weapons",
+      "task_id": "d2f94a44-910d-448f-ab54-d84947101bef",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d2f94a44-910d-448f-ab54-d84947101bef/tripo_pbr_model_d2f94a44-910d-448f-ab54-d84947101bef.glb?auth_key=1786665600-c5eddd6410d7a524fb20998c64b6424f-0-e3f11c06120b9999a11ef02f05fc7509",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d2f94a44-910d-448f-ab54-d84947101bef/legacy_mesh.webp?auth_key=1786665600-6b4e470f98e4297106bdbeca4b24178a-0-b05a17009e3c231ccae6781eca3fc3e6",
+      "local_model": "assets/generated_models/tripo/weapons/ak47/ak47_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/ak47/ak47_preview.webp",
+      "model_bytes": 2549180
+    },
+    {
+      "id": "hk45c",
+      "kind": "weapons",
+      "task_id": "ac27e3ff-7191-49d9-84e2-04161ba8dbd2",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ac27e3ff-7191-49d9-84e2-04161ba8dbd2/tripo_pbr_model_ac27e3ff-7191-49d9-84e2-04161ba8dbd2.glb?auth_key=1786665600-ea757ddfe468242b7c79ca3257255afc-0-2d9a75cd4f57890c4cf809799241bd65",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ac27e3ff-7191-49d9-84e2-04161ba8dbd2/legacy_mesh.webp?auth_key=1786665600-3ebdda88649db5e84c624f0ec1dac1d7-0-121289534df327307ede71471fa1241b",
+      "local_model": "assets/generated_models/tripo/weapons/hk45c/hk45c_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/hk45c/hk45c_preview.webp",
+      "model_bytes": 3227772
+    },
+    {
+      "id": "landmine",
+      "kind": "weapons",
+      "task_id": "c0544340-1fa4-4968-99a6-9ebcb742d2b9",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c0544340-1fa4-4968-99a6-9ebcb742d2b9/tripo_pbr_model_c0544340-1fa4-4968-99a6-9ebcb742d2b9.glb?auth_key=1786665600-e4d9f0a2bdad8ad4894892d119b77196-0-3110998ff01a3f8e31a763737f026092",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/c0544340-1fa4-4968-99a6-9ebcb742d2b9/legacy_mesh.webp?auth_key=1786665600-ba93f1200cd292b58346511dffc2126a-0-aa6067a39dd4ba90de7fd929246ba9da",
+      "local_model": "assets/generated_models/tripo/weapons/landmine/landmine_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/landmine/landmine_preview.webp",
+      "model_bytes": 2039644
+    },
+    {
+      "id": "m4a1",
+      "kind": "weapons",
+      "task_id": "dfbffc2c-4997-49b2-aa67-143b0627bcfd",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/dfbffc2c-4997-49b2-aa67-143b0627bcfd/tripo_pbr_model_dfbffc2c-4997-49b2-aa67-143b0627bcfd.glb?auth_key=1786665600-bb7cd95b552d2a574018568c2bec45e4-0-df201cb87c8e43e4296c121a0b690b5e",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/dfbffc2c-4997-49b2-aa67-143b0627bcfd/legacy_mesh.webp?auth_key=1786665600-75363b53e475cd8277261ef47824b210-0-f7d06cbba8be7116e628ddc47b2af239",
+      "local_model": "assets/generated_models/tripo/weapons/m4a1/m4a1_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/m4a1/m4a1_preview.webp",
+      "model_bytes": 2607728
+    },
+    {
+      "id": "mp5",
+      "kind": "weapons",
+      "task_id": "fa6a87bc-5be6-47c1-bcb5-aa8754c595e3",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/fa6a87bc-5be6-47c1-bcb5-aa8754c595e3/tripo_pbr_model_fa6a87bc-5be6-47c1-bcb5-aa8754c595e3.glb?auth_key=1786665600-cd4cadafc65ba4ba1d1cd66a9844b382-0-c8faa20fc34fa43f778e5a89ec23bb56",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/fa6a87bc-5be6-47c1-bcb5-aa8754c595e3/legacy_mesh.webp?auth_key=1786665600-713723efc90f45678f78dd3c65d5ab20-0-d850839aad5984b07d55d8631fb074e9",
+      "local_model": "assets/generated_models/tripo/weapons/mp5/mp5_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/mp5/mp5_preview.webp",
+      "model_bytes": 2766704
+    },
+    {
+      "id": "rpg",
+      "kind": "weapons",
+      "task_id": "63af978f-c7dd-44a5-ba9e-2bc11e054351",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/63af978f-c7dd-44a5-ba9e-2bc11e054351/tripo_pbr_model_63af978f-c7dd-44a5-ba9e-2bc11e054351.glb?auth_key=1786665600-42e5c06d3f8d531ce4bb4a5043d40d5c-0-70df8e1772ac2594a31b8b9054feefc6",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/63af978f-c7dd-44a5-ba9e-2bc11e054351/legacy_mesh.webp?auth_key=1786665600-db7554bcb298012babcd7101def0bd8f-0-f8151e1db419b5de164f3bf99f8bc1b9",
+      "local_model": "assets/generated_models/tripo/weapons/rpg/rpg_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/rpg/rpg_preview.webp",
+      "model_bytes": 2824032
+    },
+    {
+      "id": "tactical_knife",
+      "kind": "weapons",
+      "task_id": "e8c6d53d-8de0-4bda-b2fb-02eed07574b3",
+      "status": "success",
+      "progress": 100,
+      "consumed_credit": 40,
+      "face_limit": 5000,
+      "view_order": [
+        "front",
+        "left",
+        "back",
+        "right"
+      ],
+      "input_urls": [
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/front.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/left.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/back.png",
+        "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/right.png"
+      ],
+      "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/e8c6d53d-8de0-4bda-b2fb-02eed07574b3/tripo_pbr_model_e8c6d53d-8de0-4bda-b2fb-02eed07574b3.glb?auth_key=1786665600-679fb9ea3588859c86d91d51856a1920-0-37ef07f032f7d09075fb27c987971fe9",
+      "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/e8c6d53d-8de0-4bda-b2fb-02eed07574b3/legacy_mesh.webp?auth_key=1786665600-e9fb8b175fb5263078b94b8397c2d1b3-0-7b9ebeaac827350f0ab2f875d5988d10",
+      "local_model": "assets/generated_models/tripo/weapons/tactical_knife/tactical_knife_tripo.glb",
+      "local_preview": "assets/generated_models/tripo/weapons/tactical_knife/tactical_knife_preview.webp",
+      "model_bytes": 2469860
+    }
+  ],
+  "errors": []
+}

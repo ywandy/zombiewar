@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D
+Input images: Image 1 is an art-direction reference only. Use its chunky survival-game prop language, bold dark outline, angular hand-painted wear, purple-black metal, and restrained dark red-brown detail. Do not reproduce its menu, logo, text, scene, characters, or exact weapon meshes.
+Primary request: create one original stylized AK-47-pattern assault rifle as clean image-to-3D source art, exact broadside orthographic view.
+Subject: a complete AK-47-pattern rifle with recognizable curved magazine, stamped receiver, gas tube, front sight, wooden handguard and fixed wooden stock. Chunky readable game proportions, structurally coherent parts, moderate edge bevels, hand-painted surface wear. The rifle is an unbranded fictionalized game asset, not a product photograph.
+Camera: true orthographic exact left broadside view that serves as the production front view; rifle perfectly horizontal; muzzle points to image right; stock points left; no yaw, pitch, roll, or perspective. Centered with generous even padding and the entire silhouette visible.
+Style: original chunky 2.5D survival-game weapon; bold dark ink-like silhouette; hand-painted wear; angular readable shapes; purple-black gunmetal with restrained dark red-brown wood.
+Backdrop: perfectly flat uniform light gray, no horizon, no floor plane, no cast or contact shadow.
+Constraints: exactly one rifle; clean separated silhouette; all components attached correctly; no hands; no sling; no loose ammunition; no muzzle flash; no text; no watermark.
+Avoid: human, hand, arm, bipod, scope, suppressor, modern rail accessories, extra magazines, shell casing, smoke, logo, serial number, menu UI, scenery, photorealism, dramatic perspective, three-quarter view, fisheye, gradients.

@@ -1,0 +1,26 @@
+{
+  "id": "female_riot",
+  "kind": "kits",
+  "task_id": "15356876-c38f-4c89-8598-ed35d66c8c16",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/15356876-c38f-4c89-8598-ed35d66c8c16/tripo_pbr_model_15356876-c38f-4c89-8598-ed35d66c8c16.glb?auth_key=1786665600-2104902a4839c284ec1652e52107e690-0-956e781ab7ce607861ae737846e0e3af",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/15356876-c38f-4c89-8598-ed35d66c8c16/legacy_mesh.webp?auth_key=1786665600-ddd98bb9203eebd231f0faebabffe38e-0-7f6c07cf965d63578f1b584867c6af3e",
+  "local_model": "assets/generated_models/tripo/kits/female_riot/female_riot_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/female_riot/female_riot_preview.webp",
+  "model_bytes": 2968252
+}

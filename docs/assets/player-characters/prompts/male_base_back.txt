@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D
+Input images: Image 1 is the game art-direction reference only. Image 2 is the approved exact front view and is the authoritative identity, body proportion, A-pose, clothing construction, color, wear, crop, and scale reference.
+Primary request: render the exact same male rig-carrier body from the exact rear. Change only the camera to a true orthographic back view.
+Camera: rotate the camera exactly 180 degrees around the stationary subject; exact rear, eye-level, no perspective, no three-quarter angle, same 2048-square framing, body height, foot baseline, and padding as Image 2.
+Pose and invariants: preserve the neutral symmetrical A-pose in 3D, straight spine, feet parallel, fingers separated, fitted purple-black training under-suit, boots, gloves, short hair silhouette, seam logic, red accents, and hand-painted wear. Show coherent back construction with no backpack or rear accessories. Do not mirror-paste the front.
+Backdrop: perfectly flat uniform light gray, no vignette, no gradient, no horizon, no floor, no shadow.
+Constraints: one complete full-body subject, centered; only the back of the head and body visible; no equipment; no weapon; no text; no watermark.
+Avoid: face visible, front view, three-quarter view, changed proportions, changed pose, backpack, pouches, extra accessories, extra limbs, fused fingers, scenery, photorealism.

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "male_gunner",
+    "base": "male_base",
+    "kit": "male_gunner",
+    "triangles": 29930,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.58
+  },
+  {
+    "id": "female_gunner",
+    "base": "female_base",
+    "kit": "female_gunner",
+    "triangles": 29955,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.51
+  },
+  {
+    "id": "male_assault",
+    "base": "male_base",
+    "kit": "male_assault",
+    "triangles": 29974,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.62
+  },
+  {
+    "id": "female_assault",
+    "base": "female_base",
+    "kit": "female_assault",
+    "triangles": 29857,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.59
+  },
+  {
+    "id": "male_medic",
+    "base": "male_base",
+    "kit": "male_medic",
+    "triangles": 29911,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.46
+  },
+  {
+    "id": "female_medic",
+    "base": "female_base",
+    "kit": "female_medic",
+    "triangles": 29925,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.57
+  },
+  {
+    "id": "male_demolition",
+    "base": "male_base",
+    "kit": "male_demolition",
+    "triangles": 29984,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.5
+  },
+  {
+    "id": "female_demolition",
+    "base": "female_base",
+    "kit": "female_demolition",
+    "triangles": 29998,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.49
+  },
+  {
+    "id": "male_riot",
+    "base": "male_base",
+    "kit": "male_riot",
+    "triangles": 29860,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.46
+  },
+  {
+    "id": "female_riot",
+    "base": "female_base",
+    "kit": "female_riot",
+    "triangles": 29968,
+    "bones": 43,
+    "actions": 20,
+    "seconds": 1.47
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "rpg",
+    "target_size_m": 1.05,
+    "triangles": 4992,
+    "origin": "primary_grip"
+  },
+  {
+    "id": "ak47",
+    "target_size_m": 0.9,
+    "triangles": 4996,
+    "origin": "primary_grip"
+  },
+  {
+    "id": "m4a1",
+    "target_size_m": 0.82,
+    "triangles": 4998,
+    "origin": "primary_grip"
+  },
+  {
+    "id": "tactical_knife",
+    "target_size_m": 0.38,
+    "triangles": 5000,
+    "origin": "primary_grip"
+  },
+  {
+    "id": "hk45c",
+    "target_size_m": 0.28,
+    "triangles": 5000,
+    "origin": "primary_grip"
+  },
+  {
+    "id": "landmine",
+    "target_size_m": 0.35,
+    "triangles": 4994,
+    "origin": "ground_bottom_center"
+  },
+  {
+    "id": "mp5",
+    "target_size_m": 0.65,
+    "triangles": 4998,
+    "origin": "primary_grip"
+  }
+]

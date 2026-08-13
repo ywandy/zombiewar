@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D
+Input images: Image 1 is the game art-direction reference only. Image 2 is the approved AK-47-pattern left broadside and is authoritative for geometry, materials, wear, crop, and scale.
+Primary request: render the exact same stationary rifle from the opposite broadside, showing its right side. Physically orbit the camera 180 degrees; do not mirror or redraw the source image.
+Camera: true orthographic exact opposite broadside, rifle horizontal, no perspective, no three-quarter angle, same object scale and vertical registration as Image 2. Because the camera has physically moved to the opposite side, the muzzle naturally appears at image left and stock at image right.
+Invariants: preserve every component, proportion, purple-black metal, red-brown wood, bevel, scratch, and attachment. Show coherent right-side receiver construction without inventing accessories.
+Backdrop: perfectly flat uniform light gray, no vignette, no gradient, no horizon, no floor, no shadow.
+Constraints: exactly one complete rifle, no hands, no sling, no ammunition, no text, no watermark.
+Avoid: mirrored labels, duplicate parts, three-quarter view, changed rifle, extra accessories, scenery, photorealism.

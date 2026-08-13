@@ -1,0 +1,11 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D
+Input images: Image 1 is an art-direction reference only. Use its chunky survival-game character language, bold dark silhouette, angular hand-painted surfaces, purple-black clothing, and restrained red accents. Do not preserve or reproduce its menu composition, logo, text, background, weapons, or exact characters.
+Primary request: create a new original undecorated male rig-carrier body, full body, exact front orthographic view, for a modular player-character production pipeline.
+Subject: one adult male with an athletic compact build and approximately 4.5-head heroic proportion. Neutral symmetrical A-pose, straight spine, arms about 35 degrees from the torso, palms facing forward-inward, fingers relaxed and separated, feet parallel and shoulder-width. Calm neutral face, short plain hair, no facial hair.
+Clothing: fitted purple-black tactical training under-suit with simple boots and gloves. Only close-fitting construction seams and subtle hand-painted wear. No class identity and no outer equipment.
+Camera: true orthographic exact front view, eye-level, centered, no yaw, no pitch, no roll, no perspective. Identical left and right body scale. Entire body visible with generous even padding.
+Style: original chunky 2.5D survival-game character; 4.5-head proportion; bold dark ink-like silhouette; hand-painted wear; angular readable shapes; purple-black tactical clothing with restrained red identifiers; based on the supplied Zombie War menu image only as an art-direction reference.
+Backdrop: perfectly flat uniform light gray, no horizon, no floor plane, no cast or contact shadow.
+Constraints: one complete subject; clean readable silhouette; anatomically coherent hands and feet; no held item; no text; no watermark.
+Avoid: helmet, cap, goggles, headset, backpack, chest rig, armor plate, pouches, holster, belt accessories, knee pads, elbow pads, weapon, logo, menu UI, scenery, photorealism, realistic military photography, chibi below 4 heads, fisheye, three-quarter view, dramatic pose, extra limbs, fused fingers, floating accessories, gradients.

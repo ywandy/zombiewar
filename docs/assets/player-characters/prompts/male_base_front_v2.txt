@@ -1,0 +1,12 @@
+Use case: stylized-concept
+Asset type: exact front orthographic image-to-3D source art for a modular male body base
+Input images: Image 1 is the user's original style reference. Image 2 is the user-approved male assault style gate and is the sole highest-priority reference for proportions, face language, rough ink rendering, palette, material wear, silhouette weight, hands, and boots.
+Primary request: create a new undecorated male rig-carrier base derived from the approved style gate. Keep the same squat survival-comic anatomy and visual effect, but remove all class-specific outer equipment so later modular kits can be fitted over it.
+Proportion and identity: approximately 3.5 heads tall; oversized square head; short neck; broad compact torso; very short thick arms and legs; oversized blocky hands; huge heavy boots. Keep the approved tough mischievous face language, spiky black hair, cream skin, heavy eyebrows, broad jaw, scars and stubble. No headband or scarf on the undecorated base.
+Pose: neutral symmetrical A-pose suitable for rigging; straight torso; arms exactly 30 degrees from the sides; elbows straight; palms slightly forward; all thick fingers separated; legs apart; feet parallel and flat. No held object.
+Clothing: only a close-fitting battered purple-black training undersuit, simple dirty off-white fingered gloves, and oversized dirty off-white heavy boots. Minimal construction seams, patches and wear. No outer armor or class identity.
+Camera: true orthographic exact front view, eye-level, no perspective, no three-quarter angle, no tilt. Full body centered, identical left/right scale, generous even padding, boots fully visible.
+Backdrop: perfectly flat uniform #D8D8D8 light gray, no vignette, no gradient, no texture, no horizon, no floor plane, no cast or contact shadow.
+Rendering: thick uneven black exterior contour; scratchy hand-inked interior lines; flat two- or three-tone cel shading; dirty hand-painted wear; no glossy 3D look.
+Constraints: exactly one complete full-body subject; no weapon; no text; no logo; no watermark.
+Avoid: red headband, scarf, straps, backpack, chest rig, belt pouches, skulls, shoulder pads, elbow pads, knee pads, holster, armor plate, tall anatomy, athletic anime body, superhero muscles, sleek bodysuit, polished sci-fi armor, smooth digital vector art, soft airbrush, glossy render, extra limbs, fused fingers, background scenery.

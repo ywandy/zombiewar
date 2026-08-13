@@ -1,0 +1,11 @@
+Use case: stylized-concept
+Asset type: front orthographic cartoon character style gate
+Input images: Image 1 is the user's supplied reference and the only visual reference. Do not use any previous generated character image as a reference.
+Primary request: create one original male assault survivor in the same rough-inked survival-comic style as Image 1, shown front-facing in a clean neutral A-pose with no weapon.
+Overall stature: clearly short and compact, approximately 3.2–3.5 heads tall from hair to boot soles. Use a low center of gravity, short torso, short upper legs and short lower legs. The full silhouette must read as a squat adult cartoon survivor, not a tall person. Keep the head, hands, forearms and boots in natural coordinated proportion to this compact body; do not make any single body part oversized.
+Face and costume language: spiky dark hair, red cloth headband, cream skin, thick black brows, compact rugged face, small scars and stubble; worn dark purple-black field jacket and trousers; brown webbing and pouches; dirty off-white gloves and ordinary worn combat boots; red scarf and small red identifiers; stitched repairs, scratches and hand-painted grime. Small skull motifs only.
+Pose: exact neutral symmetrical A-pose for 3D reconstruction; upright compact torso; arms about 30 degrees away from body; elbows straight; separated fingers; short legs apart; feet parallel; no held object.
+Camera: true orthographic exact front view, eye-level, no perspective, no three-quarter view, no tilt. Full body centered with generous padding.
+Rendering: match Image 1's thick irregular black outer line, scratchy internal ink, flat limited cel shading, dirty painted wear, angular simplified shapes, purple-black / dirty off-white / red palette. Match the drawing effect, not the exact character or scene.
+Backdrop: perfectly flat uniform light gray, no horizon, floor, cast shadow, vignette, gradient, scenery, text, logo or watermark.
+Avoid: tall silhouette, long legs, fashion-model body, realistic adult height, 4-head-plus anatomy, oversized head, oversized hands, oversized boots, tiny torso, extreme chibi child, bobblehead, superhero muscles, anime hero, glossy 3D render, smooth vector art, soft airbrush, extra limbs, fused fingers.

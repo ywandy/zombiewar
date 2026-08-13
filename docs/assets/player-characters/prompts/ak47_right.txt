@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D
+Input images: Image 1 is the game art-direction reference only. Image 2 is the approved AK-47-pattern broadside and is authoritative for geometry, materials, wear, crop, and scale.
+Primary request: render the exact same rifle from the right multiview direction: camera directly behind the buttstock looking perfectly along the rifle toward the muzzle. This is a narrow exact end-on orthographic buttstock view, not a broadside and not a muzzle view.
+Camera: rotate camera exactly 90 degrees around the stationary horizontal rifle; true orthographic end-on buttplate view, no perspective, no three-quarter angle; rifle remains centered at the same scale and vertical registration as Image 2. The flat rear buttplate is the nearest surface; the muzzle opening must be mostly occluded by the rifle body.
+Invariants: preserve every component, proportion, purple-black metal, red-brown wood, bevel, scratch, and attachment. Reconstruct depth coherently; do not redesign or add parts.
+Backdrop: perfectly flat uniform light gray, no vignette, no gradient, no horizon, no floor, no shadow.
+Constraints: exactly one rifle seen from behind the stock, no hands, no sling, no ammunition, no muzzle flash, no text, no watermark.
+Avoid: broadside, three-quarter view, changed rifle, extra accessories, scenery, photorealism.

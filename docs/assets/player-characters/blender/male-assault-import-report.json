@@ -1,0 +1,145 @@
+{
+  "reference": {
+    "bounds": {
+      "min": [
+        -4.9510579109191895,
+        -1.4235243797302246,
+        -1.0
+      ],
+      "max": [
+        -3.0489420890808105,
+        0.9999999403953552,
+        1.5181665420532227
+      ],
+      "size": [
+        1.902115821838379,
+        2.42352432012558,
+        2.5181665420532227
+      ]
+    },
+    "objects": [
+      {
+        "name": "REF__Axe",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__CharacterArmature",
+        "type": "ARMATURE",
+        "parent": null
+      },
+      {
+        "name": "REF__Guitar",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Knife",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Lis",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Pistol",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Rifle",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Shotgun",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Shoulder",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__SMG",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__Spear",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__WoodenBat_Barbed",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__WoodenBat_Saw",
+        "type": "MESH",
+        "parent": "REF__CharacterArmature"
+      },
+      {
+        "name": "REF__\u68f1\u89d2\u7403",
+        "type": "MESH",
+        "parent": null
+      }
+    ]
+  },
+  "base": {
+    "bounds": {
+      "min": [
+        -0.11875688284635544,
+        -0.3299444317817688,
+        -0.49986159801483154
+      ],
+      "max": [
+        0.11874192208051682,
+        0.3300218880176544,
+        0.5002314448356628
+      ],
+      "size": [
+        0.23749880492687225,
+        0.6599663197994232,
+        1.0000930428504944
+      ]
+    },
+    "objects": [
+      {
+        "name": "BASE__tripo_node_8bfcb9e1-5ddf-4900-9c40-05d58598d869",
+        "type": "MESH",
+        "parent": null
+      }
+    ]
+  },
+  "kit": {
+    "bounds": {
+      "min": [
+        -0.14674967527389526,
+        -0.39343559741973877,
+        -0.5009304881095886
+      ],
+      "max": [
+        0.1458621621131897,
+        0.39410173892974854,
+        0.5001283288002014
+      ],
+      "size": [
+        0.29261183738708496,
+        0.7875373363494873,
+        1.00105881690979
+      ]
+    },
+    "objects": [
+      {
+        "name": "KIT__tripo_node_ab0f3a43-cad2-4769-b45e-b487436dfa5b",
+        "type": "MESH",
+        "parent": null
+      }
+    ]
+  }
+}
