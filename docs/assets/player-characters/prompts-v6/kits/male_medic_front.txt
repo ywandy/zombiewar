@@ -1,0 +1,14 @@
+Use case: stylized-concept
+Asset type: front orthographic separated equipment kit for image-to-3D
+Input images: Image 1 is the user's supplied Zombie War menu screenshot and Image 2 is the approved v5 style gate. Use both only as drawing-style references. Do not reuse the colors of any previously generated character.
+Subject: only the separated male medic equipment components, laid out with clear gaps around an invisible compact 3.2-3.5 heads A-pose. No base body, no torso, no limbs, no bare skin below the neck, no weapon.
+Parts: head with hair and headlamp band, short medical shoulder cape, cross-body medical satchel, bandage pouches, elbow guards, waist kit, knee pads.
+Head and identity: man in his twenties, deep brown skin #7A4B2A, short tightly-curled black hair, clean shaven, rounder softer face, small headlamp on a fabric band.
+Color identity (unique to this character): main garment is pale gray-white medical coat #D6D3C4, covering the large coat, vest and armor surfaces and reading as roughly 40-50 percent of the kit area; secondary is deep teal trim and straps #2E7D6B; accent is blood red cross #B3231E, used only on straps, tape and small identifiers. Shared neutrals across the whole roster: cream off-white #E8DFC8 leather and webbing, dark brown #4A3728 belts, gray #8C9096 metal fittings, near-black #141216 ink lines.
+Motif: plain geometric cross (not a letter or typographic glyph), used sparingly and at most three times across the whole kit.
+Silhouette intent: softest shoulder line; short cape hem and a cross-body satchel, and the only kit with a headlamp.
+Rendering: rough uneven black ink outer line, scratchy internal ink, flat two-step cel shading, hand-painted grime, scratches and stitched repairs, angular simplified readable shapes. Match the drawing effect of the style reference, not its character.
+Camera: true orthographic exact front view, eye level, no perspective, no tilt. All parts drawn at one consistent scale with generous padding.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Color discipline: this character's palette is listed above and is the only palette allowed. Absolutely no purple, violet, magenta or lavender anywhere on the garments, armor, straps or accessories.
+Avoid: purple, violet, magenta, base body, bare torso, held weapon, photorealism, realistic military photography, glossy 3D render, smooth vector art, soft airbrush, three-quarter view, perspective distortion, dramatic pose, extra limbs, fused fingers, floating debris, letters or typographic glyphs.

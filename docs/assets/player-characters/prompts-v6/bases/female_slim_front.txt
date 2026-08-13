@@ -1,0 +1,12 @@
+Use case: stylized-concept
+Asset type: front orthographic character base body for image-to-3D
+Input images: Image 1 is the user's supplied Zombie War menu screenshot and Image 2 is the approved female_standard base body. Image 2 fixes the head size, total height, head-to-body ratio and joint positions; only the body volume may differ.
+Subject: one original female survivor base body wearing a plain seamless undersuit and ordinary worn combat boots. No equipment, no pouches, no armor, no weapon, no straps.
+Build: compact lean adult female, narrower shoulders, slimmer limbs, wiry build; same head size and same overall height as female_standard. Only the girth of the torso and limbs changes. Total height, head-to-body ratio, shoulder joint height, elbow, wrist, hip, knee and ankle positions must stay identical to the reference base.
+Proportion: compact 3.2-3.5 heads tall, low center of gravity, short torso and short legs. The head, hands, forearms and boots stay in natural coordinated proportion; no single body part is oversized.
+Undersuit color: neutral dark charcoal gray #33323A, deliberately desaturated. This is a tintable source asset, so keep the hue flat and desaturated and carry all the character through value, wear and hand-painted texture. Do not use purple, violet or magenta.
+Pose: exact neutral symmetrical A-pose for 3D reconstruction; upright torso; arms about 30 degrees away from the body; elbows straight; fingers separated; feet parallel; no held object.
+Rendering: rough uneven black ink outer line, scratchy internal ink, flat two-step cel shading, hand-painted grime, scratches and stitched repairs, angular simplified readable shapes. Match the drawing effect of the style reference, not its character.
+Camera: true orthographic exact front view, eye level, no perspective, no tilt. Full body centered with generous padding.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Avoid: purple, violet, magenta, equipment, armor, pouches, straps, weapon, tall silhouette, long legs, fashion-model body, 4-head-plus anatomy, oversized head, bobblehead, superhero muscles, photorealism, realistic military photography, glossy 3D render, smooth vector art, soft airbrush, three-quarter view, perspective distortion, dramatic pose, extra limbs, fused fingers, floating debris, letters or typographic glyphs.

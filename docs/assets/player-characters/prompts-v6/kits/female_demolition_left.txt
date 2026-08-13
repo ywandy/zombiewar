@@ -1,0 +1,14 @@
+Use case: stylized-concept
+Asset type: left orthographic separated equipment kit for image-to-3D
+Input images: Image 1 is the approved v6 FRONT kit sheet for female_demolition. It is the identity reference and must be matched exactly.
+Subject: the same female demolition kit as Image 1, same parts, same part count, same colors, same wear marks and same scale, redrawn seen from the left. No base body, no weapon.
+Parts: head with hair and goggles pushed up on the forehead, reinforced shoulder pads, tool chest rig, demolition waist kit, thigh mine pouch, knee pads.
+Head and identity: woman in her forties, deep brown skin #6E4326, black hair in thick cornrows tied back, strong square jaw, welding goggles pushed up on the forehead. The head must be the same person as Image 1.
+Color identity (unique to this character): main garment is brighter orange work coveralls #D4762A, covering the large coat, vest and armor surfaces and reading as roughly 40-50 percent of the kit area; secondary is dark brown leather rig #4A3728; accent is hazard yellow stripes #D9A521, used only on straps, tape and small identifiers. Shared neutrals across the whole roster: cream off-white #E8DFC8 leather and webbing, dark brown #4A3728 belts, gray #8C9096 metal fittings, near-black #141216 ink lines.
+Motif: hazard stripes and a triangular blast mark, in the same places as Image 1 where visible from the left.
+Rendering: rough uneven black ink outer line, scratchy internal ink, flat two-step cel shading, hand-painted grime, scratches and stitched repairs, angular simplified readable shapes. Match the drawing effect of the style reference, not its character.
+Camera: true orthographic exact left side view, eye level, no perspective, no tilt, identical scale and identical crop to Image 1.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Color discipline: this character's palette is listed above and is the only palette allowed. Absolutely no purple, violet, magenta or lavender anywhere on the garments, armor, straps or accessories.
+Consistency: garment seams, pouch count, buckle count, damage marks and colors must all match Image 1. Do not add, remove or restyle any part.
+Avoid: purple, violet, magenta, base body, bare torso, held weapon, new parts not present in Image 1, photorealism, realistic military photography, glossy 3D render, smooth vector art, soft airbrush, three-quarter view, perspective distortion, dramatic pose, extra limbs, fused fingers, floating debris, letters or typographic glyphs.

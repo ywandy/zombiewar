@@ -1,0 +1,12 @@
+Use case: stylized-concept
+Asset type: left orthographic character base body for image-to-3D
+Input images: Image 1 is the approved v6 FRONT base body for male_heavy. It is the identity reference and must be matched exactly.
+Subject: the same male base body as Image 1, same build, same undersuit, same boots, same height and same scale, redrawn seen from the left. No equipment, no weapon.
+Build: compact heavy-set adult male, broad thick shoulders, thick neck, barrel chest, heavier thighs; same head size and same overall height as male_standard.
+Undersuit color: neutral dark charcoal gray #33323A, deliberately desaturated, matching Image 1 exactly. No purple, violet or magenta.
+Pose: identical neutral symmetrical A-pose to Image 1; arms about 30 degrees away from the body; elbows straight; fingers separated; feet parallel.
+Rendering: rough uneven black ink outer line, scratchy internal ink, flat two-step cel shading, hand-painted grime, scratches and stitched repairs, angular simplified readable shapes. Match the drawing effect of the style reference, not its character.
+Camera: true orthographic exact left side view, eye level, no perspective, no tilt, identical scale and identical crop to Image 1.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Consistency: total height, head size, shoulder width, waist, limb thickness, boot shape and wear marks must match Image 1.
+Avoid: purple, violet, magenta, equipment, armor, pouches, weapon, changed proportion, photorealism, realistic military photography, glossy 3D render, smooth vector art, soft airbrush, three-quarter view, perspective distortion, dramatic pose, extra limbs, fused fingers, floating debris, letters or typographic glyphs.

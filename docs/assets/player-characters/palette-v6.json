@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "revision": "v6",
+  "supersedes": "v5 全员 purple-black + red accents 单一配色",
+  "proportion": "compact 3.2-3.5 heads (以已通过的 v5 style gate 为准，非旧 spec 的 4.5 头身)",
+
+  "shared_style": {
+    "outline": "rough uneven black ink outline, scratchy internal lines",
+    "shading": "flat two-step cel shading, no gradient, no airbrush",
+    "wear": "hand-painted grime, scratches, stitched repairs",
+    "neutrals": {
+      "cream": "#E8DFC8",
+      "leather_brown": "#4A3728",
+      "metal_gray": "#8C9096",
+      "ink_black": "#141216"
+    },
+    "hard_ban": [
+      "purple",
+      "violet",
+      "magenta",
+      "lavender",
+      "any purple-black garment"
+    ]
+  },
+
+  "bases": [
+    {
+      "id": "male_standard",
+      "sex": "male",
+      "body": "compact standard adult male, moderate shoulders, low center of gravity",
+      "source": "reuse_existing_mesh",
+      "note": "现有 male_base 网格不重出；仅在 Blender 里按角色重烘焙底衣颜色",
+      "characters": ["male_gunner", "male_assault", "male_medic"]
+    },
+    {
+      "id": "male_heavy",
+      "sex": "male",
+      "body": "compact heavy-set adult male, broad thick shoulders, thick neck, barrel chest, heavier thighs; same head size and same overall height as male_standard",
+      "build_constraint": "Only the girth of the torso and limbs changes. Total height, head-to-body ratio, shoulder joint height, elbow, wrist, hip, knee and ankle positions must stay identical to the reference base.",
+      "source": "generate_new",
+      "note": "只加厚躯干与四肢围度，不改身高、头身比和骨骼关节位置",
+      "characters": ["male_demolition", "male_riot"]
+    },
+    {
+      "id": "female_standard",
+      "sex": "female",
+      "body": "compact standard adult female, moderate shoulders, defined waist",
+      "source": "reuse_existing_mesh",
+      "note": "现有 female_base 网格不重出；仅在 Blender 里按角色重烘焙底衣颜色",
+      "characters": ["female_assault", "female_demolition", "female_riot"]
+    },
+    {
+      "id": "female_slim",
+      "sex": "female",
+      "body": "compact lean adult female, narrower shoulders, slimmer limbs, wiry build; same head size and same overall height as female_standard",
+      "build_constraint": "Only the girth of the torso and limbs changes. Total height, head-to-body ratio, shoulder joint height, elbow, wrist, hip, knee and ankle positions must stay identical to the reference base.",
+      "source": "generate_new",
+      "note": "只收窄围度，不改身高、头身比和骨骼关节位置",
+      "characters": ["female_gunner", "female_medic"]
+    }
+  ],
+
+  "base_undersuit_source": {
+    "target": "neutral dark charcoal gray #33323A, deliberately desaturated",
+    "reason": "底衣是可染色源图。新基体直接出中性灰；两套现有紫黑基体在 Blender 里先去饱和再乘目标色，两条路径得到一致结果。"
+  },
+
+  "class_motifs": {
+    "gunner": "stenciled ammo-belt / gear mark",
+    "assault": "small skull",
+    "medic": "plain geometric cross (not a letter or typographic glyph)",
+    "demolition": "hazard stripes and a triangular blast mark",
+    "riot": "shield emblem"
+  },
+
+  "class_parts": {
+    "gunner": "head with hair, thickened tactical gloves, cross-body ammo belt, compact ammunition chest rig, hip magazine pouches, knee pads",
+    "assault": "head with hair, medium chest rig, elbow guards, belt magazine pouches, knee pads, identifier arm band",
+    "medic": "head with hair and headlamp band, short medical shoulder cape, cross-body medical satchel, bandage pouches, elbow guards, waist kit, knee pads",
+    "demolition": "head with hair and goggles pushed up on the forehead, reinforced shoulder pads, tool chest rig, demolition waist kit, thigh mine pouch, knee pads",
+    "riot": "riot helmet with raised visor, broad shoulder armor, forearm guards, thick chest armor, compact back plate, belt pouches, knee guards"
+  },
+
+  "class_silhouette": {
+    "gunner": "the horizontal ammo belt is the loudest element; the widest point of the upper body is at the chest",
+    "assault": "lightest kit of the roster; medium chest rig and elbow guards, with the identifier band high on the upper arm",
+    "medic": "softest shoulder line; short cape hem and a cross-body satchel, and the only kit with a headlamp",
+    "demolition": "tallest and widest shoulder pads, with heavy thigh hangers pulling down and mass clearly biased upward",
+    "riot": "squarest and thickest overall; the helmet closes off the top of the head and the forearm guards are the largest in the roster"
+  },
+
+  "characters": [
+    {
+      "id": "male_gunner",
+      "base": "male_standard",
+      "class": "gunner",
+      "main": {"name": "deep olive drab military coat", "hex": "#4F5B32"},
+      "secondary": {"name": "mustard yellow ammo webbing", "hex": "#C9A227"},
+      "accent": {"name": "burnt orange tape", "hex": "#B5551F"},
+      "undersuit_tint": "#2F3620",
+      "face": "man in his forties, weathered tan skin #C89A6B, steel-gray buzz cut, broken nose, heavy square jaw, deep crow's feet, thick stubble, no beard"
+    },
+    {
+      "id": "female_gunner",
+      "base": "female_slim",
+      "class": "gunner",
+      "main": {"name": "lighter sage olive military coat", "hex": "#6E7A43"},
+      "secondary": {"name": "bright mustard ammo webbing", "hex": "#D9B94A"},
+      "accent": {"name": "burnt orange tape", "hex": "#B5551F"},
+      "undersuit_tint": "#3A4227",
+      "face": "woman in her thirties, tan skin #CB9A6E, dark brown hair in a tight high ponytail with shaved sides, sharp cheekbones, small scar through one eyebrow"
+    },
+    {
+      "id": "male_assault",
+      "base": "male_standard",
+      "class": "assault",
+      "main": {"name": "deep brick red field jacket", "hex": "#8E3B2E"},
+      "secondary": {"name": "cream off-white guards", "hex": "#E8DFC8"},
+      "accent": {"name": "dark red identifier band", "hex": "#B3231E"},
+      "undersuit_tint": "#3A211C",
+      "face": "man in his thirties, cream skin #E0BB93, spiky black hair under a red cloth headband, scar on one cheek, light stubble, thick black brows"
+    },
+    {
+      "id": "female_assault",
+      "base": "female_standard",
+      "class": "assault",
+      "main": {"name": "brighter terracotta field jacket", "hex": "#B24A38"},
+      "secondary": {"name": "cream off-white guards", "hex": "#E8DFC8"},
+      "accent": {"name": "dark red identifier band", "hex": "#B3231E"},
+      "undersuit_tint": "#46261F",
+      "face": "woman in her twenties, light skin #EBC49A, messy short auburn bob, freckles across the nose, dark red bandana knotted at the neck"
+    },
+    {
+      "id": "male_medic",
+      "base": "male_standard",
+      "class": "medic",
+      "main": {"name": "pale gray-white medical coat", "hex": "#D6D3C4"},
+      "secondary": {"name": "deep teal trim and straps", "hex": "#2E7D6B"},
+      "accent": {"name": "blood red cross", "hex": "#B3231E"},
+      "undersuit_tint": "#2B3038",
+      "face": "man in his twenties, deep brown skin #7A4B2A, short tightly-curled black hair, clean shaven, rounder softer face, small headlamp on a fabric band"
+    },
+    {
+      "id": "female_medic",
+      "base": "female_slim",
+      "class": "medic",
+      "main": {"name": "brighter off-white medical coat", "hex": "#E4E2D6"},
+      "secondary": {"name": "lighter teal trim and straps", "hex": "#3D9B85"},
+      "accent": {"name": "blood red cross", "hex": "#B3231E"},
+      "undersuit_tint": "#333842",
+      "face": "woman in her thirties, light olive skin #E3C09A, straight black hair in a low bun with loose strands, calm narrow eyes, small round face, cloth surgical mask pulled down under the chin"
+    },
+    {
+      "id": "male_demolition",
+      "base": "male_heavy",
+      "class": "demolition",
+      "main": {"name": "burnt orange work coveralls", "hex": "#B45A18"},
+      "secondary": {"name": "dark brown leather rig", "hex": "#4A3728"},
+      "accent": {"name": "hazard yellow stripes", "hex": "#D9A521"},
+      "undersuit_tint": "#3A2415",
+      "face": "man in his fifties, ruddy sunburnt skin #D08A62, bald on top with bushy gray sideburns, large gray walrus moustache, welding goggles pushed up on the forehead"
+    },
+    {
+      "id": "female_demolition",
+      "base": "female_standard",
+      "class": "demolition",
+      "main": {"name": "brighter orange work coveralls", "hex": "#D4762A"},
+      "secondary": {"name": "dark brown leather rig", "hex": "#4A3728"},
+      "accent": {"name": "hazard yellow stripes", "hex": "#D9A521"},
+      "undersuit_tint": "#452B19",
+      "face": "woman in her forties, deep brown skin #6E4326, black hair in thick cornrows tied back, strong square jaw, welding goggles pushed up on the forehead"
+    },
+    {
+      "id": "male_riot",
+      "base": "male_heavy",
+      "class": "riot",
+      "main": {"name": "cobalt blue heavy armor", "hex": "#2B4C7E"},
+      "secondary": {"name": "silver gray metal plating", "hex": "#A8ADB4"},
+      "accent": {"name": "pale ice blue marking", "hex": "#8FB6DC"},
+      "undersuit_tint": "#1E2A3D",
+      "face": "man in his thirties, olive skin #B5804F, shaved head, thick full black beard, heavy brow, visible under a riot helmet with the visor raised"
+    },
+    {
+      "id": "female_riot",
+      "base": "female_standard",
+      "class": "riot",
+      "main": {"name": "brighter cobalt blue heavy armor", "hex": "#3A639E"},
+      "secondary": {"name": "silver gray metal plating", "hex": "#A8ADB4"},
+      "accent": {"name": "pale ice blue marking", "hex": "#8FB6DC"},
+      "undersuit_tint": "#26344A",
+      "face": "woman in her thirties, pale skin #F0D2B0, ash blonde undercut braid, angular face, thin scar across the bridge of the nose, visible under a riot helmet with the visor raised"
+    }
+  ]
+}

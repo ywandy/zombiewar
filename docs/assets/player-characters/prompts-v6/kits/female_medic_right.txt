@@ -1,0 +1,14 @@
+Use case: stylized-concept
+Asset type: right orthographic separated equipment kit for image-to-3D
+Input images: Image 1 is the approved v6 FRONT kit sheet for female_medic. It is the identity reference and must be matched exactly.
+Subject: the same female medic kit as Image 1, same parts, same part count, same colors, same wear marks and same scale, redrawn seen from the right. No base body, no weapon.
+Parts: head with hair and headlamp band, short medical shoulder cape, cross-body medical satchel, bandage pouches, elbow guards, waist kit, knee pads.
+Head and identity: woman in her thirties, light olive skin #E3C09A, straight black hair in a low bun with loose strands, calm narrow eyes, small round face, cloth surgical mask pulled down under the chin. The head must be the same person as Image 1.
+Color identity (unique to this character): main garment is brighter off-white medical coat #E4E2D6, covering the large coat, vest and armor surfaces and reading as roughly 40-50 percent of the kit area; secondary is lighter teal trim and straps #3D9B85; accent is blood red cross #B3231E, used only on straps, tape and small identifiers. Shared neutrals across the whole roster: cream off-white #E8DFC8 leather and webbing, dark brown #4A3728 belts, gray #8C9096 metal fittings, near-black #141216 ink lines.
+Motif: plain geometric cross (not a letter or typographic glyph), in the same places as Image 1 where visible from the right.
+Rendering: rough uneven black ink outer line, scratchy internal ink, flat two-step cel shading, hand-painted grime, scratches and stitched repairs, angular simplified readable shapes. Match the drawing effect of the style reference, not its character.
+Camera: true orthographic exact right side view, eye level, no perspective, no tilt, identical scale and identical crop to Image 1.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Color discipline: this character's palette is listed above and is the only palette allowed. Absolutely no purple, violet, magenta or lavender anywhere on the garments, armor, straps or accessories.
+Consistency: garment seams, pouch count, buckle count, damage marks and colors must all match Image 1. Do not add, remove or restyle any part.
+Avoid: purple, violet, magenta, base body, bare torso, held weapon, new parts not present in Image 1, photorealism, realistic military photography, glossy 3D render, smooth vector art, soft airbrush, three-quarter view, perspective distortion, dramatic pose, extra limbs, fused fingers, floating debris, letters or typographic glyphs.
