@@ -240,13 +240,11 @@ func _test_chest_view_claim_lifecycle(
 	# 连调两次：第二次必须是空操作（claim_locked），否则一个箱子能被领两回。
 	chest.claim_by(player)
 	chest.claim_by(player)
+	# 领取的货已经由 SimWorld.accept_reward() 记进背包账本，表现层再发一次就是
+	# 第二本账——「捡满弹药后再也捡不到子弹」正是两本账各自演化的结果。
 	_expect(
-		player.equipment_calls == [{
-			"item_id": &"smg",
-			"amount": 4,
-			"auto_equip": true,
-		}],
-		"simulated claim must grant the overridden reward exactly once",
+		player.equipment_calls.is_empty() and player.ammo_calls.is_empty(),
+		"simulated claim must not grant rewards outside the simulation ledger",
 		failures
 	)
 	_expect(chest.claim_locked, "simulated claim must lock the view", failures)

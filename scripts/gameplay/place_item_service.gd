@@ -14,12 +14,51 @@ signal item_removed(item: Node3D, world_aabb: AABB)
 @export_node_path("PlaceItemGrid") var grid_path: NodePath
 @export_node_path("Node3D") var placed_items_path: NodePath
 
+## 放不下时 resolve_placement_cell() 返回它。格子坐标本身没有「无效值」，
+## 用一个不可能被 target_cell() 算出来的极值当哨兵。
+const INVALID_CELL := Vector2i(0x7FFFFFFF, 0x7FFFFFFF)
+
 var tracked_items: Dictionary = {}
 
-func request_place_item(
+## 第一步：**本机**决定这一下能不能放，返回目标格。
+##
+## 这一步刻意允许各端算出不同答案：它要做物理查询（那个格子上此刻站没站着人或
+## 僵尸），而僵尸与玩家的身体在各端是各自插值/预测的，同一 tick 上本来就不在同
+## 一个像素。因此它只是**放置者自己的决定**，与「我有没有子弹开这一枪」同性质。
+##
+## 决定之后走帧：真正落地由 place_item_at_cell() 在各端按同一个格子号执行。
+func resolve_placement_cell(
 	requester: CollisionObject3D,
 	origin: Vector3,
-	direction: Vector3,
+	direction: Vector3
+) -> Vector2i:
+	var grid := get_node_or_null(grid_path) as PlaceItemGrid
+	var container := get_node_or_null(placed_items_path) as Node3D
+	if grid == null or container == null:
+		push_warning("PlaceItemService has invalid scene, grid, or container configuration")
+		_reject(&"invalid_configuration")
+		return INVALID_CELL
+	if Vector2(direction.x, direction.z).length_squared() <= 0.000001:
+		_reject(&"invalid_direction")
+		return INVALID_CELL
+	var cell := grid.target_cell(origin, direction)
+	if grid.is_cell_reserved(cell):
+		_reject(&"reserved_cell")
+		return INVALID_CELL
+	var excluded: Array[RID] = []
+	if requester != null and is_instance_valid(requester):
+		excluded.append(requester.get_rid())
+	if grid.has_dynamic_blocker(grid.get_world_3d(), cell, excluded):
+		_reject(&"dynamic_blocker")
+		return INVALID_CELL
+	return cell
+
+## 第二步：在给定格子上落地。**不做任何物理查询**——各端在同一 tick 上按同一个
+## 格子号执行，因此结果一致。owner_slot 由调用方给出（帧里带着放置者座位），
+## 而不是从 requester 节点上读：远端座位的放置在本机也要落地。
+func place_item_at_cell(
+	cell: Vector2i,
+	owner_slot: int,
 	item_scene: PackedScene = null
 ) -> bool:
 	var resolved_scene := item_scene if item_scene != null else default_item_scene
@@ -28,28 +67,17 @@ func request_place_item(
 	if grid == null or container == null or resolved_scene == null:
 		push_warning("PlaceItemService has invalid scene, grid, or container configuration")
 		return _reject(&"invalid_configuration")
-	if Vector2(direction.x, direction.z).length_squared() <= 0.000001:
-		return _reject(&"invalid_direction")
-	var cell := grid.target_cell(origin, direction)
-	if grid.is_cell_reserved(cell):
-		return _reject(&"reserved_cell")
-	var excluded: Array[RID] = []
-	if requester != null and is_instance_valid(requester):
-		excluded.append(requester.get_rid())
-	if grid.has_dynamic_blocker(grid.get_world_3d(), cell, excluded):
-		return _reject(&"dynamic_blocker")
+	if cell == INVALID_CELL:
+		return _reject(&"invalid_cell")
 	var instance := resolved_scene.instantiate()
 	if not instance is Node3D:
 		instance.free()
 		return _reject(&"invalid_scene_root")
 	var item := instance as Node3D
 	# 记下放置者座位：工兵「加固」被动需要知道这桶是谁放的，才能确定性缩放
-	# 爆炸范围/伤害。requester 是本机玩家（PlayerController），其 player_index
-	# 即模拟层座位号；用 get() 鸭子类型读，未知类型静默跳过。联机各端从同一份
-	# 角色目录得到同一 owner 判定，确定性成立。
-	var owner_index: Variant = requester.get("player_index") if requester != null else null
-	if owner_index is int:
-		item.set_meta("owner_slot", owner_index)
+	# 爆炸范围/伤害。
+	if owner_slot >= 0:
+		item.set_meta("owner_slot", owner_slot)
 	container.add_child(item)
 	item.global_position = grid.cell_to_world(cell)
 	if not grid.reserve_cells(item, [cell]):

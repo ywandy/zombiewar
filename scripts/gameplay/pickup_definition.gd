@@ -51,6 +51,9 @@ func get_inventory_key() -> StringName:
 func get_inventory_max_stack() -> int:
 	return inventory_max_stack
 
+## 竞技场的拾取路径**不再走这里**：奖励由 SimWorld.accept_reward() 记进背包账本，
+## 再由背包镜像落到装备节点上（见 EquipmentController.apply_inventory_snapshot）。
+## 本方法只留给不带模拟层的工具与校验脚本，改它不会影响正常对局。
 func grant_to(player: PlayerController, amount_override: int = -1) -> bool:
 	# 改装件的效果已经由 SimWorld._resolve_chest_claims() 在拾取判定当场施加了，
 	# 表现层这里什么都不做。这条路径顺带绕开了一个历史坑：表现层兑现是「可能失败

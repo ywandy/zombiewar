@@ -65,6 +65,9 @@ var warmup_overlay_tween: Tween
 var _shop_offers: Array[ShopOfferDefinition] = []
 var single_player_input = SinglePlayerInputSourceScript.new()
 var players: Array[PlayerController] = []
+## 背包镜像的复用缓冲。每 tick 逐座位刷一次，不能每次都新建数组。
+var inventory_mirror_profiles := PackedInt32Array()
+var inventory_mirror_amounts := PackedInt32Array()
 var local_team_state = LocalTeamStateScript.new()
 
 ## 每隔这么多 tick 附一次帧哈希给服务端对拍。每 tick 都发是浪费，
@@ -309,6 +312,15 @@ func _queue_online_event(slot: int, event: Dictionary) -> void:
 					or offer.offer_type == ShopOfferDefinition.OfferType.PASSIVE \
 					or offer.offer_type == ShopOfferDefinition.OfferType.AMMO:
 				_buy_equipment_local(slot, offer)
+		return
+	if kind == LobbyProtocolScript.EVENT_PLACE_ITEM:
+		# 放置落地：各端在同一 tick 上按同一个格子号执行，因此得到同一个桶。
+		# 「能不能放」是放置者当场决定的（含物理查询），这里不再复核。
+		_apply_place_item(
+			slot,
+			int(event.get("pi", -1)),
+			Vector2i(int(event.get("ci", 0)), int(event.get("cj", 0)))
+		)
 
 ## 击杀归属取射击事件的 slot。带穿透的一枪可能带走多个目标而这里只记一次，
 ## 是刻意的取舍：所有客户端读的是同一批事件，因此少算得**一模一样**，
@@ -498,7 +510,10 @@ func register_weapon_profiles() -> void:
 			definition.spread_recovery_degrees_per_second,
 			definition.max_penetration_count,
 			definition.penetration_damage_coefficient,
-			definition.pellet_count
+			definition.pellet_count,
+			# 模拟层靠这个 id 把开火扣到对应的背包弹药档案上。漏传不会报错，
+			# 只会让那把枪的弹药在背包里只增不减，捡满一次之后再也捡不到子弹。
+			definition.weapon_id
 		)
 
 ## 把某个座位当前的改装件摘要刷到它的头顶标签上。
@@ -595,6 +610,11 @@ func _on_sim_request(request: Dictionary, slot: int) -> void:
 		sim_world.queue_spread_reset(
 			slot, get_weapon_profile_index(request["weapon_id"])
 		)
+		return
+	if kind == &"place_item":
+		_apply_place_item(
+			slot, _placeable_index_for(slot, request["item_id"]), request["cell"]
+		)
 
 ## 联机下把本机的模拟层请求量化后攒起来，等下一条命令一起发。
 ## 一个 tick 内最多攒 8 条，与服务端 parseCommand 的上限一致：
@@ -630,6 +650,54 @@ func _buffer_local_sim_request(request: Dictionary) -> void:
 			pending_local_events.append(
 				LobbyProtocolScript.pack_spread_reset_event(reset_index)
 			)
+		return
+	if kind == &"place_item":
+		var placeable_index := _placeable_index_for(online_slot, request["item_id"])
+		if placeable_index >= 0:
+			pending_local_events.append(
+				LobbyProtocolScript.pack_place_item_event(
+					placeable_index, request["cell"]
+				)
+			)
+
+## 可放置物在该座位装备栏里的下标。跨线只发这个下标：各端为同一座位建的是
+## 同一份 loadout，收端据此取回同一个 item_scene，协议因此不必认识「油桶」。
+func _placeable_index_for(slot: int, item_id: StringName) -> int:
+	var player := _player_for_slot(slot)
+	if player == null:
+		return -1
+	return player.equipment.get_slot_for_item(item_id)
+
+## 放置落地：单机在请求当场执行，联机在帧到达时由各端同时执行。
+##
+## 账本是这里唯一的闸门——有油桶才放得下。少了它，一个客户端在一个 RTT 内
+## 连按几次就能用一个油桶放出好几个桶：本地的可用性判断读的是还没扣账的镜像值。
+func _apply_place_item(slot: int, placeable_index: int, cell: Vector2i) -> void:
+	var player := _player_for_slot(slot)
+	if player == null or placeable_index < 0:
+		return
+	var items: Array = player.equipment.equipment_items
+	if placeable_index >= items.size():
+		return
+	var placeable = items[placeable_index]
+	if placeable == null or not placeable.has_method(&"get_place_item_scene"):
+		return
+	var oil_profile_index := sim_world.inventory_oil_profile_index()
+	if oil_profile_index < 0:
+		return
+	if sim_world.spend_inventory(slot, oil_profile_index, 1) <= 0:
+		return
+	var place_item_service = get_node_or_null("PlaceItemService")
+	if place_item_service == null:
+		return
+	if not place_item_service.place_item_at_cell(
+		cell, slot, placeable.get_place_item_scene()
+	):
+		# 落地失败（格子在这一 tick 已经被占）：把扣掉的那个还回去，
+		# 否则玩家会丢一个油桶却什么也没放下。各端拒绝的条件相同，退款也相同。
+		sim_world.accept_inventory(slot, oil_profile_index, 1)
+		return
+	_push_inventory_mirror(slot)
 
 func _on_sim_shot_event(event: Dictionary) -> void:
 	var origin: Vector2 = event["origin"]
@@ -780,6 +848,12 @@ func _on_sim_chest_event(event: Dictionary) -> void:
 	# 效果是模拟层给的，跟表现节点在不在无关。
 	if int(event.get("weapon_mod_id", -1)) >= 0:
 		_refresh_weapon_mod_summary(int(event["slot"]))
+	# 奖励已经记进模拟层账本，这里立刻刷一次镜像而不等下一 tick：
+	# 自动切枪必须在同一帧就看到「这把枪已经归我了」。
+	_push_inventory_mirror(int(event["slot"]))
+	_auto_equip_claimed_reward(
+		int(event["slot"]), int(event.get("reward_profile_index", -1))
+	)
 	var chest_id_value := int(event["chest_id"])
 	var view = chest_views.get(chest_id_value, null)
 	chest_views.erase(chest_id_value)
@@ -795,6 +869,19 @@ func _on_sim_chest_event(event: Dictionary) -> void:
 	# 领取已成定局，表现层没有否决权：能不能兑现取决于各端并不同步的弹药状态，
 	# 让它回写模拟层就是把分叉重新引进来。
 	(view as PickupChest).claim_by(_player_for_slot(int(event["slot"])))
+
+## 捡到标了自动装备的武器就切过去。这是纯表现动作：拿没拿到由账本决定，
+## 这里只决定手上举着哪一把，因此各端不一致也只影响本机画面。
+func _auto_equip_claimed_reward(slot: int, reward_profile_index: int) -> void:
+	var definition := map_runtime.reward_definition(reward_profile_index)
+	if definition == null or not definition.auto_equip:
+		return
+	if definition.reward_mode != PickupDefinition.RewardMode.EQUIPMENT:
+		return
+	var player := _player_for_slot(slot)
+	if player == null or not player.is_alive():
+		return
+	player.equipment.equip_item(definition.item_id)
 
 func _create_chest_view(event: Dictionary) -> void:
 	var chest_id_value := int(event.get("chest_id", 0))
@@ -871,6 +958,10 @@ func _consume_sim_events() -> void:
 	if sim_world.tick_death_events.size() > 0:
 		zombie_renderer.notify_deaths(sim_world)
 		call_deferred("_refresh_wave_state_after_deaths")
+	# 背包镜像每 tick 刷一次：拾取、购买、开火扣弹、放油桶都在这一步落到装备节点上。
+	# 内容没变时 EquipmentController 会自己跳过，所以这里不需要再判一次。
+	for slot in range(players.size()):
+		_push_inventory_mirror(slot)
 	_update_wave_hud()
 	_sync_command_controls()
 
@@ -991,23 +1082,55 @@ func _buy_equipment_local(slot: int, offer: ShopOfferDefinition) -> void:
 	var player := _player_for_slot(slot)
 	if player == null:
 		return
+	# 买到的东西写进模拟层账本，不写进装备节点：钱早就是模拟层扣的，货也必须落在
+	# 同一本账上，否则买来的枪不进背包、买来的子弹背包不知道。装备节点由紧接着的
+	# 镜像刷新拿到结果。
 	match offer.offer_type:
 		ShopOfferDefinition.OfferType.WEAPON:
+			var weapon_profile_index := sim_world.inventory_weapon_profile_index(
+				offer.weapon_id
+			)
+			if weapon_profile_index < 0:
+				return
+			# 已经有这把枪就别收钱：重复武器在拾取语义里会折算成 1 发子弹，
+			# 拿整把枪的价钱换一发是坑。
+			if sim_world.inventory_amount_of(slot, weapon_profile_index) > 0:
+				return
 			if not sim_world.spend_player_material(slot, offer.price):
 				return
-			var granted := player.equipment.grant_item(offer.weapon_id, 1, true)
-			if not granted:
+			var weapon_result: Dictionary = sim_world.accept_inventory(
+				slot, weapon_profile_index, 1
+			)
+			if not bool(weapon_result.get("accepted", false)):
 				sim_world.add_player_material(slot, offer.price)  # 退款
+				return
+			_push_inventory_mirror(slot)
+			player.equipment.equip_item(offer.weapon_id)
 		ShopOfferDefinition.OfferType.PASSIVE:
 			if not sim_world.spend_player_material(slot, offer.price):
 				return
 			player.set_runtime_passive(offer.passive_id)
 		ShopOfferDefinition.OfferType.AMMO:
+			var ammo_profile_index := sim_world.inventory_ammo_profile_index(
+				offer.weapon_id
+			)
+			if ammo_profile_index < 0:
+				return
+			# 没有这把枪就不卖它的子弹，与改造前 add_ammo() 要求 is_available() 一致。
+			var owner_profile_index := sim_world.inventory_weapon_profile_index(
+				offer.weapon_id
+			)
+			if sim_world.inventory_amount_of(slot, owner_profile_index) <= 0:
+				return
 			if not sim_world.spend_player_material(slot, offer.price):
 				return
-			var added := player.equipment.add_ammo(offer.weapon_id, offer.ammo_amount)
-			if added <= 0:
-				sim_world.add_player_material(slot, offer.price)  # 退款
+			var ammo_result: Dictionary = sim_world.accept_inventory(
+				slot, ammo_profile_index, offer.ammo_amount
+			)
+			if not bool(ammo_result.get("accepted", false)):
+				sim_world.add_player_material(slot, offer.price)  # 退款（弹匣已满）
+				return
+			_push_inventory_mirror(slot)
 	_refresh_shop_material(slot)
 
 func _offer_index_of(offer: ShopOfferDefinition) -> int:
@@ -1291,8 +1414,62 @@ func _spawn_session_players() -> bool:
 		for player in players:
 			player_registry.register_player(player)
 	_register_player_signatures()
+	_seed_starting_inventory()
 	_collect_network_input_sources()
 	return not players.is_empty()
+
+## 把开局自带的装备记进模拟层账本，并立刻刷一次镜像。
+##
+## 必须在玩家生成之后、第一个 tick 之前：从这一刻起「拥有哪把枪、有几发子弹」
+## 由账本说了算，账本里没有的东西下一次镜像刷新就会被收走。漏掉这一步的现象是
+## 开局手里的刀和手枪凭空消失。
+##
+## 各端都会为**所有座位**跑一遍（远端玩家的身体也在本机存在），读的是同一份
+## 场景与角色目录，因此结果一致，不需要走网络帧——与 _register_player_signatures()
+## 同性质。
+func _seed_starting_inventory() -> void:
+	var profiles := map_runtime.inventory_profile_dictionaries()
+	for slot in range(players.size()):
+		var player := players[slot]
+		if player == null:
+			continue
+		player.bind_inventory_profiles(profiles)
+		for entry in player.starting_inventory_entries():
+			var profile_index := _inventory_profile_index_for_entry(entry)
+			if profile_index < 0:
+				push_warning(
+					"开局装备 %s 在背包目录里没有对应档案" % entry.get("item_id", &"")
+				)
+				continue
+			sim_world.accept_inventory(slot, profile_index, int(entry["amount"]))
+		_push_inventory_mirror(slot)
+
+func _inventory_profile_index_for_entry(entry: Dictionary) -> int:
+	match int(entry.get("category", -1)):
+		EquipmentController.INVENTORY_CATEGORY_WEAPON:
+			return sim_world.inventory_weapon_profile_index(entry["item_id"])
+		EquipmentController.INVENTORY_CATEGORY_OIL:
+			return sim_world.inventory_oil_profile_index()
+	return -1
+
+## 把某个座位的 12 格账本推给它的装备节点。单向，表现层没有否决权。
+func _push_inventory_mirror(slot: int) -> void:
+	var player := _player_for_slot(slot)
+	if player == null:
+		return
+	if inventory_mirror_profiles.size() != SimWorldScript.INVENTORY_SLOT_COUNT:
+		inventory_mirror_profiles.resize(SimWorldScript.INVENTORY_SLOT_COUNT)
+		inventory_mirror_amounts.resize(SimWorldScript.INVENTORY_SLOT_COUNT)
+	for inventory_slot in range(SimWorldScript.INVENTORY_SLOT_COUNT):
+		inventory_mirror_profiles[inventory_slot] = sim_world.get_inventory_slot_profile(
+			slot, inventory_slot
+		)
+		inventory_mirror_amounts[inventory_slot] = sim_world.get_inventory_slot_amount(
+			slot, inventory_slot
+		)
+	player.apply_inventory_snapshot(
+		inventory_mirror_profiles, inventory_mirror_amounts
+	)
 
 ## 把每名玩家的本命武器伤害缩放 + 医疗光环登记进模拟层。
 ##

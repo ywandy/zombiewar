@@ -8,7 +8,8 @@ class_name LobbyProtocol
 ## 这条规则的价值不在于兼容，恰恰在于**拒绝兼容**：把「两个仓库悄悄漂移」
 ## 从一个会在半年后以诡异同步 bug 现身的静默缺陷，变成握手当场的一次响亮失败。
 ## v5：新增 EVENT_SHOP_PURCHASE（波间商店购买事件），与 server/src/lib/protocol.ts 同步。
-const PROTOCOL_VERSION := 5
+## v6：新增 EVENT_PLACE_ITEM（放置油桶），同样与服务端那一份同步。
+const PROTOCOL_VERSION := 6
 
 ## 大厅与控制消息号段。
 const OPCODE_LOBBY_MIN := 0x00
@@ -57,6 +58,7 @@ const EVENT_SHOT := 0
 const EVENT_MELEE := 1
 const EVENT_SPREAD_RESET := 2
 const EVENT_SHOP_PURCHASE := 3
+const EVENT_PLACE_ITEM := 4
 
 const MAX_PLAYER_SLOTS := 4
 
@@ -219,6 +221,25 @@ static func pack_shop_purchase_event(
 		"t": offer_type,
 		"p": price,
 		"si": offer_index,
+	}
+
+## 放置事件（油桶）。
+##
+## 带的是**格子号**而不是世界坐标：格子是整数，本来就不需要量化，而且「放哪一格」
+## 是放置者当场决定的——那个判断要做物理查询（那格上此刻有没有人站着），各端
+## 本来就算不出同一个答案。把结论发出去，各端照着放，才是同一个桶。
+##
+## pi = 放置者装备栏里这件可放置物的下标；各端为同一座位建的是同一份 loadout，
+## 因此收端用它就能取回同一个 item_scene，协议不必认识「油桶」是什么。
+static func pack_place_item_event(
+	placeable_index: int,
+	cell: Vector2i
+) -> Dictionary:
+	return {
+		"k": EVENT_PLACE_ITEM,
+		"pi": placeable_index,
+		"ci": cell.x,
+		"cj": cell.y,
 	}
 
 static func command_has_bit(command: Dictionary, bit: int) -> bool:

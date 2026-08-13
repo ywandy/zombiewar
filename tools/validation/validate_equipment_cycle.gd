@@ -20,6 +20,8 @@ func _init() -> void:
 	_test_smg_pickup_grants_owner_ammo_and_auto_equips(failures)
 	_test_oil_barrel_pickup_caps_per_player_inventory(failures)
 	_test_equipment_label_count_text_contract(failures)
+	_test_inventory_mirror_drives_equipment(failures)
+	_test_local_shot_prediction_reconciles(failures)
 	_test_demo_map_uses_place_item_service(failures)
 	if failures.is_empty():
 		print("validate_equipment_cycle: PASS")
@@ -65,12 +67,32 @@ func _test_placeable_inventory_changes_only_on_success(failures: Array[String]) 
 	placeable.item_scene = _build_node_scene()
 	placeable.set_place_item_service(service)
 	placeable.bind_context(requester, visual_root, ray_origin)
+	# 装备节点自己不再扣数量、也不再直接落地：它只把「放哪一格」抬给上层走帧，
+	# 扣账与建桶由竞技场按帧统一做（联机下各端必须放出同一个桶）。
+	var raised: Array[Dictionary] = []
+	placeable.set_sim_request_sink(func(request: Dictionary) -> void: raised.append(request))
 	service.next_result = false
 	placeable.set_use_input(false, true, Vector3.FORWARD)
-	_expect(placeable.get_remaining_count() == 2, "failed placement must not consume inventory", failures)
+	_expect(raised.is_empty(), "a rejected placement must not raise a request", failures)
+	_expect(
+		placeable.get_remaining_count() == 2,
+		"a rejected placement must not touch the mirrored count",
+		failures
+	)
 	service.next_result = true
 	placeable.set_use_input(false, true, Vector3.FORWARD)
-	_expect(placeable.get_remaining_count() == 1, "successful placement must consume exactly one item", failures)
+	_expect(raised.size() == 1, "an accepted placement must raise exactly one request", failures)
+	if raised.size() == 1:
+		_expect(
+			raised[0].get("kind") == &"place_item" and raised[0].get("cell") == service.next_cell,
+			"the placement request must carry the resolved grid cell",
+			failures
+		)
+	_expect(
+		placeable.get_remaining_count() == 2,
+		"the placeable must not spend its own count -- the ledger owns it",
+		failures
+	)
 	_expect(service.request_count == 2, "placeable must issue one request per use edge", failures)
 	placeable.free()
 	service.free()
@@ -255,6 +277,110 @@ func _test_equipment_label_count_text_contract(failures: Array[String]) -> void:
 	label.call("set_status", 3, "倒地", "")
 	_expect(label.text == "P4 · 倒地", "labels must omit an empty count text", failures)
 	label.free()
+	controller.free()
+
+## 装备节点不记账：拥有哪把枪、几发子弹、几个油桶全部由模拟层快照决定。
+## profile 表与 SimWorld.configure_inventory_profiles() 吃的是同一种字典。
+func _mirror_profiles() -> Array[Dictionary]:
+	return [
+		{"category": 0, "max_stack": 1, "weapon_id": &"pistol", "mod_id": -1},
+		{"category": 0, "max_stack": 1, "weapon_id": &"smg", "mod_id": -1},
+		{"category": 1, "max_stack": 360, "weapon_id": &"smg", "mod_id": -1},
+		{"category": 1, "max_stack": 0, "weapon_id": &"pistol", "mod_id": -1},
+		{"category": 2, "max_stack": 999, "weapon_id": &"", "mod_id": -1},
+	]
+
+func _test_inventory_mirror_drives_equipment(failures: Array[String]) -> void:
+	var controller = _build_controller([
+		PistolScene,
+		SmgScene,
+		KnifeScene,
+		OilBarrelEquipmentScene,
+	], 0)
+	_expect(
+		controller.has_method(&"bind_inventory_profiles")
+		and controller.has_method(&"apply_inventory_snapshot"),
+		"EquipmentController must accept a simulation inventory mirror",
+		failures
+	)
+	if not controller.has_method(&"apply_inventory_snapshot"):
+		controller.free()
+		return
+	controller.bind_inventory_profiles(_mirror_profiles())
+	var smg = controller.get_item_by_id(&"smg")
+	var oil = controller.get_item_by_id(&"oil_barrel")
+	_expect(not smg.is_available(), "smg must start unowned before any snapshot", failures)
+
+	# 槽位 0=手枪、1=SMG、2=SMG 弹药 30、3=油桶 2。其余为空。
+	controller.apply_inventory_snapshot(
+		PackedInt32Array([0, 1, 2, 4, -1, -1, -1, -1, -1, -1, -1, -1]),
+		PackedInt32Array([1, 1, 30, 2, 0, 0, 0, 0, 0, 0, 0, 0])
+	)
+	_expect(smg.is_available(), "a weapon in the ledger must become owned", failures)
+	_expect(smg.get_ammo_count() == 30, "ammo must follow the ledger", failures)
+	_expect(oil.get_remaining_count() == 2, "oil must follow the ledger", failures)
+	_expect(controller.equip_item(&"smg"), "a ledger-owned weapon must be equippable", failures)
+	_expect(controller.get_current_item() == smg, "equipping must select the smg", failures)
+
+	# 账本里没有 SMG 了：镜像必须把它收走，而不是留着上一份状态。
+	# 它此刻正拿在手上，所以这一步同时守「手上的东西被收走要自动换枪」。
+	controller.apply_inventory_snapshot(
+		PackedInt32Array([0, -1, -1, 4, -1, -1, -1, -1, -1, -1, -1, -1]),
+		PackedInt32Array([1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0])
+	)
+	_expect(not smg.is_available(), "a weapon missing from the ledger must be revoked", failures)
+	_expect(
+		controller.get_current_item() != smg,
+		"a revoked weapon must not stay in hand",
+		failures
+	)
+	var pistol = controller.get_item_by_id(&"pistol")
+	_expect(
+		pistol.get_count_text() == "∞",
+		"an unlimited weapon must not be zeroed by its capacity-0 ammo profile",
+		failures
+	)
+	controller.free()
+
+## 本地开火先扣、模拟层兑现后抵消。没有这一步，扳机与数字之间会空一拍；
+## 抵消错了则会一路少算，把玩家的子弹越显示越少。
+func _test_local_shot_prediction_reconciles(failures: Array[String]) -> void:
+	var controller = _build_controller([PistolScene, SmgScene], 0)
+	controller.bind_inventory_profiles(_mirror_profiles())
+	var smg = controller.get_item_by_id(&"smg")
+	controller.apply_inventory_snapshot(
+		PackedInt32Array([0, 1, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1]),
+		PackedInt32Array([1, 1, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+	)
+	_expect(
+		smg.has_method(&"apply_authoritative_ammo"),
+		"ranged weapons must accept an authoritative ammo count",
+		failures
+	)
+	if not smg.has_method(&"apply_authoritative_ammo"):
+		controller.free()
+		return
+	_expect(smg.try_consume_ammo(), "firing must be allowed with ammo in the ledger", failures)
+	_expect(smg.get_ammo_count() == 29, "a local shot must show immediately", failures)
+	# 这一枪还没进模拟层：账本仍是 30，显示值必须保持预扣后的 29。
+	smg.apply_authoritative_ammo(30)
+	_expect(
+		smg.get_ammo_count() == 29,
+		"an unresolved local shot must survive an unchanged ledger",
+		failures
+	)
+	# 账本兑现了这一枪：预扣被抵消，不能再扣一次变成 28。
+	smg.apply_authoritative_ammo(29)
+	_expect(
+		smg.get_ammo_count() == 29,
+		"a resolved local shot must be cancelled, not counted twice",
+		failures
+	)
+	smg.apply_authoritative_ammo(29)
+	_expect(smg.get_ammo_count() == 29, "a settled ledger must stay put", failures)
+	# 捡到子弹：账本上涨要照原样显示。
+	smg.apply_authoritative_ammo(89)
+	_expect(smg.get_ammo_count() == 89, "a ledger credit must show in full", failures)
 	controller.free()
 
 func _test_demo_map_uses_place_item_service(failures: Array[String]) -> void:

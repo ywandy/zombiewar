@@ -18,6 +18,19 @@ var weapon_trigger: WeaponTrigger
 var tracer_pool: Array[ShotTracer] = []
 var tracer_pool_cursor := 0
 var current_ammo := 0
+## 模拟层账本里这把枪的弹药数。current_ammo 是它减去本地预扣后的显示值，
+## 不是独立的第二本账。
+var authoritative_ammo := 0
+## 已经在本地打出去、但模拟层还没兑现的发数。
+##
+## 单机也需要它：武器的 _physics_process 可能排在竞技场之后，那一枪要等下一个
+## tick 才解算；联机更是要等一个 RTT。没有预扣，扳机按下去到数字变化之间会空一拍，
+## 自动武器上就是数字来回跳。
+var predicted_spend := 0
+var predicted_spend_frames := 0
+## 预扣的兜底寿命（物理帧）。模拟层因任何原因没兑现这一枪（例如服务端把这一
+## tick 超出 8 条的事件丢了），预扣必须自己过期，否则显示值会永远比账本少几发。
+const PREDICTION_TTL_FRAMES := 120
 var spatial_sfx_pool: SpatialSfxPool
 ## 音高与选音是纯表现，不进模拟层：散布已经由 Stream.WEAPON_SPREAD
 ## 在各端确定性地算过了，这里再摇一次骰子不影响任何判定。
@@ -49,6 +62,7 @@ func bind_context(
 
 func _physics_process(delta: float) -> void:
 	weapon_trigger.tick(delta)
+	_expire_prediction()
 	if (
 		has_ammo_for_shot() and
 		weapon_trigger.try_attack(trigger_pressed, trigger_just_pressed) and
@@ -56,6 +70,32 @@ func _physics_process(delta: float) -> void:
 	):
 		_fire(aim_direction)
 	trigger_just_pressed = false
+
+## 模拟层账本刷下来的权威弹药数。显示值 = 账本 − 还没兑现的本地预扣。
+func apply_authoritative_ammo(value: int) -> void:
+	if not _uses_ammo():
+		return
+	var next_value := maxi(value, 0)
+	# 账本掉了几发，就说明我们预扣的那几发已经被兑现，抵掉等量的预扣，
+	# 否则同一枪会被扣两次、显示值一路比账本少。
+	# 账本上涨（捡到/买到弹药）不是我们预测的事，预扣照旧生效。
+	if next_value < authoritative_ammo:
+		predicted_spend = maxi(
+			predicted_spend - (authoritative_ammo - next_value), 0
+		)
+	authoritative_ammo = next_value
+	if predicted_spend <= 0:
+		predicted_spend_frames = 0
+	set_ammo_count(maxi(authoritative_ammo - predicted_spend, 0))
+
+func _expire_prediction() -> void:
+	if predicted_spend <= 0:
+		return
+	predicted_spend_frames -= 1
+	if predicted_spend_frames > 0:
+		return
+	predicted_spend = 0
+	set_ammo_count(authoritative_ammo)
 
 func set_ammo_count(amount: int) -> void:
 	var next_ammo := clampi(amount, 0, get_max_ammo()) if _uses_ammo() else 0
@@ -97,6 +137,9 @@ func try_consume_ammo() -> bool:
 		return true
 	if current_ammo <= 0:
 		return false
+	# 本地先扣，等模拟层解算完这一枪再由 apply_authoritative_ammo() 抵掉。
+	predicted_spend += 1
+	predicted_spend_frames = PREDICTION_TTL_FRAMES
 	set_ammo_count(current_ammo - 1)
 	return true
 
@@ -117,6 +160,13 @@ func set_equipped(value: bool) -> void:
 			"kind": &"spread_reset",
 			"weapon_id": ranged_definition.weapon_id,
 		})
+		return
+	# 收起时清掉预扣：_expire_prediction() 挂在 _physics_process 上，而收起的武器
+	# 不跑 _physics_process，留着的预扣会在下次换回来时压低显示值。
+	if predicted_spend > 0:
+		predicted_spend = 0
+		predicted_spend_frames = 0
+		set_ammo_count(authoritative_ammo)
 
 func _process(_delta: float) -> void:
 	_sync_to_visual_anchor()

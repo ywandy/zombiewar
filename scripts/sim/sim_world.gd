@@ -240,6 +240,13 @@ var chest_blocker_max := PackedVector2Array()
 
 # ---- 武器档案与逐槽位散布状态 ----
 var weapon_profiles: Array = []
+## 每个武器档案打的是哪种弹药，按 weapon_id 存，下标与 weapon_profiles 对齐。
+##
+## 刻意**不放进 weapon_profiles 的字典**：那份字典是「武器数值」，每次读都要先过
+## WeaponModMath.derive_profile() 派生改装效果，而派生只重建它认识的数值键，
+## 身份键会在那一步被丢掉。分开存也让 validate_weapon_mods.gd 的「数值必须走
+## _effective_weapon_profile」闸门继续成立：弹药身份不是数值，不该被改装件改。
+var weapon_profile_ammo_ids: Array[StringName] = []
 var player_spread_degrees := PackedFloat32Array()
 var player_spread_profile := PackedInt32Array()
 ## 每个座位持有的武器改装层数，展平成 [slot * WeaponModTable.COUNT + mod_id]。
@@ -467,6 +474,78 @@ func accept_reward(slot: int, reward_profile_index: int, amount: int) -> Diction
 	tick_inventory_events.append(accepted)
 	return accepted
 
+## 记一笔背包收入，键是稳定的**背包 profile 下标**而不是地图奖励下标。
+##
+## 商店购买与开局携带走这里：它们没有对应的地图奖励，但必须和箱子拾取落进
+## 同一本账，否则又会长出第二本。返回值与 accept_reward() 同构。
+func accept_inventory(slot: int, inventory_profile_index: int, amount: int) -> Dictionary:
+	var plan: Dictionary = _plan_inventory_acceptance(slot, inventory_profile_index, amount)
+	if not bool(plan.get("accepted", false)):
+		var rejected := {
+			"kind": &"inventory_rejected",
+			"slot": slot,
+			"reward_profile_index": -1,
+			"reason": plan.get("reason", &"rejected"),
+		}
+		tick_inventory_feedback.append(rejected)
+		return rejected
+	_apply_reward_acceptance(slot, plan)
+	var accepted := {
+		"kind": &"inventory_accepted",
+		"accepted": true,
+		"slot": slot,
+		"reward_profile_index": -1,
+		"inventory_profile_index": int(plan["inventory_profile_index"]),
+		"inventory_slot": int(plan["inventory_slot"]),
+		"amount": int(plan["accepted_amount"]),
+		"weapon_mod_id": int(plan.get("weapon_mod_id", -1)),
+	}
+	tick_inventory_events.append(accepted)
+	return accepted
+
+## 记一笔背包支出（放置油桶）。返回实际扣掉的数量，槽位不够就只扣到 0。
+## 开火扣弹不走这里：它在 _resolve_shot_event() 里逐发扣，见 _spend_inventory_ammo()。
+func spend_inventory(slot: int, inventory_profile_index: int, amount: int) -> int:
+	if amount <= 0:
+		return 0
+	var inventory_slot := _find_inventory_slot(slot, inventory_profile_index)
+	if inventory_slot < 0:
+		return 0
+	var current := get_inventory_slot_amount(slot, inventory_slot)
+	var spent := mini(amount, current)
+	if spent <= 0:
+		return 0
+	_set_inventory_slot(slot, inventory_slot, inventory_profile_index, current - spent)
+	return spent
+
+## 某个座位当前持有多少这种东西（没有对应槽位就是 0）。
+func inventory_amount_of(slot: int, inventory_profile_index: int) -> int:
+	var inventory_slot := _find_inventory_slot(slot, inventory_profile_index)
+	return get_inventory_slot_amount(slot, inventory_slot) if inventory_slot >= 0 else 0
+
+## ---- 装配层按身份反查背包 profile 下标 ----
+## 表现层只认 weapon_id 这类稳定 id，模拟层只认下标，转换统一收在这里，
+## 免得每个调用点各自遍历一遍 profile 表、各自写一份分类判断。
+func inventory_weapon_profile_index(weapon_id: StringName) -> int:
+	return _find_inventory_profile(INVENTORY_CATEGORY_WEAPON, weapon_id)
+
+func inventory_ammo_profile_index(weapon_id: StringName) -> int:
+	return _find_ammo_profile_for_weapon(weapon_id)
+
+func inventory_oil_profile_index() -> int:
+	return _find_inventory_profile(INVENTORY_CATEGORY_OIL, StringName())
+
+func _find_inventory_profile(category: int, weapon_id: StringName) -> int:
+	for profile_index in range(inventory_profiles.size()):
+		var profile := _inventory_profile(profile_index)
+		if int(profile.get("category", -1)) != category:
+			continue
+		if category == INVENTORY_CATEGORY_OIL:
+			return profile_index
+		if profile.get("weapon_id", StringName()) == weapon_id:
+			return profile_index
+	return -1
+
 func _plan_reward_acceptance(slot: int, reward_profile_index: int, amount: int) -> Dictionary:
 	if slot < 0 or slot >= MAX_PLAYER_SLOTS:
 		return {"accepted": false, "reason": &"invalid_slot"}
@@ -475,6 +554,17 @@ func _plan_reward_acceptance(slot: int, reward_profile_index: int, amount: int) 
 	var inventory_profile_index := _inventory_profile_index_for_reward(reward_profile_index)
 	if inventory_profile_index < 0:
 		return {"accepted": false, "reason": &"unknown_reward"}
+	return _plan_inventory_acceptance(slot, inventory_profile_index, amount)
+
+func _plan_inventory_acceptance(
+	slot: int,
+	inventory_profile_index: int,
+	amount: int
+) -> Dictionary:
+	if slot < 0 or slot >= MAX_PLAYER_SLOTS:
+		return {"accepted": false, "reason": &"invalid_slot"}
+	if amount <= 0:
+		return {"accepted": false, "reason": &"invalid_amount"}
 	var profile := _inventory_profile(inventory_profile_index)
 	if profile.is_empty():
 		return {"accepted": false, "reason": &"unknown_profile"}
@@ -1880,12 +1970,16 @@ func configure_weapon_profile(
 	spread_recovery_degrees_per_second: float,
 	max_penetration_count: int,
 	penetration_damage_coefficient: float,
-	pellet_count: int = 1
+	pellet_count: int = 1,
+	weapon_id: StringName = &""
 ) -> void:
 	if profile_index < 0:
 		return
 	while weapon_profiles.size() <= profile_index:
 		weapon_profiles.append({})
+	while weapon_profile_ammo_ids.size() <= profile_index:
+		weapon_profile_ammo_ids.append(&"")
+	weapon_profile_ammo_ids[profile_index] = weapon_id
 	weapon_profiles[profile_index] = {
 		"damage": maxf(damage, 0.0),
 		"attack_range": maxf(attack_range, 0.0),
@@ -2238,6 +2332,39 @@ func _resolve_shot_event(event: Dictionary) -> void:
 		spread_degrees,
 		float(profile["spread_increase_degrees"]),
 		float(profile["max_spread_degrees"])
+	)
+	# 背包里的弹药也按「扣一次扳机」扣一发，与 RangedWeapon.try_consume_ammo() 同口径
+	# （霰弹一枪 = 一发，不按弹丸数扣）。
+	_spend_inventory_ammo(slot, profile_index)
+
+## 开火消耗背包里的弹药。
+##
+## 少了这一步，模拟层的弹药只增不减：弹匣一旦装满就永远是「满」，打空之后每一个
+## 弹药箱都会被 _plan_finite_stack() 以 &"full" 拒绝——现象是「捡满、打光、
+## 从此再也捡不到子弹」，而箱子还老老实实立在地上。
+##
+## 扣减放在模拟层而不是表现层，是因为背包槽位进帧哈希：开火事件本来就逐帧到达
+## 各端，在这里扣，各端扣的是同一发。
+func _spend_inventory_ammo(slot: int, weapon_profile_index: int) -> void:
+	if weapon_profile_index < 0 or weapon_profile_index >= weapon_profile_ammo_ids.size():
+		return
+	var weapon_id := weapon_profile_ammo_ids[weapon_profile_index]
+	if weapon_id.is_empty():
+		return
+	var ammo_profile_index := _find_ammo_profile_for_weapon(weapon_id)
+	if ammo_profile_index < 0:
+		return
+	# 上限 0 = 无限弹武器（手枪）：它从来不占背包槽位，开火也不该凭空建一个。
+	if int(_inventory_profile(ammo_profile_index).get("max_stack", 0)) <= 0:
+		return
+	var inventory_slot := _find_inventory_slot(slot, ammo_profile_index)
+	if inventory_slot < 0:
+		return
+	_set_inventory_slot(
+		slot,
+		inventory_slot,
+		ammo_profile_index,
+		maxi(get_inventory_slot_amount(slot, inventory_slot) - 1, 0)
 	)
 
 ## 一颗弹丸在散布锥内的归一化偏角（-1..1）。

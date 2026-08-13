@@ -9,7 +9,7 @@
  * version numbers in the close reason, is worth more than any compatibility
  * shim. See close code 4001 below.
  */
-export const PROTOCOL_VERSION = 5;
+export const PROTOCOL_VERSION = 6;
 
 /**
  * Length ceiling for a cross-wire content identifier (character id, map id).
@@ -118,6 +118,7 @@ export const EVENT_SHOT = 0;
 export const EVENT_MELEE = 1;
 export const EVENT_SPREAD_RESET = 2;
 export const EVENT_SHOP_PURCHASE = 3;
+export const EVENT_PLACE_ITEM = 4;
 
 export interface SimEvent {
   /** EVENT_* discriminant. */
@@ -139,6 +140,11 @@ export interface SimEvent {
   p?: number;
   /** Shop purchase: offer index into the deterministic per-wave shop list. */
   si?: number;
+  /** Place item: index of the placeable in the placer's equipment loadout. */
+  pi?: number;
+  /** Place item: target grid cell. Already integral, so nothing to quantize. */
+  ci?: number;
+  cj?: number;
 }
 
 /**
@@ -267,12 +273,13 @@ function parseEvent(raw: unknown): SimEvent | null {
     kind !== EVENT_SHOT &&
     kind !== EVENT_MELEE &&
     kind !== EVENT_SPREAD_RESET &&
-    kind !== EVENT_SHOP_PURCHASE
+    kind !== EVENT_SHOP_PURCHASE &&
+    kind !== EVENT_PLACE_ITEM
   ) {
     return null;
   }
   const event: SimEvent = { k: kind };
-  for (const key of ['w', 'oy', 'd', 'r', 'hw', 't', 'p', 'si'] as const) {
+  for (const key of ['w', 'oy', 'd', 'r', 'hw', 't', 'p', 'si', 'pi', 'ci', 'cj'] as const) {
     const entry = value[key];
     if (typeof entry === 'number' && Number.isInteger(entry)) event[key] = entry;
   }

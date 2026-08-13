@@ -249,6 +249,20 @@ func receive_ammo_pickup(item_id: StringName, amount: int) -> bool:
 		return false
 	return equipment.add_ammo(item_id, amount) > 0
 
+## ---- 模拟层背包镜像 ----
+## 单向：模拟层 → 装备节点。玩家侧不往回写，见 EquipmentController 的说明。
+func bind_inventory_profiles(profiles: Array[Dictionary]) -> void:
+	equipment.bind_inventory_profiles(profiles)
+
+func apply_inventory_snapshot(
+	slot_profiles: PackedInt32Array,
+	slot_amounts: PackedInt32Array
+) -> void:
+	equipment.apply_inventory_snapshot(slot_profiles, slot_amounts)
+
+func starting_inventory_entries() -> Array[Dictionary]:
+	return equipment.starting_inventory_entries()
+
 func _physics_process(delta: float) -> void:
 	last_input_state = (
 		input_source.sample() if input_source != null else PlayerInputStateScript.new()

@@ -43,18 +43,18 @@ func bind_sim_chest(chest_id_value: int) -> void:
 func get_sim_chest_id() -> int:
 	return sim_chest_id
 
-## 由竞技场在模拟层判定领取之后调用——「谁碰到了」已经判完，这里只兑现与演出。
+## 由竞技场在模拟层判定领取之后调用——「谁碰到了」和「拿到了什么」都已经判完，
+## 这里只负责演出。
 ##
-## 兑现失败（弹药已满）时箱子**照样**消耗掉。基线在这里会提前返回、把箱子
-## 留在地上，但那个判断读的是玩家当前的弹药与存活，而这两个量在各端差着一个
-## RTT，于是同一个箱子在一端被消耗、在另一端被留下，模拟就此分叉。
-## 详见 SimWorld 里 release_chest 缺席的那段说明。
-func claim_by(player: PlayerController) -> void:
+## **不在这里发货**：奖励已经由 SimWorld.accept_reward() 记进背包账本，竞技场随后
+## 刷一次镜像就把它落到装备节点上。表现层再补发一次，就等于在账本之外又加了一笔，
+## 正是「捡满弹药后再也捡不到子弹」那个 bug 的同一个病根。
+##
+## 箱子在兑现失败（弹药已满）时**不会**走到这里：模拟层拒绝时箱子保持 active。
+func claim_by(_player: PlayerController) -> void:
 	if claim_locked:
 		return
 	claim_locked = true
-	if player != null and definition != null:
-		definition.grant_to(player, reward_amount)
 	if spatial_sfx_pool != null:
 		spatial_sfx_pool.play_at(PICKUP_SOUND, global_position, -5.0, 1.0, 24.0)
 	queue_free()

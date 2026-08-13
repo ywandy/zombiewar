@@ -60,6 +60,8 @@ func _run() -> void:
 	_test_pickup_metadata(catalog, pickup_definition_script, inventory_profile_script, mod_table_script)
 	_test_map_runtime_contract(map_runtime_script, catalog)
 	_test_sim_inventory_acceptance(sim_world_script)
+	_test_sim_ammo_spend(sim_world_script)
+	_test_sim_inventory_ledger_api(sim_world_script)
 	_finish()
 
 
@@ -337,6 +339,106 @@ func _test_sim_inventory_acceptance(sim_world_script: Script) -> void:
 		"rejected chest must emit deterministic inventory feedback",
 		not rejected_world.tick_inventory_feedback.is_empty()
 	)
+
+
+## 背包里的弹药必须随开火下降。模拟层只加不减时，弹匣一旦装满就永远是「满」，
+## 于是打空之后所有弹药箱都被 _plan_finite_stack() 以 &"full" 拒绝，
+## 箱子留在原地、玩家再也捡不到子弹。
+func _test_sim_ammo_spend(sim_world_script: Script) -> void:
+	var world = sim_world_script.new()
+	world.configure(Vector2(-4.5, -4.5), 1.0, 9, 9)
+	var profiles: Array[Dictionary] = [
+		{"category": 0, "max_stack": 1, "weapon_id": &"smg", "mod_id": -1},
+		{"category": 1, "max_stack": 10, "weapon_id": &"smg", "mod_id": -1},
+		{"category": 0, "max_stack": 1, "weapon_id": &"pistol", "mod_id": -1},
+		{"category": 1, "max_stack": 0, "weapon_id": &"pistol", "mod_id": -1},
+	]
+	# reward 0=SMG weapon, 1=SMG ammo, 2=pistol weapon, 3=pistol ammo（无限弹，上限 0）。
+	world.configure_inventory_profiles(profiles, PackedInt32Array([0, 1, 2, 3]))
+	# 武器档案 0=SMG、1=手枪；开火解算按 weapon_id 反查背包里的弹药档案。
+	world.configure_weapon_profile(0, 14.0, 22.0, 1.2, 7.0, 0.5, 5.0, 0, 0.0, 1, &"smg")
+	world.configure_weapon_profile(1, 35.0, 24.0, 0.35, 3.0, 0.8, 1.8, 0, 0.0, 1, &"pistol")
+	world.reset(3)
+	world.set_player_snapshot(0, Vector2.ZERO, true, true)
+	world.accept_reward(0, 1, 10)
+	_check("ammo stack must start full for the spend test", world.get_inventory_slot_amount(0, 0) == 10)
+	_check("full ammo must reject a reward before firing", not world.can_accept_reward(0, 1, 1))
+
+	_fire_once(world, 0, 0)
+	_check("firing must spend one round from the inventory", world.get_inventory_slot_amount(0, 0) == 9)
+	_check("spent ammo must accept a reward again", world.can_accept_reward(0, 1, 1))
+	_check(
+		"refilling after a shot must land in the same ammo slot",
+		bool(world.accept_reward(0, 1, 1).get("accepted", false))
+		and world.get_inventory_slot_amount(0, 0) == 10
+	)
+
+	for _shot in range(12):
+		_fire_once(world, 0, 0)
+	_check("ammo must never go negative", world.get_inventory_slot_amount(0, 0) == 0)
+	_check("an empty ammo stack must keep its profile", world.get_inventory_slot_profile(0, 0) == 1)
+
+	# 手枪是无限弹（弹药档案上限 0），开火不得凭空建出弹药槽位。
+	var occupied_slots := 0
+	for inventory_slot in range(12):
+		if world.get_inventory_slot_profile(0, inventory_slot) >= 0:
+			occupied_slots += 1
+	_fire_once(world, 0, 1)
+	var occupied_after := 0
+	for inventory_slot in range(12):
+		if world.get_inventory_slot_profile(0, inventory_slot) >= 0:
+			occupied_after += 1
+	_check("infinite ammo weapons must not create an inventory slot", occupied_after == occupied_slots)
+
+
+## 商店购买与开局携带都不是地图奖励，但必须落进同一本账。这组契约守的就是
+## 那条入口：按稳定的背包 profile 下标记账、按身份反查下标、以及支出的夹取。
+func _test_sim_inventory_ledger_api(sim_world_script: Script) -> void:
+	var world = sim_world_script.new()
+	world.configure(Vector2(-4.5, -4.5), 1.0, 9, 9)
+	var profiles: Array[Dictionary] = [
+		{"category": 0, "max_stack": 1, "weapon_id": &"smg", "mod_id": -1},
+		{"category": 1, "max_stack": 10, "weapon_id": &"smg", "mod_id": -1},
+		{"category": 2, "max_stack": 3, "weapon_id": &"", "mod_id": -1},
+	]
+	world.configure_inventory_profiles(profiles, PackedInt32Array([0, 1, 2]))
+	world.reset(4)
+
+	_check("weapon identity must resolve to its profile", world.inventory_weapon_profile_index(&"smg") == 0)
+	_check("ammo identity must resolve to its profile", world.inventory_ammo_profile_index(&"smg") == 1)
+	_check("oil must resolve without a weapon identity", world.inventory_oil_profile_index() == 2)
+	_check("unknown weapon identity must not resolve", world.inventory_weapon_profile_index(&"railgun") == -1)
+	_check("unknown ammo identity must not resolve", world.inventory_ammo_profile_index(&"railgun") == -1)
+
+	_check("nothing held must report zero", world.inventory_amount_of(0, 0) == 0)
+	var weapon_credit: Dictionary = world.accept_inventory(0, 0, 4)
+	_check("crediting a weapon must be accepted", bool(weapon_credit.get("accepted", false)))
+	_check("credited weapon must occupy a slot", world.inventory_amount_of(0, 0) == 1)
+	_check("credited weapon must bring its ammo", world.inventory_amount_of(0, 1) == 4)
+	world.accept_inventory(0, 1, 100)
+	_check("credited ammo must clamp at the stack limit", world.inventory_amount_of(0, 1) == 10)
+	_check(
+		"a full stack must reject further credit",
+		not bool(world.accept_inventory(0, 1, 1).get("accepted", false))
+	)
+	_check(
+		"an unknown profile must be rejected",
+		not bool(world.accept_inventory(0, 99, 1).get("accepted", false))
+	)
+
+	world.accept_inventory(0, 2, 3)
+	_check("spending must return what it actually took", world.spend_inventory(0, 2, 2) == 2)
+	_check("spending must debit the stack", world.inventory_amount_of(0, 2) == 1)
+	_check("spending must clamp at what is held", world.spend_inventory(0, 2, 9) == 1)
+	_check("a drained stack must report zero", world.inventory_amount_of(0, 2) == 0)
+	_check("spending what is not held must take nothing", world.spend_inventory(0, 99, 1) == 0)
+
+
+func _fire_once(world, slot: int, weapon_profile_index: int) -> void:
+	world.queue_fire_event(
+		slot, weapon_profile_index, Vector2.ZERO, 1.0, Vector2(0.0, -1.0)
+	)
+	world.step_tick()
 
 
 func _assert_map_compile_rejects_catalog_field(

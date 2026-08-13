@@ -100,6 +100,8 @@ func _check_protocol_constants() -> Array[String]:
 		"EVENT_SHOT": LobbyProtocolScript.EVENT_SHOT,
 		"EVENT_MELEE": LobbyProtocolScript.EVENT_MELEE,
 		"EVENT_SPREAD_RESET": LobbyProtocolScript.EVENT_SPREAD_RESET,
+		"EVENT_SHOP_PURCHASE": LobbyProtocolScript.EVENT_SHOP_PURCHASE,
+		"EVENT_PLACE_ITEM": LobbyProtocolScript.EVENT_PLACE_ITEM,
 		"CLOSE_PROTOCOL_MISMATCH": LobbyProtocolScript.CLOSE_PROTOCOL_MISMATCH,
 		"CLOSE_ROOM_FULL": LobbyProtocolScript.CLOSE_ROOM_FULL,
 		"CLOSE_RECONNECTED_ELSEWHERE": LobbyProtocolScript.CLOSE_RECONNECTED_ELSEWHERE,
