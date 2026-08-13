@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="RangedWeaponDefinition" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="RangedWeaponDefinition" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/combat/weapons/ranged_weapon_definition.gd" id="1_definition"]
-[ext_resource type="PackedScene" path="res://assets/weapons/decoupled/Rifle/Rifle.gltf" id="2_model"]
 [ext_resource type="PackedScene" path="res://assets/weapons/generated/ak47.glb" id="2_visual"]
 
 [resource]
@@ -19,12 +18,6 @@ spread_increase_per_shot_degrees = 0.9
 spread_recovery_degrees_per_second = 2.5
 weapon_id = &"rifle"
 display_name = "步枪"
-visual_node_name = &"Rifle"
-visual_model_scene = ExtResource("2_model")
-visual_socket_name = &"WeaponSocket.L"
-visual_relative_position = Vector3(-1.246226e-07, 1.41561e-07, 8.195639e-08)
-visual_relative_rotation = Vector4(-3.911555e-08, 1.18569e-07, 1.318404e-08, 1)
-visual_relative_scale = Vector3(0.99999994, 0.99999988, 0.99999994)
 visual_scene = ExtResource("2_visual")
 attacks_per_second = 2.2
 damage = 45.0

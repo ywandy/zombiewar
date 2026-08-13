@@ -22,16 +22,34 @@ const PlayerScene := preload("res://scenes/player/Player.tscn")
 const PistolScene := preload("res://scenes/weapons/Pistol.tscn")
 const CharacterProbeScene := preload("res://tools/fixtures/character_model_probe.tscn")
 const ArenaScript := preload("res://scripts/gameplay/gameplay_arena.gd")
-const CHARACTER_MODEL_PATH := "res://scenes/player/PlayerVisual.tscn"
+const ContentCatalogsScript := preload("res://scripts/gameplay/content_catalogs.gd")
 const RangedWeaponDefinitionScript = preload(
 	"res://scripts/combat/weapons/ranged_weapon_definition.gd"
 )
+const EXPECTED_VISUAL_PATHS := {
+	&"pistol": "res://assets/weapons/generated/hk45c.glb",
+	&"smg": "res://assets/weapons/generated/mp5.glb",
+	&"shotgun": "res://assets/weapons/generated/m4a1.glb",
+	&"rifle": "res://assets/weapons/generated/ak47.glb",
+	&"knife": "res://assets/weapons/generated/tactical_knife.glb",
+}
 
 var failures: Array[String] = []
 
 
 func _initialize() -> void:
-	var player := PlayerScene.instantiate()
+	var catalog = ContentCatalogsScript.characters()
+	_check("character catalog must load", catalog != null)
+	if catalog == null:
+		_report(null)
+		return
+	var default_definition = catalog.get_by_id(catalog.default_id())
+	_check("default character definition must load", default_definition != null)
+	if default_definition == null:
+		_report(null)
+		return
+	var player := PlayerScene.instantiate() as PlayerController
+	player.apply_character_definition(default_definition)
 	root.add_child(player)
 	# 等 @onready / _ready / bind_context 全部完成，武器才真正装配好。
 	await process_frame
@@ -44,30 +62,15 @@ func _initialize() -> void:
 		return
 
 	_test_loadout_is_authored(equipment)
-	var model_node_names := _collect_character_model_node_names()
-	_check(
-		"character model node names must be readable",
-		not model_node_names.is_empty()
-	)
 
 	var weapons := _collect_weapons(equipment)
 	_check("player loadout must contain weapons", not weapons.is_empty())
-	var independent_visual_probe := CharacterProbeScene.instantiate() as Node3D
-	root.add_child(independent_visual_probe)
 	for weapon in weapons:
-		# Player.tscn 的 fallback 仍是只含内嵌武器的旧角色；它没有新角色契约里的
-		# WeaponHandSocket。独立表现必须在带 socket 的角色上验证，legacy 表现则继续
-		# 保持原绑定，以覆盖旧模型节点名的兼容路径。
-		if weapon.definition != null and weapon.definition.visual_scene != null:
-			weapon.bind_context(
-				player,
-				independent_visual_probe,
-				player.get_node("FunctionalRayOrigin") as Marker3D
-			)
-		_test_weapon(weapon, model_node_names)
+		_test_weapon(weapon)
 	_test_independent_visual_mount(player)
+	_test_legacy_socket_cannot_mount(player)
+	await _test_all_character_weapon_slots(catalog)
 	_test_simulation_registration(weapons)
-	independent_visual_probe.free()
 
 	_report(player)
 
@@ -116,22 +119,7 @@ func _collect_weapons(equipment: Node) -> Array:
 	return weapons
 
 
-## 角色模型自带每把枪的视觉节点（Knife / Pistol / Rifle / Shotgun / SMG），
-## 武器场景本身只有逻辑与特效锚点，因此「视觉节点名」是装配链的真正接头。
-func _collect_character_model_node_names() -> Dictionary:
-	var names := {}
-	var model_scene := load(CHARACTER_MODEL_PATH) as PackedScene
-	if model_scene == null:
-		return names
-	var probe := model_scene.instantiate()
-	for node in probe.find_children("*", "", true, false):
-		names[node.name] = true
-	names[probe.name] = true
-	probe.free()
-	return names
-
-
-func _test_weapon(weapon: WeaponBase, model_node_names: Dictionary) -> void:
+func _test_weapon(weapon: WeaponBase) -> void:
 	var label := weapon.name
 	var definition = weapon.definition
 	_check("%s must carry a definition" % label, definition != null)
@@ -144,32 +132,27 @@ func _test_weapon(weapon: WeaponBase, model_node_names: Dictionary) -> void:
 	if not _has_property(definition, &"visual_scene"):
 		return
 
-	# 新角色优先挂载生成武器；旧角色仍由 visual_model_scene + WeaponSocket.L 回退。
-	if definition.visual_scene != null:
-		_check(
-			"%s: weapon exposes visual_instance" % label,
-			_has_property(weapon, &"visual_instance")
-		)
-		if not _has_property(weapon, &"visual_instance"):
-			return
-		_check(
-			"%s: independent visual is instanced" % label,
-			weapon.visual_instance != null
-		)
-		_check(
-			"%s: independent visual is parented to hand socket" % label,
-			weapon.visual_instance != null and
-			weapon.visual_instance.get_parent().name == "WeaponHandSocket"
-		)
-	else:
-		_check(
-			"%s: fallback model scene must be assigned" % label,
-			definition.visual_model_scene != null
-		)
-		_check(
-			"%s: fallback visual resolves" % label,
-			weapon.visual_anchor != null and is_instance_valid(weapon.visual_anchor)
-		)
+	var expected_path: String = EXPECTED_VISUAL_PATHS.get(
+		definition.weapon_id, ""
+	)
+	_check(
+		"%s: weapon id must have a generated visual mapping" % label,
+		not expected_path.is_empty()
+	)
+	_check(
+		"%s: generated visual path must be %s" % [label, expected_path],
+		definition.visual_scene != null and
+		definition.visual_scene.resource_path == expected_path
+	)
+	_check(
+		"%s: generated visual is mounted" % label,
+		weapon.visual_anchor != null and is_instance_valid(weapon.visual_anchor)
+	)
+	_check(
+		"%s: generated visual is parented to WeaponHandSocket" % label,
+		weapon.visual_anchor != null and
+		weapon.visual_anchor.get_parent().name == "WeaponHandSocket"
+	)
 	_check(
 		"%s: weapon_id must be set" % label,
 		not String(definition.weapon_id).is_empty()
@@ -196,13 +179,13 @@ func _test_independent_visual_mount(player: CharacterBody3D) -> void:
 		_has_property(weapon.definition, &"visual_transform")
 	)
 	_check(
-		"weapon exposes visual_instance",
-		_has_property(weapon, &"visual_instance")
+		"weapon exposes visual_anchor",
+		_has_property(weapon, &"visual_anchor")
 	)
 	if (
 		not _has_property(weapon.definition, &"visual_scene") or
 		not _has_property(weapon.definition, &"visual_transform") or
-		not _has_property(weapon, &"visual_instance")
+		not _has_property(weapon, &"visual_anchor")
 	):
 		weapon.free()
 		character_probe.free()
@@ -217,20 +200,80 @@ func _test_independent_visual_mount(player: CharacterBody3D) -> void:
 		character_probe,
 		player.get_node("FunctionalRayOrigin") as Marker3D
 	)
-	_check("independent visual is instanced", weapon.visual_instance != null)
-	if weapon.visual_instance != null:
+	_check("independent visual is instanced", weapon.visual_anchor != null)
+	if weapon.visual_anchor != null:
 		_check(
 			"independent visual uses authored transform",
-			weapon.visual_instance.transform.is_equal_approx(
+			weapon.visual_anchor.transform.is_equal_approx(
 				weapon.definition.visual_transform
 			)
 		)
 		_check(
 			"independent visual is parented to hand socket",
-			weapon.visual_instance.get_parent().name == "WeaponHandSocket"
+			weapon.visual_anchor.get_parent().name == "WeaponHandSocket"
 		)
 	weapon.free()
 	character_probe.free()
+
+
+func _test_legacy_socket_cannot_mount(player: CharacterBody3D) -> void:
+	var legacy_root := Node3D.new()
+	var legacy_socket := Node3D.new()
+	legacy_socket.name = "LegacyOnlySocket"
+	legacy_root.add_child(legacy_socket)
+	root.add_child(legacy_root)
+	var weapon := PistolScene.instantiate() as WeaponBase
+	root.add_child(weapon)
+	weapon.bind_context(
+		player,
+		legacy_root,
+		player.get_node("FunctionalRayOrigin") as Marker3D
+	)
+	_check(
+		"a root without WeaponHandSocket must not mount a fallback weapon model",
+		weapon.visual_anchor == null
+	)
+	weapon.free()
+	legacy_root.free()
+
+
+func _test_all_character_weapon_slots(catalog) -> void:
+	for character_definition in catalog.entries:
+		var player := PlayerScene.instantiate() as PlayerController
+		player.apply_character_definition(character_definition)
+		root.add_child(player)
+		await process_frame
+		await process_frame
+		var equipment := player.get_node("EquipmentController") as EquipmentController
+		var weapons := _collect_weapons(equipment)
+		_check(
+			"%s: full weapon loadout must instantiate" % character_definition.character_id,
+			weapons.size() == EXPECTED_VISUAL_PATHS.size()
+		)
+		for weapon in weapons:
+			weapon.set_owned(true)
+			_check(
+				"%s/%s: visual must mount to WeaponHandSocket" % [
+					character_definition.character_id, weapon.definition.weapon_id
+				],
+				weapon.visual_anchor != null and
+				weapon.visual_anchor.get_parent().name == "WeaponHandSocket"
+			)
+		for slot_index in range(weapons.size()):
+			_check(
+				"%s: slot %d must equip" % [character_definition.character_id, slot_index],
+				equipment.equip_slot(slot_index)
+			)
+			for candidate_index in range(weapons.size()):
+				var candidate: WeaponBase = weapons[candidate_index]
+				_check(
+					"%s: only slot %d visual may remain visible" % [
+						character_definition.character_id, slot_index
+					],
+					candidate.visual_anchor != null and
+					candidate.visual_anchor.visible == (candidate_index == slot_index)
+				)
+		player.free()
 
 
 func _test_ranged_weapon(

@@ -73,4 +73,4 @@ offset_right = 500.0
 offset_bottom = 150.0
 theme_override_colors/font_color = Color(0.92, 0.96, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "Decoupled Player Binding Test"
+text = "Generated Player Binding Test"

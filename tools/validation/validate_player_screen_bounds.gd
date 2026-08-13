@@ -1,5 +1,7 @@
 extends SceneTree
 
+const PlayerFixture = preload("res://tools/validation/support/player_fixture.gd")
+
 const BOUNDS_PATH := "res://scripts/camera/player_screen_bounds.gd"
 const PlayerScene = preload("res://scenes/player/Player.tscn")
 const RawInputSource = preload("res://tools/validation/support/raw_input_source.gd")
@@ -96,6 +98,7 @@ func _run() -> void:
 		failures
 	)
 	var player_probe = PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player_probe)
 	root.add_child(player_probe)
 	player_probe.set_physics_process(false)
 	_expect(
@@ -111,6 +114,7 @@ func _run() -> void:
 	player_probe.queue_free()
 
 	var player = PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	player.set_physics_process(false)
 	_expect(player.has_method("set_screen_camera"), "PlayerController must accept the shared screen camera", failures)

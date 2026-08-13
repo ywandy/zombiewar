@@ -3,6 +3,7 @@ extends SceneTree
 const REGISTRY_PATH := "res://scripts/gameplay/player_registry.gd"
 const SELECTOR_PATH := "res://scripts/combat/zombie_target_selector.gd"
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 
 func _init() -> void:
 	call_deferred("_run")
@@ -59,6 +60,7 @@ func _run() -> void:
 
 func _player_at(position: Vector3):
 	var player = PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	player.set_physics_process(false)
 	player.position = position

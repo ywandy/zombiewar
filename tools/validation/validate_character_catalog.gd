@@ -80,6 +80,16 @@ func _run() -> void:
 			"角色 %s 缺少 model_scene" % id,
 			failures
 		)
+		if definition.model_scene != null:
+			_expect(
+				definition.model_scene.resource_path.begins_with(
+					"res://assets/characters/generated/"
+				),
+				"角色 %s 的模型必须来自 assets/characters/generated：%s" % [
+					id, definition.model_scene.resource_path
+				],
+				failures
+			)
 		# 配色是四个人在场上唯一的区分手段，撞色等于没做区分。
 		var color_key := "%d_%d_%d" % [
 			roundi(definition.accent_color.r * 255.0),

@@ -11,6 +11,7 @@ extends SceneTree
 ##     --script res://tools/validation/validate_player_accent_color.gd
 
 const PLAYER_SCENE_PATH := "res://scenes/player/Player.tscn"
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 
 func _init() -> void:
 	call_deferred("_run")
@@ -19,6 +20,7 @@ func _run() -> void:
 	var failures: Array[String] = []
 	var scene := load(PLAYER_SCENE_PATH) as PackedScene
 	var player = scene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	await process_frame
 
@@ -57,6 +59,7 @@ func _run() -> void:
 
 	# 第二个玩家换色不能把第一个的颜色一起改掉——材质必须是每实例一份。
 	var other = scene.instantiate()
+	PlayerFixture.apply_default_character(other)
 	root.add_child(other)
 	await process_frame
 	other.set_accent_color(Color(0.906, 0.263, 0.212, 1.0))

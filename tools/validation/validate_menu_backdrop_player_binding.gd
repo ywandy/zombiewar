@@ -1,8 +1,7 @@
 extends SceneTree
 
 const MENU_BACKDROP_SCENE_PATH := "res://scenes/menu/MenuBackdrop.tscn"
-const PLAYER_VISUAL_SCENE_PATH := "res://scenes/player/PlayerVisual.tscn"
-const OLD_PLAYER_MODEL_PATH := "res://assets/characters/Characters_Lis_SingleWeapon.gltf"
+const DEFAULT_PLAYER_MODEL_PATH := "res://assets/characters/generated/male_assault.glb"
 
 var failures: Array[String] = []
 
@@ -22,27 +21,20 @@ func _run() -> void:
 	var player_hero := backdrop.get_node_or_null("SetDressing/PlayerHero") as Node3D
 	_check("menu backdrop exposes PlayerHero", player_hero != null)
 	if player_hero != null:
+		var character_model := player_hero.get_node_or_null("CharacterModel") as Node3D
 		_check(
-			"menu backdrop uses the reusable decoupled player visual",
-			player_hero.scene_file_path == PLAYER_VISUAL_SCENE_PATH
+			"menu backdrop loads the default catalog character",
+			character_model != null and
+			character_model.scene_file_path == DEFAULT_PLAYER_MODEL_PATH
 		)
-		var socket := player_hero.find_child("WeaponSocket.L", true, false) as Node3D
-		_check("menu player exposes the corrected WeaponSocket.L", socket != null)
-		if socket != null:
-			_check(
-				"corrected socket follows a hand bone attachment",
-				socket.get_parent() is BoneAttachment3D
-			)
-		var smg := player_hero.find_child("SMGVisual", true, false) as Node3D
+		var socket := player_hero.find_child("WeaponHandSocket", true, false) as Node3D
+		_check("menu player exposes WeaponHandSocket", socket != null)
+		var smg := player_hero.find_child("mp5Visual", true, false) as Node3D
 		_check("menu player shows an independently bound SMG", smg != null and smg.visible)
 		_check(
-			"menu SMG is parented to the corrected hand socket",
+			"menu SMG is parented to WeaponHandSocket",
 			socket != null and smg != null and smg.get_parent() == socket
 		)
-	_check(
-		"old merged player model has been deleted",
-		not FileAccess.file_exists(OLD_PLAYER_MODEL_PATH)
-	)
 	backdrop.queue_free()
 	await process_frame
 	_finish()

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PLAYER_SCENE := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 
 func _init() -> void:
 	call_deferred("_run")
@@ -11,6 +12,7 @@ func _run() -> void:
 	camera.current = true
 	root.add_child(camera)
 	var player := PLAYER_SCENE.instantiate() as PlayerController
+	PlayerFixture.apply_default_character(player)
 	_expect(player != null, "Player scene must instantiate", failures)
 	if player == null:
 		_finish(failures)

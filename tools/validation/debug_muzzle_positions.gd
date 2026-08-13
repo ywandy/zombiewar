@@ -6,9 +6,11 @@ extends SceneTree
 ##     --script tools/validation/debug_muzzle_positions.gd
 
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 
 func _initialize() -> void:
 	var player := PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	await process_frame
 	await process_frame

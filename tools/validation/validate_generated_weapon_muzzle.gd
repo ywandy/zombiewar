@@ -1,13 +1,14 @@
 extends SceneTree
 
-## 解耦武器的枪口回归：每把独立远程武器必须自带 MuzzleSocket，枪火与可见
+## 生成武器的枪口回归：每把远程生成武器必须自带 MuzzleSocket，枪火与可见
 ## 枪线始终从该挂点出发；伤害与联机输入的功能弹道起点仍由 WeaponCollision 提供。
 ##
 ## 运行：
 ##   /Applications/Godot.app/Contents/MacOS/Godot --headless --path . \
-##     --script tools/validation/validate_decoupled_weapon_muzzle.gd
+##     --script tools/validation/validate_generated_weapon_muzzle.gd
 
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 const SOCKET_NAME := "MuzzleSocket"
 const EXPECTED_RANGED_IDS := [&"pistol", &"smg", &"shotgun", &"rifle"]
 
@@ -16,6 +17,7 @@ var failures: Array[String] = []
 
 func _initialize() -> void:
 	var player := PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	await process_frame
 	await process_frame
@@ -55,18 +57,18 @@ func _test_weapon(weapon: RangedWeapon, label: String) -> void:
 	if visual_bounds.size != Vector3.ZERO:
 		var socket_local := visual_anchor.to_local(socket.global_position)
 		_check(
-			"%s: MuzzleSocket sits beyond the weapon +X front" % label,
-			socket_local.x > visual_bounds.end.x
+			"%s: MuzzleSocket sits on the weapon -Z barrel front" % label,
+			is_equal_approx(socket_local.z, visual_bounds.position.z)
 		)
 		_check(
-			"%s: MuzzleSocket remains inside the barrel Y span" % label,
+			"%s: MuzzleSocket remains inside the weapon X span" % label,
+			socket_local.x >= visual_bounds.position.x and
+			socket_local.x <= visual_bounds.end.x
+		)
+		_check(
+			"%s: MuzzleSocket remains inside the weapon Y span" % label,
 			socket_local.y >= visual_bounds.position.y and
 			socket_local.y <= visual_bounds.end.y
-		)
-		_check(
-			"%s: MuzzleSocket remains inside the barrel Z span" % label,
-			socket_local.z >= visual_bounds.position.z and
-			socket_local.z <= visual_bounds.end.z
 		)
 
 	weapon._process(0.0)
@@ -157,10 +159,10 @@ func _check(label: String, condition: bool) -> void:
 func _report(player: Node) -> void:
 	player.queue_free()
 	if failures.is_empty():
-		print("validate_decoupled_weapon_muzzle: PASS")
+		print("validate_generated_weapon_muzzle: PASS")
 		quit(0)
 		return
 	for failure in failures:
-		printerr("validate_decoupled_weapon_muzzle: %s" % failure)
-	printerr("validate_decoupled_weapon_muzzle: FAIL (%d)" % failures.size())
+		printerr("validate_generated_weapon_muzzle: %s" % failure)
+	printerr("validate_generated_weapon_muzzle: FAIL (%d)" % failures.size())
 	quit(1)

@@ -2,6 +2,7 @@ extends SceneTree
 
 const RawInputSource = preload("res://tools/validation/support/raw_input_source.gd")
 const FakePlaceItemService = preload("res://tools/validation/support/fake_place_item_service.gd")
+const PlayerFixture = preload("res://tools/validation/support/player_fixture.gd")
 
 func _init() -> void:
 	call_deferred("_run")
@@ -17,6 +18,7 @@ func _run() -> void:
 	camera.current = true
 	root.add_child(camera)
 	var player = scene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	await process_frame
 	player.set_physics_process(false)

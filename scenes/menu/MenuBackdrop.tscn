@@ -1,7 +1,6 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/menu/menu_backdrop.gd" id="1_backdrop"]
-[ext_resource type="PackedScene" path="res://scenes/player/PlayerVisual.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://assets/enemies/Zombie_Basic.gltf" id="3_basic"]
 [ext_resource type="PackedScene" path="res://assets/enemies/Zombie_Chubby.gltf" id="4_chubby"]
 [ext_resource type="PackedScene" path="res://assets/vehicles/Vehicle_Pickup.gltf" id="5_pickup"]
@@ -98,7 +97,7 @@ fov = 46.0
 
 [node name="SetDressing" type="Node3D" parent="."]
 
-[node name="PlayerHero" parent="SetDressing" instance=ExtResource("2_player")]
+[node name="PlayerHero" type="Node3D" parent="SetDressing"]
 position = Vector3(2.8, 0, 1.4)
 rotation_degrees = Vector3(0, 155, 0)
 scale = Vector3(1.08, 1.08, 1.08)

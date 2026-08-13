@@ -7,6 +7,7 @@ extends SceneTree
 ##     --script tools/validation/validate_muzzle_flash_orientation.gd
 
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 const WeaponMathScript := preload("res://scripts/combat/weapon_math.gd")
 
 var failures: Array[String] = []
@@ -14,6 +15,7 @@ var failures: Array[String] = []
 
 func _initialize() -> void:
 	var player := PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	# 等一帧让 @onready / _ready / bind_context 完成。
 	await process_frame
