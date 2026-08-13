@@ -265,6 +265,9 @@ const STAT_COUNT := 3
 ## 展平为 [slot * STAT_COUNT + stat]，初始 1.0（无加成）。进帧哈希。
 ## 伤害/移速是倍率（相乘）；最大生命是加值（加算，arena 应用到 max_health）。
 var player_upgrade_scale := PackedFloat32Array()
+## 「压制」被动：持续开火时散布增长的削减比例，0 = 无削减。
+## 与 blast_armor 的 passive_strength 用法一致（0.3 即减 30%）。
+var player_suppression_relief := PackedFloat32Array()
 
 # ---- 逐玩家材料（货币） ----
 ## 波间商店的购买力。僵尸死亡掉落积累。进帧哈希，各端必须一致。
@@ -317,6 +320,8 @@ func _init() -> void:
 	player_upgrade_scale.fill(1.0)
 	player_spread_degrees.resize(MAX_PLAYER_SLOTS)
 	player_spread_degrees.fill(0.0)
+	player_suppression_relief.resize(MAX_PLAYER_SLOTS)
+	player_suppression_relief.fill(0.0)
 	player_spread_profile.resize(MAX_PLAYER_SLOTS)
 	player_spread_profile.fill(-1)
 	player_mod_level.resize(MAX_PLAYER_SLOTS * WeaponModTableScript.COUNT)
@@ -395,6 +400,7 @@ func reset(room_seed: int) -> void:
 	pending_events = []
 	player_spread_degrees.fill(0.0)
 	player_spread_profile.fill(-1)
+	player_suppression_relief.fill(0.0)
 	# 单局清零：改装件只在本局有效，reset() 即开新局。
 	player_mod_level.fill(0)
 	# 签名表复位为 1.0（无加成），保留尺寸分配。
@@ -1932,6 +1938,13 @@ func configure_weapon_profile(
 	}
 
 ## 已注册的武器档案数。profile 下标 0..count-1 都是合法武器。
+## 配置某个座位的「压制」被动强度。relief 是散布增长的削减比例。
+func configure_player_suppression(slot: int, relief: float) -> void:
+	if slot < 0 or slot >= player_suppression_relief.size():
+		return
+	player_suppression_relief[slot] = clampf(relief, 0.0, 0.9)
+
+## 已注册的武器档案数。profile 下标 0..count-1 都是合法武器。
 func weapon_profile_count() -> int:
 	return weapon_profiles.size()
 
@@ -2267,9 +2280,12 @@ func _resolve_shot_event(event: Dictionary) -> void:
 		_resolve_pellet(slot, profile, origin, origin_height, pellet_direction, damage_scale)
 	# 散布按「扣一次扳机」增长一次，不按弹丸数增长：
 	# 否则一发霰弹就把散布顶到上限，第二枪起等于在盲射。
+	# 「压制」被动在这里生效：削减每次扣扳机的散布增长，让持续开火更可控。
+	# 放在增长处而不是改武器档案，因为档案是全局共享的，被动必须逐玩家生效。
+	var relief := clampf(player_suppression_relief[slot], 0.0, 0.9) if slot < player_suppression_relief.size() else 0.0
 	player_spread_degrees[slot] = WeaponSpreadStateScript.increased_degrees(
 		spread_degrees,
-		float(profile["spread_increase_degrees"]),
+		float(profile["spread_increase_degrees"]) * (1.0 - relief),
 		float(profile["max_spread_degrees"])
 	)
 

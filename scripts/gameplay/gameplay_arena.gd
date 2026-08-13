@@ -1315,6 +1315,12 @@ func _register_player_signatures() -> void:
 		sim_world.set_slot_medic(
 			slot, def.passive_id == &"medic_aura", def.passive_strength
 		)
+		# 「压制」被动：削减持续开火的散布增长。与 medic 走同一条逐座位配置路径，
+		# 各端从同一份角色目录算出同一个值，确定性成立。
+		sim_world.configure_player_suppression(
+			slot,
+			def.passive_strength if def.passive_id == &"suppression" else 0.0
+		)
 
 ## 记下每个远端座位的输入源，之后每一帧都靠它把命令喂给对应的身体。
 ## 本机座位不在表里：它由真实设备驱动。

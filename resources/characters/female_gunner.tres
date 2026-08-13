@@ -14,5 +14,5 @@ damage_mult = 1.0
 signature_weapon_id = &"smg"
 signature_weapon_damage_mult = 1.3
 passive_id = &"suppression"
-passive_strength = 1.2
+passive_strength = 0.45
 model_scene = ExtResource("2_model")

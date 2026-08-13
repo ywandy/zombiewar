@@ -186,7 +186,8 @@ func _test_definition_values(definition, failures: Array[String]) -> void:
 		"perception range",
 		failures
 	)
-	_expect(definition.inter_wave_delay_ticks == 60, "inter-wave ticks", failures)
+	# 300 tick / 20tps = 15 秒商店窗口，见 cd96983。
+	_expect(definition.inter_wave_delay_ticks == 300, "inter-wave ticks", failures)
 	_expect(
 		definition.player_spawn_positions == [
 			Vector3(-1.2, 0.0, 6.2),
@@ -308,11 +309,12 @@ func _test_definition_values(definition, failures: Array[String]) -> void:
 		if death_rule.groups.size() == 1:
 			var group = death_rule.groups[0]
 			_expect(group.group_id == &"common_drop", "common drop id", failures)
-			_expect(group.trigger_chance_per_10000 == 3200, "common drop chance", failures)
+			# 6000 来自 f08e6f0 的掉落重调：第一波即可攒够商店首购。
+			_expect(group.trigger_chance_per_10000 == 6000, "common drop chance", failures)
 			# 前五件是武器与弹药，后六件是改装件。下面的 expected_drops 只逐件核对
 			# 前五件的语义；改装件那六件由 validate_weapon_mod_catalog.gd 与
 			# validate_weapon_mods.gd 负责，在这里重复一遍只会让两处断言互相漂移。
-			_expect(group.events.size() == 11, "eleven common drops", failures)
+			_expect(group.events.size() == 13, "thirteen common drops", failures)
 			var expected_drops := [
 				[
 					"res://resources/pickups/smg_pickup.tres",
