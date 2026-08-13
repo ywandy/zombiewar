@@ -1,13 +1,10 @@
 extends Node3D
 class_name LobbyPlayerPreview
 
-const DISPLAY_WEAPON := "SMG"
 const WeaponVisualBindingScript = preload(
 	"res://scripts/combat/weapons/weapon_visual_binding.gd"
 )
 const DISPLAY_WEAPON_DEFINITION = preload("res://resources/weapons/smg.tres")
-
-@export var character_scene: PackedScene
 
 var player_index := 0
 var online := true
@@ -19,7 +16,6 @@ var preview_weapon_binding: WeaponVisualBinding
 var current_character_id: StringName = &""
 
 func _ready() -> void:
-	_instantiate_character()
 	_apply_status()
 
 func set_player_index(index: int) -> void:
@@ -38,18 +34,22 @@ func set_accent_color(value: Color) -> void:
 
 func set_character_definition(definition: CharacterDefinition) -> void:
 	var next_id: StringName = definition.character_id if definition != null else &""
-	if next_id != &"" and next_id == current_character_id and character_model != null:
+	if (
+		definition != null and
+		definition.model_scene != null and
+		next_id != &"" and
+		next_id == current_character_id and
+		character_model != null
+	):
 		return
 	if character_model != null and is_instance_valid(character_model):
 		character_model.free()
 	character_model = null
 	current_character_id = next_id
-	var selected := (
-		definition.model_scene
-		if definition != null and definition.model_scene != null
-		else character_scene
-	)
-	_instantiate_character(selected)
+	if definition == null or definition.model_scene == null:
+		_warn_missing_resource()
+		return
+	_instantiate_character(definition.model_scene)
 
 ## 座位卡里名字由卡片自己的 2D 标签画，Label3D 要能关掉，
 ## 否则同一个名字会在卡里出现两次。
@@ -91,12 +91,11 @@ func _visible_within_preview(node: Node3D) -> bool:
 		cursor = cursor.get_parent()
 	return true
 
-func _instantiate_character(scene: PackedScene = null) -> void:
-	var selected := scene if scene != null else character_scene
-	if selected == null:
+func _instantiate_character(scene: PackedScene) -> void:
+	if scene == null:
 		_warn_missing_resource()
 		return
-	var instance := selected.instantiate() as Node3D
+	var instance := scene.instantiate() as Node3D
 	if instance == null:
 		_warn_missing_resource()
 		return
@@ -110,29 +109,10 @@ func _configure_weapons() -> void:
 	if character_model == null:
 		return
 	preview_weapon_binding = WeaponVisualBindingScript.new()
-	var uses_generated_socket := character_model.find_child(
-		"WeaponHandSocket", true, false
-	) != null
-	var model_scene: PackedScene = (
-		DISPLAY_WEAPON_DEFINITION.visual_scene
-		if uses_generated_socket
-		else DISPLAY_WEAPON_DEFINITION.visual_model_scene
-	)
-	var socket_name: StringName = (
-		&"WeaponHandSocket"
-		if uses_generated_socket
-		else DISPLAY_WEAPON_DEFINITION.visual_socket_name
-	)
-	var model_transform := (
-		DISPLAY_WEAPON_DEFINITION.visual_transform
-		if uses_generated_socket
-		else DISPLAY_WEAPON_DEFINITION.get_visual_relative_transform()
-	)
 	preview_weapon_binding.bind(
 		character_model,
-		model_scene,
-		socket_name,
-		model_transform
+		DISPLAY_WEAPON_DEFINITION.visual_scene,
+		DISPLAY_WEAPON_DEFINITION.visual_transform
 	)
 
 ## 待机动画必须循环播放。

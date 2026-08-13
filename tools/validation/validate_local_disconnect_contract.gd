@@ -4,6 +4,7 @@ const GamepadInputSourceScript = preload("res://scripts/input/gamepad_input_sour
 const PlayerRegistryScript = preload("res://scripts/gameplay/player_registry.gd")
 const ZombieTargetSelectorScript = preload("res://scripts/combat/zombie_target_selector.gd")
 const PlayerScene = preload("res://scenes/player/Player.tscn")
+const PlayerFixture = preload("res://tools/validation/support/player_fixture.gd")
 const SmgScene = preload("res://scenes/weapons/Smg.tscn")
 const KnifeScene = preload("res://scenes/weapons/Knife.tscn")
 
@@ -30,6 +31,7 @@ func _run() -> void:
 	var registry = PlayerRegistryScript.new()
 	root.add_child(registry)
 	var player = PlayerScene.instantiate() as PlayerController
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	player.set_physics_process(false)
 	player.set_input_source(source)

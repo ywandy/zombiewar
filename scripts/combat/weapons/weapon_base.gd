@@ -24,7 +24,6 @@ var character_visual_root: Node3D
 var functional_ray_origin: Marker3D
 var visual_anchor: Node3D
 var visual_binding: WeaponVisualBinding
-var visual_instance: Node3D
 var trigger_pressed := false
 var trigger_just_pressed := false
 var aim_direction := Vector3.FORWARD
@@ -54,45 +53,21 @@ func bind_context(
 	visual_anchor = null
 	if definition == null:
 		return
-	# 新生成角色统一带 WeaponHandSocket，优先挂载同批次生成的武器。
-	# 旧版角色只带 WeaponSocket.L，继续走远程分支的解耦模型作为兼容回退。
-	if definition.visual_scene != null:
-		var hand_socket := character_visual_root.find_child(
-			"WeaponHandSocket", true, false
-		) as Node3D
-		if hand_socket != null:
-			visual_instance = definition.visual_scene.instantiate() as Node3D
-			if visual_instance != null:
-				visual_instance.name = String(definition.weapon_id) + "_visual"
-				hand_socket.add_child(visual_instance)
-				visual_instance.transform = definition.visual_transform
-				visual_anchor = visual_instance
-				return
 	visual_binding = WeaponVisualBindingScript.new()
-	var fallback_socket := definition.visual_socket_name
-	if character_visual_root.find_child("WeaponHandSocket", true, false) != null:
-		fallback_socket = &"WeaponHandSocket"
 	visual_anchor = visual_binding.bind(
 		character_visual_root,
-		definition.visual_model_scene,
-		fallback_socket,
-		definition.get_visual_relative_transform()
+		definition.visual_scene,
+		definition.visual_transform
 	)
-	if visual_anchor == null:
-		visual_anchor = character_visual_root.find_child(
-			String(definition.visual_node_name), true, false
-		) as Node3D
 
 func _exit_tree() -> void:
 	_clear_visual_instance()
 
 func _clear_visual_instance() -> void:
-	if visual_instance != null and is_instance_valid(visual_instance):
-		visual_instance.free()
-	visual_instance = null
 	if visual_binding != null:
 		visual_binding.clear()
 	visual_binding = null
+	visual_anchor = null
 
 func set_attack_input(
 	value_trigger_pressed: bool,

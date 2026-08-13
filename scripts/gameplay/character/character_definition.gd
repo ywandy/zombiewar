@@ -36,6 +36,6 @@ class_name CharacterDefinition
 ## 被动强度标量，各被动自行解释（增伤上限 / 范围加成 / 回血速率 / 减伤比例）。
 @export var passive_strength := 1.0
 
-@export_group("模型（换皮支线）")
-## 角色模型场景。空 = 沿用 Player.tscn 默认模型 + accent_color 换色。
+@export_group("生成模型")
+## 角色模型场景。目录条目必须显式配置，空值会拒绝玩家生成。
 @export var model_scene: PackedScene = null

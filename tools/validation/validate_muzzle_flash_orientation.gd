@@ -1,15 +1,13 @@
 extends SceneTree
 
-## 枪口火光朝向的回归：火光（Muzzle/MuzzleFlash）必须与外观模型的枪口指向一致，
-## 并压平到水平以匹配模拟层弹道（WeaponMath.flat_direction）。
-## 历史缺陷：Muzzle 只同步了位置（取自 WeaponCollision 胶囊），朝向却仍随外观模型；
-## 收枪/举枪时外观模型绕 Y 偏航、胶囊绕 X 俯仰（见 WeaponClearanceController），
-## 两者不在同一旋转平面，导致「枪口斜向上、火光仍照水平轴」。
+## 枪口火光变换的回归：位置必须来自独立武器的 MuzzleSocket，朝向必须与
+## WeaponCollision 的功能弹道轴一致，并压平到水平匹配模拟层弹道。
 ## 运行：
 ##   /Applications/Godot.app/Contents/MacOS/Godot --headless --path . \
 ##     --script tools/validation/validate_muzzle_flash_orientation.gd
 
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 const WeaponMathScript := preload("res://scripts/combat/weapon_math.gd")
 
 var failures: Array[String] = []
@@ -17,6 +15,7 @@ var failures: Array[String] = []
 
 func _initialize() -> void:
 	var player := PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	# 等一帧让 @onready / _ready / bind_context 完成。
 	await process_frame
@@ -35,10 +34,21 @@ func _initialize() -> void:
 		return
 
 	# 强制走同步路径一次，模拟开火前的对齐。
-	var origin: Vector3 = weapon._sync_muzzle_to_capsule()
-	_check("origin is finite", origin.is_finite())
+	var visual_origin: Vector3 = weapon._sync_muzzle_to_weapon_front()
+	var functional_origin: Vector3 = weapon.get_ray_origin()
+	_check("visual origin is finite", visual_origin.is_finite())
+	_check("functional origin is finite", functional_origin.is_finite())
 
 	var muzzle: Marker3D = weapon.muzzle
+	var visual_socket := weapon.visual_anchor.find_child(
+		"MuzzleSocket",
+		true,
+		false
+	) as Node3D
+	if visual_socket == null:
+		failures.append("MuzzleSocket missing from independent weapon model")
+		_report()
+		return
 	var weapon_collision := player.get_node_or_null("WeaponCollision") as CollisionShape3D
 	if weapon_collision == null:
 		failures.append("WeaponCollision missing")
@@ -59,9 +69,9 @@ func _initialize() -> void:
 		"muzzle_dir.y=%f" % muzzle_dir.y
 	)
 	_check(
-		"muzzle sits at capsule origin",
-		muzzle.global_position.distance_to(origin) < 0.001,
-		"muzzle_pos=%s origin=%s" % [muzzle.global_position, origin]
+		"muzzle sits at independent weapon MuzzleSocket",
+		muzzle.global_position.distance_to(visual_socket.global_position) < 0.001,
+		"muzzle_pos=%s socket=%s" % [muzzle.global_position, visual_socket.global_position]
 	)
 
 	_report()

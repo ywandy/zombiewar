@@ -1,6 +1,8 @@
 extends RefCounted
 class_name WeaponVisualBinding
 
+const SOCKET_NAME := &"WeaponHandSocket"
+
 var model_instance: Node3D
 var socket: Node3D
 var warned_missing_socket := false
@@ -9,7 +11,6 @@ var warned_missing_model := false
 func bind(
 	visual_root: Node3D,
 	model_scene: PackedScene,
-	socket_name: StringName,
 	relative_transform: Transform3D
 ) -> Node3D:
 	clear()
@@ -19,9 +20,9 @@ func bind(
 	if model_scene == null:
 		_warn_missing_model()
 		return null
-	socket = _find_socket(visual_root, socket_name)
+	socket = visual_root.find_child(String(SOCKET_NAME), true, false) as Node3D
 	if socket == null:
-		_warn_missing_socket("socket '%s' was not found" % String(socket_name))
+		_warn_missing_socket("socket '%s' was not found" % String(SOCKET_NAME))
 		return null
 	model_instance = model_scene.instantiate() as Node3D
 	if model_instance == null:
@@ -38,16 +39,6 @@ func clear() -> void:
 		model_instance.queue_free()
 	model_instance = null
 	socket = null
-
-func _find_socket(visual_root: Node3D, socket_name: StringName) -> Node3D:
-	var exact := visual_root.find_child(String(socket_name), true, false) as Node3D
-	if exact != null:
-		return exact
-	# Godot's glTF importer sanitizes Blender names containing dots to underscores
-	# (WeaponSocket.L -> WeaponSocket_L). Keep the authored socket id in resources,
-	# but accept the importer spelling at runtime.
-	var imported_name := String(socket_name).replace(".", "_")
-	return visual_root.find_child(imported_name, true, false) as Node3D
 
 func set_visible(value: bool) -> void:
 	if model_instance != null and is_instance_valid(model_instance):

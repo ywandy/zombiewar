@@ -130,7 +130,8 @@ func effective_passive_strength() -> float:
 ## _ensure_health_initialized() 用新上限创建。若在运行时替换角色（health 已建），
 ## 则重建 Health 并重连信号，保证血条与死亡回调不丢。
 func apply_character_definition(def: CharacterDefinition) -> void:
-	if def == null:
+	if def == null or def.model_scene == null:
+		push_error("PlayerController requires a character definition with model_scene")
 		return
 	character_definition = def
 	max_health = maxf(1.0, BASE_MAX_HEALTH + def.max_health_bonus)
@@ -146,6 +147,9 @@ func apply_character_definition(def: CharacterDefinition) -> void:
 	set_accent_color(def.accent_color)
 
 func _ready() -> void:
+	if character_definition == null or character_definition.model_scene == null:
+		push_error("PlayerController initialization stopped: character model is missing")
+		return
 	var visual_host := visual_root as CharacterVisualHostScript
 	if visual_host != null:
 		visual_host.install(
