@@ -22,7 +22,7 @@ func _run() -> void:
 	root.add_child(client)
 	await process_frame
 
-	client.connect_to_room("ABCDEF", "token-1", "阿波", &"survivor_blue")
+	client.connect_to_room("ABCDEF", "token-1", "阿波", &"male_medic")
 	var payload: Dictionary = client.join_payload()
 	_expect(
 		int(payload.get("protocol_version", -1)) == LobbyProtocolScript.PROTOCOL_VERSION,
@@ -30,7 +30,7 @@ func _run() -> void:
 		failures
 	)
 	_expect(
-		String(payload.get("character_id", "")) == "survivor_blue",
+		String(payload.get("character_id", "")) == "male_medic",
 		"握手必须带入房时选定的角色 id，实际 %s" % String(payload.get("character_id", "")),
 		failures
 	)
@@ -60,7 +60,7 @@ func _run() -> void:
 				"nickname": "阿波",
 				"ready": false,
 				"connected": true,
-				"character_id": "survivor_red",
+				"character_id": "male_assault",
 			},
 		],
 	}).to_utf8_buffer())
@@ -72,7 +72,7 @@ func _run() -> void:
 	)
 	_expect(client.roster.size() == 1, "roster 必须存下座位表", failures)
 	_expect(
-		String(client.roster[0].get("character_id", "")) == "survivor_red",
+		String(client.roster[0].get("character_id", "")) == "male_assault",
 		"roster 条目必须保留 character_id",
 		failures
 	)
@@ -89,7 +89,7 @@ func _run() -> void:
 		"tick": 0,
 		"map_id": "demo",
 		"slots": [
-			{"slot": 0, "nickname": "阿波", "player_id": "p0", "character_id": "survivor_red"},
+			{"slot": 0, "nickname": "阿波", "player_id": "p0", "character_id": "male_assault"},
 		],
 	}).to_utf8_buffer())
 	_expect(
@@ -99,16 +99,16 @@ func _run() -> void:
 	)
 	var started_slots: Array = observed["started_slots"]
 	_expect(
-		started_slots.size() == 1 and String(started_slots[0].get("character_id", "")) == "survivor_red",
+		started_slots.size() == 1 and String(started_slots[0].get("character_id", "")) == "male_assault",
 		"match_started 必须透出每个座位的 character_id",
 		failures
 	)
 
 	# 未连接时发选择请求必须是空操作，而不是崩溃。
-	client.select_character(&"survivor_green")
+	client.select_character(&"male_riot")
 	client.select_map(&"demo")
 	_expect(
-		client.character_id == &"survivor_green",
+		client.character_id == &"male_riot",
 		"select_character 必须记住本机选择，便于重连时随握手重发",
 		failures
 	)

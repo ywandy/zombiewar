@@ -50,11 +50,11 @@ func _run() -> void:
 
 	var online_descriptor = OnlinePlayerDescriptorScript.new()
 	online_descriptor.player_index = 0
-	online_descriptor.character_id = &"survivor_blue"
+	online_descriptor.character_id = &"male_medic"
 	session.configure_online([online_descriptor], &"demo")
 	_expect(session.map_id == &"demo", "联机会话的地图必须来自 start 消息", failures)
 	_expect(
-		session.local_players[0].character_id == &"survivor_blue",
+		session.local_players[0].character_id == &"male_medic",
 		"联机描述符必须带上角色 id",
 		failures
 	)

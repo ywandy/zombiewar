@@ -25,8 +25,8 @@ func _run() -> void:
 
 	var scene := load(SEAT_CARD_SCENE_PATH) as PackedScene
 	var catalog = ContentCatalogsScript.characters()
-	var red = catalog.get_by_id(&"survivor_red")
-	var blue = catalog.get_by_id(&"survivor_blue")
+	var red = catalog.get_by_id(&"male_assault")
+	var blue = catalog.get_by_id(&"male_medic")
 
 	var card_a = scene.instantiate()
 	var card_b = scene.instantiate()

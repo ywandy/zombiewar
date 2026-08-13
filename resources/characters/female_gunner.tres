@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/character/character_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://assets/characters/generated/female_gunner.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_definition")
+character_id = &"female_gunner"
+display_name = "女·机枪手"
+accent_color = Color(0.431, 0.478, 0.263, 1)
+max_health_bonus = 20.0
+move_speed_mult = 0.85
+damage_mult = 1.0
+signature_weapon_id = &"smg"
+signature_weapon_damage_mult = 1.3
+passive_id = &"suppression"
+passive_strength = 1.2
+model_scene = ExtResource("2_model")

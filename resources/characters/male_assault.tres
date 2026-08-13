@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/character/character_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://assets/characters/generated/male_assault.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_definition")
+character_id = &"male_assault"
+display_name = "男·突击手"
+accent_color = Color(0.557, 0.231, 0.18, 1)
+max_health_bonus = 0.0
+move_speed_mult = 0.92
+damage_mult = 1.0
+signature_weapon_id = &"smg"
+signature_weapon_damage_mult = 1.25
+passive_id = &"suppression"
+passive_strength = 1.0
+model_scene = ExtResource("2_model")

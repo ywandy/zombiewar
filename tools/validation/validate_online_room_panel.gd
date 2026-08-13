@@ -48,11 +48,11 @@ func _run() -> void:
 	var roster := [
 		{
 			"slot": 0, "player_id": "p0", "nickname": "阿波",
-			"ready": false, "connected": true, "character_id": "survivor_red",
+			"ready": false, "connected": true, "character_id": "male_assault",
 		},
 		{
 			"slot": 1, "player_id": "p1", "nickname": "小明",
-			"ready": false, "connected": true, "character_id": "survivor_blue",
+			"ready": false, "connected": true, "character_id": "male_medic",
 		},
 	]
 	room.apply_roster(roster, 0, "lobby", 0, default_map)
@@ -135,7 +135,7 @@ func _run() -> void:
 	)
 
 	_expect(
-		characters.get_by_id(&"survivor_red") != null,
+		characters.get_by_id(&"male_assault") != null,
 		"校验依赖的角色 id 必须存在于目录",
 		failures
 	)
@@ -186,7 +186,7 @@ func _run() -> void:
 		failures
 	)
 	_expect(
-		lobby._missing_content(default_map, [{"character_id": "survivor_red"}]) == "",
+		lobby._missing_content(default_map, [{"character_id": "male_assault"}]) == "",
 		"目录里有的内容不该被判为缺失",
 		failures
 	)

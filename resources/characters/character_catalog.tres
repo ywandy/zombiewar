@@ -1,11 +1,17 @@
-[gd_resource type="Resource" script_class="CharacterCatalog" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="CharacterCatalog" load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/character/character_catalog.gd" id="1_catalog"]
-[ext_resource type="Resource" path="res://resources/characters/survivor_red.tres" id="2_red"]
-[ext_resource type="Resource" path="res://resources/characters/survivor_blue.tres" id="3_blue"]
-[ext_resource type="Resource" path="res://resources/characters/survivor_amber.tres" id="4_amber"]
-[ext_resource type="Resource" path="res://resources/characters/survivor_green.tres" id="5_green"]
+[ext_resource type="Resource" path="res://resources/characters/male_gunner.tres" id="2_male_gunner"]
+[ext_resource type="Resource" path="res://resources/characters/female_gunner.tres" id="3_female_gunner"]
+[ext_resource type="Resource" path="res://resources/characters/male_assault.tres" id="4_male_assault"]
+[ext_resource type="Resource" path="res://resources/characters/female_assault.tres" id="5_female_assault"]
+[ext_resource type="Resource" path="res://resources/characters/male_medic.tres" id="6_male_medic"]
+[ext_resource type="Resource" path="res://resources/characters/female_medic.tres" id="7_female_medic"]
+[ext_resource type="Resource" path="res://resources/characters/male_demolition.tres" id="8_male_demolition"]
+[ext_resource type="Resource" path="res://resources/characters/female_demolition.tres" id="9_female_demolition"]
+[ext_resource type="Resource" path="res://resources/characters/male_riot.tres" id="10_male_riot"]
+[ext_resource type="Resource" path="res://resources/characters/female_riot.tres" id="11_female_riot"]
 
 [resource]
 script = ExtResource("1_catalog")
-entries = [ExtResource("2_red"), ExtResource("3_blue"), ExtResource("4_amber"), ExtResource("5_green")]
+entries = [ExtResource("2_male_gunner"), ExtResource("3_female_gunner"), ExtResource("4_male_assault"), ExtResource("5_female_assault"), ExtResource("6_male_medic"), ExtResource("7_female_medic"), ExtResource("8_male_demolition"), ExtResource("9_female_demolition"), ExtResource("10_male_riot"), ExtResource("11_female_riot")]
