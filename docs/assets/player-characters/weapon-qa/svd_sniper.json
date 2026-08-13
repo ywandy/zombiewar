@@ -1,7 +1,7 @@
 {
   "weapon": "svd_sniper",
   "length_before": 1.0002,
-  "length_after": 1.23,
+  "length_after": 1.2308,
   "target_length": 1.23,
   "scale": 1.22981,
   "grip_along_axis": 0.28,
@@ -10,5 +10,8 @@
     0.0623,
     -0.2706
   ],
+  "triangles_before": 209172,
+  "triangles_after": 4999,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/svd_sniper.glb"
 }

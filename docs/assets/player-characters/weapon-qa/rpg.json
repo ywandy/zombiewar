@@ -1,7 +1,7 @@
 {
   "weapon": "rpg",
   "length_before": 0.9896,
-  "length_after": 0.95,
+  "length_after": 0.9506,
   "target_length": 0.95,
   "scale": 0.95999,
   "grip_along_axis": 0.35,
@@ -10,5 +10,8 @@
     0.0006,
     -0.1372
   ],
+  "triangles_before": 401584,
+  "triangles_after": 5000,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/rpg.glb"
 }

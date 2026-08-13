@@ -1,7 +1,7 @@
 {
   "weapon": "sentry_turret",
   "length_before": 0.9959,
-  "length_after": 0.9,
+  "length_after": 0.8988,
   "target_length": 0.9,
   "scale": 0.90367,
   "grip_along_axis": 0.5,
@@ -10,5 +10,8 @@
     -0.0,
     0.0014
   ],
+  "triangles_before": 973594,
+  "triangles_after": 4999,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/sentry_turret.glb"
 }

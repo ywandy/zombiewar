@@ -350,6 +350,36 @@ def weight_regions(target: bpy.types.Object) -> list[dict]:
     ]
 
 
+# 武器挂点，逐字取自 main 已有角色的实测值。位置是骨骼局部坐标，骨骼名在两套
+# 角色里完全相同，因此可直接照搬。缺了它们，武器挂载系统会找不到挂点，角色拿不了枪。
+WEAPON_SOCKETS = [
+    ("WeaponHandSocket", "Middle1.L", (-0.0, -0.08, 0.0)),
+    ("WeaponBackSocket", "Torso", (-0.0, 0.16, 0.05)),
+    ("MineHipSocket", "Hips", (-0.18, 0.0, -0.0)),
+]
+
+
+def add_weapon_sockets(armature: bpy.types.Object) -> list[str]:
+    """给角色补上武器挂点。空节点绑到指定骨骼，跟随动画一起动。"""
+    added: list[str] = []
+    bone_names = {b.name for b in armature.data.bones}
+    for name, bone, offset in WEAPON_SOCKETS:
+        if bone not in bone_names:
+            print(f"[warn] 骨架缺少骨骼 {bone}，跳过挂点 {name}", flush=True)
+            continue
+        empty = bpy.data.objects.new(name, None)
+        empty.empty_display_size = 0.05
+        bpy.context.collection.objects.link(empty)
+        empty.parent = armature
+        empty.parent_type = "BONE"
+        empty.parent_bone = bone
+        empty.matrix_parent_inverse = Matrix.Identity(4)
+        empty.location = Vector(offset)
+        added.append(name)
+    bpy.context.view_layer.update()
+    return added
+
+
 def setup_render(target: bpy.types.Object, width: int = 700, height: int = 1000) -> None:
     scene = bpy.context.scene
     scene.render.engine = "BLENDER_EEVEE_NEXT"
@@ -425,6 +455,7 @@ def main() -> None:
     weight_method = bind_weights_geometric(body, armature)
 
     bpy.data.objects.remove(rig_body, do_unlink=True)
+    sockets = add_weapon_sockets(armature)
 
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.export_scene.gltf(
@@ -440,6 +471,7 @@ def main() -> None:
         "triangles_after": after,
         "budget": args.budget,
         "weight_method": weight_method,
+        "weapon_sockets": sockets,
         "facing": facing,
         "within_budget": after <= args.budget,
         "weight_regions": weight_regions(body),

@@ -1,7 +1,7 @@
 {
   "weapon": "hk45c",
   "length_before": 1.0004,
-  "length_after": 0.19,
+  "length_after": 0.1903,
   "target_length": 0.19,
   "scale": 0.18993,
   "grip_along_axis": 0.35,
@@ -10,5 +10,8 @@
     0.0006,
     -0.0285
   ],
+  "triangles_before": 972978,
+  "triangles_after": 4999,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/hk45c.glb"
 }

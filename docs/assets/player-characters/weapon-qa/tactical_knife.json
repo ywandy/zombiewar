@@ -10,5 +10,8 @@
     0.0,
     -0.1066
   ],
+  "triangles_before": 226446,
+  "triangles_after": 5000,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/tactical_knife.glb"
 }

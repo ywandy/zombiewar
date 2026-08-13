@@ -1,7 +1,7 @@
 {
   "weapon": "flamethrower",
   "length_before": 1.0,
-  "length_after": 0.9,
+  "length_after": 0.8995,
   "target_length": 0.9,
   "scale": 0.89996,
   "grip_along_axis": 0.3,
@@ -10,5 +10,8 @@
     -0.0006,
     -0.1799
   ],
+  "triangles_before": 585554,
+  "triangles_after": 5000,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/flamethrower.glb"
 }

@@ -28,6 +28,11 @@
   "triangles_after": 29998,
   "budget": 30000,
   "weight_method": "geometric_smoothed",
+  "weapon_sockets": [
+    "WeaponHandSocket",
+    "WeaponBackSocket",
+    "MineHipSocket"
+  ],
   "facing": {
     "yaw_deg": -90.0,
     "flipped_180": false

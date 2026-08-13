@@ -1,7 +1,7 @@
 {
   "weapon": "ak47",
   "length_before": 1.0004,
-  "length_after": 0.87,
+  "length_after": 0.8704,
   "target_length": 0.87,
   "scale": 0.86964,
   "grip_along_axis": 0.3,
@@ -10,5 +10,8 @@
     0.0001,
     -0.174
   ],
+  "triangles_before": 279280,
+  "triangles_after": 5000,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/ak47.glb"
 }

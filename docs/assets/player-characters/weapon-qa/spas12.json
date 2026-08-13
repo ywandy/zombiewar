@@ -10,5 +10,8 @@
     -0.0012,
     -0.187
   ],
+  "triangles_before": 430488,
+  "triangles_after": 5000,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/spas12.glb"
 }

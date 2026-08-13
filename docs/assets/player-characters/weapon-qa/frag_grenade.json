@@ -10,5 +10,8 @@
     0.0002,
     -0.0002
   ],
+  "triangles_before": 966864,
+  "triangles_after": 5000,
+  "socket": "GroundSocket",
   "out": "assets/weapons/generated/frag_grenade.glb"
 }

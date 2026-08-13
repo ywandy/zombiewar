@@ -45,6 +45,10 @@ WEAPON_LENGTHS = {
 }
 
 # 握把在长轴上的相对位置（0 = 最后端，1 = 枪口）。原点落在这里，挂点才对得上手。
+TRIANGLE_BUDGET = 5000
+# 放置类武器用地面挂点而不是枪口挂点
+GROUND_SOCKET_WEAPONS = {"landmine", "fuel_barrel", "frag_grenade"}
+
 GRIP_ALONG_AXIS = {
     "hk45c": 0.35,
     "mp5": 0.30,
@@ -119,7 +123,44 @@ def main() -> None:
         ob.matrix_world = Matrix.Translation(-origin) @ ob.matrix_world
     bpy.context.view_layer.update()
 
+    # 4. 减面：main 的武器校验要求每件不超过 5000 三角面
+    tris_before = 0
+    for ob in meshes:
+        ob.data.calc_loop_triangles()
+        tris_before += len(ob.data.loop_triangles)
+    if tris_before > TRIANGLE_BUDGET:
+        for ob in meshes:
+            ob.data.calc_loop_triangles()
+            cur = len(ob.data.loop_triangles)
+            if cur <= 0:
+                continue
+            share = max(int(TRIANGLE_BUDGET * cur / tris_before), 32)
+            if cur <= share:
+                continue
+            bpy.context.view_layer.objects.active = ob
+            mod = ob.modifiers.new("Decimate", "DECIMATE")
+            mod.decimate_type = "COLLAPSE"
+            mod.ratio = max(share / cur, 0.002)
+            bpy.ops.object.modifier_apply(modifier=mod.name)
+    tris_after = 0
+    for ob in meshes:
+        ob.data.calc_loop_triangles()
+        tris_after += len(ob.data.loop_triangles)
+
+    # 5. 挂点：枪械要 MuzzleSocket（枪口，用于火光与曳光起点），地雷要 GroundSocket。
+    #    没有挂点，main 的武器表现系统会把火光挂在原点上，飘在枪身外面。
     lo, hi = bounds()
+    socket_name = "GroundSocket" if args.weapon in GROUND_SOCKET_WEAPONS else "MuzzleSocket"
+    socket = bpy.data.objects.new(socket_name, None)
+    socket.empty_display_size = 0.02
+    bpy.context.collection.objects.link(socket)
+    # 枪口在长轴正前端；地面挂点在最低处中心
+    socket.location = (
+        (0.0, 0.0, hi.z) if socket_name == "MuzzleSocket"
+        else ((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z)
+    )
+    bpy.context.view_layer.update()
+
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.export_scene.gltf(filepath=args.out, export_format="GLB")
 
@@ -131,6 +172,9 @@ def main() -> None:
         "scale": round(scale, 5),
         "grip_along_axis": grip_t,
         "origin_offset": [round(v, 4) for v in origin],
+        "triangles_before": tris_before,
+        "triangles_after": tris_after,
+        "socket": socket_name,
         "out": args.out,
     }
     print("###REPORT###" + json.dumps(report, ensure_ascii=False))

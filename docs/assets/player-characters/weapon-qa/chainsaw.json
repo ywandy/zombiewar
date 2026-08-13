@@ -1,7 +1,7 @@
 {
   "weapon": "chainsaw",
   "length_before": 0.9936,
-  "length_after": 0.75,
+  "length_after": 0.7502,
   "target_length": 0.75,
   "scale": 0.75486,
   "grip_along_axis": 0.2,
@@ -10,5 +10,8 @@
     0.1128,
     -0.2276
   ],
+  "triangles_before": 563878,
+  "triangles_after": 5000,
+  "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/chainsaw.glb"
 }
