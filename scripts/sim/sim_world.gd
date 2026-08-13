@@ -1225,6 +1225,7 @@ func apply_zombie_damage(
 	tick_hit_events.append({
 		"zombie_id": zombie_id[index],
 		"position": hit_position,
+		"zombie_position": zombie_position[index],
 		"height": hit_height,
 		"direction": direction,
 		"damage": float(applied) / float(HEALTH_SCALE),

@@ -5,11 +5,9 @@ class_name BloodImpact
 @export var minimum_intensity: float = 0.75
 @export var maximum_intensity: float = 1.35
 
-@onready var splat: Sprite3D = $Splat
 @onready var droplets: GPUParticles3D = $Droplets
 
-var remaining: float = 0.0
-var splat_start_scale := Vector3.ONE
+var remaining := 0.0
 var pooled := false
 
 func _ready() -> void:
@@ -33,14 +31,9 @@ func setup(hit_position: Vector3, shot_direction: Vector3, intensity: float = 1.
 			up_direction = Vector3.RIGHT
 		look_at(global_position + spray_direction, up_direction)
 
-	var resolved_intensity := clampf(intensity, minimum_intensity, maximum_intensity)
-	splat_start_scale = Vector3.ONE * resolved_intensity
-	splat.scale = splat_start_scale * 0.72
-	splat.rotation.z = randf_range(-PI, PI)
-	var splat_color := splat.modulate
-	splat_color.a = 0.94
-	splat.modulate = splat_color
-
+	# 强度仍限制在现有范围内，但粒子数量固定为少量 9 滴；强度只保留接口兼容。
+	var _resolved_intensity := clampf(intensity, minimum_intensity, maximum_intensity)
+	droplets.amount_ratio = 1.0
 	remaining = maxf(lifetime, 0.05)
 	if is_inside_tree():
 		droplets.restart()
@@ -75,12 +68,6 @@ func finish_render_warmup() -> void:
 
 func _process(delta: float) -> void:
 	remaining -= delta
-	var duration := maxf(lifetime, 0.05)
-	var progress := clampf(1.0 - remaining / duration, 0.0, 1.0)
-	splat.scale = splat_start_scale * lerpf(0.72, 1.28, progress)
-	var splat_color := splat.modulate
-	splat_color.a = 0.94 * (1.0 - progress)
-	splat.modulate = splat_color
 	if remaining <= 0.0:
 		if pooled:
 			deactivate()
@@ -88,7 +75,5 @@ func _process(delta: float) -> void:
 			queue_free()
 
 func _ensure_nodes() -> void:
-	if splat == null:
-		splat = get_node("Splat") as Sprite3D
 	if droplets == null:
 		droplets = get_node("Droplets") as GPUParticles3D

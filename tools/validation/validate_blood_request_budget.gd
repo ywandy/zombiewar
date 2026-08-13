@@ -59,8 +59,8 @@ func _test_queue_is_bounded(manager) -> void:
 	for index in range(flood):
 		manager.queue_hit_splat(
 			Vector3(float(index), 0.0, 0.0),
-			Vector3.FORWARD,
-			1.0
+			1.0,
+			false
 		)
 	_check(
 		"queue must stay bounded under a flood (%d pending after %d requests)" % [
@@ -119,11 +119,11 @@ func _peak_requests_per_shot() -> int:
 		if entry.get_extension() == "tres":
 			var definition = load(WEAPON_RESOURCE_DIRECTORY.path_join(entry))
 			if definition != null and definition is RangedWeaponDefinition:
-				# 一枪 = 弹丸数 × 每颗能穿透的目标数，每个被打到的目标一个命中血点，
-				# 打死的再加一滩尸血。多弹丸武器是这个峰值的主要来源。
+				# 一枪 = 弹丸数 × 每颗能穿透的目标数；每个目标只排一个脚下圆形血迹，
+				# 击杀强度通过同一请求的 killed 标记表达。
 				var targets: int = definition.max_penetration_count + 1
 				var pellets: int = definition.pellet_count
-				peak = maxi(peak, targets * pellets * 2)
+				peak = maxi(peak, targets * pellets)
 		entry = directory.get_next()
 	directory.list_dir_end()
 	return peak
