@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "tripo_view_order": ["front", "left", "back", "right"],
+  "character_budget_triangles": 30000,
+  "weapon_budget_triangles": 5000,
+  "bases": [
+    {"id":"male_base","sex":"male","views":{},"tripo":{},"qa":"pending"},
+    {"id":"female_base","sex":"female","views":{},"tripo":{},"qa":"pending"}
+  ],
+  "kits": [
+    {"id":"male_gunner_kit","character_id":"male_gunner","views":{},"tripo":{},"qa":"pending"},
+    {"id":"female_gunner_kit","character_id":"female_gunner","views":{},"tripo":{},"qa":"pending"},
+    {"id":"male_assault_kit","character_id":"male_assault","views":{},"tripo":{},"qa":"pending"},
+    {"id":"female_assault_kit","character_id":"female_assault","views":{},"tripo":{},"qa":"pending"},
+    {"id":"male_medic_kit","character_id":"male_medic","views":{},"tripo":{},"qa":"pending"},
+    {"id":"female_medic_kit","character_id":"female_medic","views":{},"tripo":{},"qa":"pending"},
+    {"id":"male_demolition_kit","character_id":"male_demolition","views":{},"tripo":{},"qa":"pending"},
+    {"id":"female_demolition_kit","character_id":"female_demolition","views":{},"tripo":{},"qa":"pending"},
+    {"id":"male_riot_kit","character_id":"male_riot","views":{},"tripo":{},"qa":"pending"},
+    {"id":"female_riot_kit","character_id":"female_riot","views":{},"tripo":{},"qa":"pending"}
+  ],
+  "characters": [
+    {"id":"male_gunner","sex":"male","class":"gunner","display_name":"男·机枪手","preview_weapon":"mp5","accent":"#C04A3D"},
+    {"id":"female_gunner","sex":"female","class":"gunner","display_name":"女·机枪手","preview_weapon":"mp5","accent":"#C66B55"},
+    {"id":"male_assault","sex":"male","class":"assault","display_name":"男·突击手","preview_weapon":"ak47","accent":"#D63B32"},
+    {"id":"female_assault","sex":"female","class":"assault","display_name":"女·突击手","preview_weapon":"ak47","accent":"#E25E70"},
+    {"id":"male_medic","sex":"male","class":"medic","display_name":"男·医疗兵","preview_weapon":"hk45c","accent":"#3188D8"},
+    {"id":"female_medic","sex":"female","class":"medic","display_name":"女·医疗兵","preview_weapon":"hk45c","accent":"#55A3E6"},
+    {"id":"male_demolition","sex":"male","class":"demolition","display_name":"男·爆破兵","preview_weapon":"rpg","accent":"#D68A2F"},
+    {"id":"female_demolition","sex":"female","class":"demolition","display_name":"女·爆破兵","preview_weapon":"rpg","accent":"#E2AA47"},
+    {"id":"male_riot","sex":"male","class":"riot","display_name":"男·防爆兵","preview_weapon":"tactical_knife","accent":"#3AA45B"},
+    {"id":"female_riot","sex":"female","class":"riot","display_name":"女·防爆兵","preview_weapon":"tactical_knife","accent":"#55BD72"}
+  ],
+  "weapons": [
+    {"id":"rpg","display_name":"RPG","gameplay_id":null},
+    {"id":"ak47","display_name":"AK-47","gameplay_id":"rifle"},
+    {"id":"m4a1","display_name":"M4A1 卡宾枪","gameplay_id":null},
+    {"id":"tactical_knife","display_name":"战术匕首","gameplay_id":"knife"},
+    {"id":"hk45c","display_name":"HK-45C 紧凑型战术手枪","gameplay_id":"pistol"},
+    {"id":"landmine","display_name":"地雷","gameplay_id":null},
+    {"id":"mp5","display_name":"MP-5 冲锋枪","gameplay_id":"smg"}
+  ]
+}
