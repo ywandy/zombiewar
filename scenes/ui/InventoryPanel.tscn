@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="1_script"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="2_font"]
@@ -19,6 +19,22 @@ content_margin_top = 16.0
 content_margin_right = 20.0
 content_margin_bottom = 16.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats"]
+bg_color = Color(0.05, 0.062, 0.066, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.3, 0.24, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+
 [node name="InventoryPanel" type="Control"]
 visible = false
 anchor_right = 1.0
@@ -36,10 +52,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -360.0
-offset_top = -260.0
-offset_right = 360.0
-offset_bottom = 260.0
+offset_left = -420.0
+offset_top = -280.0
+offset_right = 420.0
+offset_bottom = 280.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -62,5 +78,16 @@ theme_override_colors/font_color = Color(0.95, 0.66, 0.0, 1)
 text = "材料 0"
 horizontal_alignment = 1
 
-[node name="Sections" type="VBoxContainer" parent="Margin/Panel/VBox"]
+[node name="Content" type="HBoxContainer" parent="Margin/Panel/VBox"]
+theme_override_constants/separation = 16
+
+[node name="StatsPanel" type="PanelContainer" parent="Margin/Panel/VBox/Content"]
+custom_minimum_size = Vector2(200, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_stats")
+
+[node name="StatsBox" type="VBoxContainer" parent="Margin/Panel/VBox/Content/StatsPanel"]
+theme_override_constants/separation = 6
+
+[node name="Sections" type="VBoxContainer" parent="Margin/Panel/VBox/Content"]
+size_flags_horizontal = 3
 theme_override_constants/separation = 16
