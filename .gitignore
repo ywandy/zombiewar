@@ -22,3 +22,6 @@ docs/assets/player-characters/recolor-qa/*.png
 
 # 派生基体：由 derive_base_girth.py 从现有基体几何派生，可随时重跑
 assets/characters/derived/
+
+# Tripo 重建产物：可由 tripo_multiview.py 重跑，task_id 记录在 tripo-tasks.jsonl
+assets/generated_models/
