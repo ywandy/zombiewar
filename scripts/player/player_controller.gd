@@ -12,6 +12,9 @@ const RangedWeaponDefinition = preload(
 	"res://scripts/combat/weapons/ranged_weapon_definition.gd"
 )
 const PlayerInputStateScript = preload("res://scripts/input/player_input_state.gd")
+const CharacterVisualHostScript = preload(
+	"res://scripts/player/character_visual_host.gd"
+)
 const DEATH_VOICE_SOUNDS := [
 	preload("res://assets/sfx/boxhead/player_scream_1.mp3"),
 	preload("res://assets/sfx/boxhead/player_scream_2.mp3"),
@@ -127,7 +130,8 @@ func effective_passive_strength() -> float:
 ## _ensure_health_initialized() 用新上限创建。若在运行时替换角色（health 已建），
 ## 则重建 Health 并重连信号，保证血条与死亡回调不丢。
 func apply_character_definition(def: CharacterDefinition) -> void:
-	if def == null:
+	if def == null or def.model_scene == null:
+		push_error("PlayerController requires a character definition with model_scene")
 		return
 	character_definition = def
 	max_health = maxf(1.0, BASE_MAX_HEALTH + def.max_health_bonus)
@@ -143,6 +147,14 @@ func apply_character_definition(def: CharacterDefinition) -> void:
 	set_accent_color(def.accent_color)
 
 func _ready() -> void:
+	if character_definition == null or character_definition.model_scene == null:
+		push_error("PlayerController initialization stopped: character model is missing")
+		return
+	var visual_host := visual_root as CharacterVisualHostScript
+	if visual_host != null:
+		visual_host.install(
+			character_definition.model_scene if character_definition != null else null
+		)
 	_ensure_health_initialized()
 	_sync_health_bar(false)
 	health_bar_initialized = true
@@ -248,6 +260,20 @@ func receive_ammo_pickup(item_id: StringName, amount: int) -> bool:
 	if defeated:
 		return false
 	return equipment.add_ammo(item_id, amount) > 0
+
+## ---- 模拟层背包镜像 ----
+## 单向：模拟层 → 装备节点。玩家侧不往回写，见 EquipmentController 的说明。
+func bind_inventory_profiles(profiles: Array[Dictionary]) -> void:
+	equipment.bind_inventory_profiles(profiles)
+
+func apply_inventory_snapshot(
+	slot_profiles: PackedInt32Array,
+	slot_amounts: PackedInt32Array
+) -> void:
+	equipment.apply_inventory_snapshot(slot_profiles, slot_amounts)
+
+func starting_inventory_entries() -> Array[Dictionary]:
+	return equipment.starting_inventory_entries()
 
 func _physics_process(delta: float) -> void:
 	last_input_state = (

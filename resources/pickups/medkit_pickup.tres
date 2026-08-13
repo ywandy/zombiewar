@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PickupDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/pickup_definition.gd" id="1_pickup_definition"]
+
+[resource]
+script = ExtResource("1_pickup_definition")
+reward_mode = 3
+item_id = &"medkit"
+amount = 1
+auto_equip = false
+display_name = "急救包"
+marker_color = Color(0.95, 0.25, 0.28, 1)
+heal_amount = 40.0

@@ -22,7 +22,7 @@ func _run() -> void:
 	root.add_child(client)
 	await process_frame
 
-	client.connect_to_room("ABCDEF", "token-1", "阿波", &"male_medic")
+	client.connect_to_room("ABCDEF", "token-1", "阿波", &"female_medic")
 	var payload: Dictionary = client.join_payload()
 	_expect(
 		int(payload.get("protocol_version", -1)) == LobbyProtocolScript.PROTOCOL_VERSION,
@@ -30,7 +30,7 @@ func _run() -> void:
 		failures
 	)
 	_expect(
-		String(payload.get("character_id", "")) == "male_medic",
+		String(payload.get("character_id", "")) == "female_medic",
 		"握手必须带入房时选定的角色 id，实际 %s" % String(payload.get("character_id", "")),
 		failures
 	)
@@ -105,10 +105,10 @@ func _run() -> void:
 	)
 
 	# 未连接时发选择请求必须是空操作，而不是崩溃。
-	client.select_character(&"male_riot")
+	client.select_character(&"female_riot")
 	client.select_map(&"demo")
 	_expect(
-		client.character_id == &"male_riot",
+		client.character_id == &"female_riot",
 		"select_character 必须记住本机选择，便于重连时随握手重发",
 		failures
 	)

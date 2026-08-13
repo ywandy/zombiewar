@@ -1,4 +1,4 @@
-extends Node3D
+extends Control
 class_name MapSelection
 
 const CATALOG_PATH := "res://resources/maps/catalogs/map_catalog.tres"
@@ -64,11 +64,7 @@ func _on_confirm_button_pressed() -> void:
 		error_label.show()
 		return
 	GameSession.select_map_scene(scene_path)
-	if GameSession.map_selection_mode == GameSessionState.Mode.SINGLE:
-		GameSession.configure_single()
-		get_tree().change_scene_to_file(scene_path)
-	else:
-		get_tree().change_scene_to_file(LOCAL_LOBBY_PATH)
+	get_tree().change_scene_to_file(LOCAL_LOBBY_PATH)
 
 func _on_back_button_pressed() -> void:
 	GameSession.clear()
@@ -83,6 +79,7 @@ func _on_next_button_pressed() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_echo():
 		return
+	var viewport := get_viewport()
 	if event.is_action_pressed("ui_left"):
 		_select_previous()
 	elif event.is_action_pressed("ui_right"):
@@ -93,7 +90,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_on_back_button_pressed()
 	else:
 		return
-	get_viewport().set_input_as_handled()
+	viewport.set_input_as_handled()
 
 func _is_joy_button_pressed(event: InputEvent, button: JoyButton) -> bool:
 	var joy_button := event as InputEventJoypadButton

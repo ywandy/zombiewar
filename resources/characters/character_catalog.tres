@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="CharacterCatalog" load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/character/character_catalog.gd" id="1_catalog"]
-[ext_resource type="Resource" path="res://resources/characters/male_gunner.tres" id="2_male_gunner"]
-[ext_resource type="Resource" path="res://resources/characters/female_gunner.tres" id="3_female_gunner"]
-[ext_resource type="Resource" path="res://resources/characters/male_assault.tres" id="4_male_assault"]
-[ext_resource type="Resource" path="res://resources/characters/female_assault.tres" id="5_female_assault"]
+[ext_resource type="Resource" path="res://resources/characters/male_assault.tres" id="2_male_assault"]
+[ext_resource type="Resource" path="res://resources/characters/female_assault.tres" id="3_female_assault"]
+[ext_resource type="Resource" path="res://resources/characters/male_gunner.tres" id="4_male_gunner"]
+[ext_resource type="Resource" path="res://resources/characters/female_gunner.tres" id="5_female_gunner"]
 [ext_resource type="Resource" path="res://resources/characters/male_medic.tres" id="6_male_medic"]
 [ext_resource type="Resource" path="res://resources/characters/female_medic.tres" id="7_female_medic"]
 [ext_resource type="Resource" path="res://resources/characters/male_demolition.tres" id="8_male_demolition"]
@@ -14,4 +14,4 @@
 
 [resource]
 script = ExtResource("1_catalog")
-entries = [ExtResource("2_male_gunner"), ExtResource("3_female_gunner"), ExtResource("4_male_assault"), ExtResource("5_female_assault"), ExtResource("6_male_medic"), ExtResource("7_female_medic"), ExtResource("8_male_demolition"), ExtResource("9_female_demolition"), ExtResource("10_male_riot"), ExtResource("11_female_riot")]
+entries = [ExtResource("2_male_assault"), ExtResource("3_female_assault"), ExtResource("4_male_gunner"), ExtResource("5_female_gunner"), ExtResource("6_male_medic"), ExtResource("7_female_medic"), ExtResource("8_male_demolition"), ExtResource("9_female_demolition"), ExtResource("10_male_riot"), ExtResource("11_female_riot")]

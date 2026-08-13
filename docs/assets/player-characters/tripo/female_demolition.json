@@ -1,0 +1,26 @@
+{
+  "id": "female_demolition",
+  "kind": "kits",
+  "task_id": "41f65d55-0880-4a63-b0be-535aacb8cb32",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/41f65d55-0880-4a63-b0be-535aacb8cb32/tripo_pbr_model_41f65d55-0880-4a63-b0be-535aacb8cb32.glb?auth_key=1786665600-b2f16c956607ab206547091a5118e611-0-45b786fcd76a8a90cf5e4fd7c22c7748",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/41f65d55-0880-4a63-b0be-535aacb8cb32/legacy_mesh.webp?auth_key=1786665600-271a89abafe7a8ae4cf3c86309c23bf1-0-ef2a8b5ea0c502f21c27ccfad13de9f7",
+  "local_model": "assets/generated_models/tripo/kits/female_demolition/female_demolition_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/female_demolition/female_demolition_preview.webp",
+  "model_bytes": 2876232
+}

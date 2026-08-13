@@ -14,6 +14,7 @@ import {
   CONTENT_ID_MAX_LENGTH,
   EDGE_BITS,
   EVENT_MELEE,
+  EVENT_PLACE_ITEM,
   EVENT_SHOT,
   MAX_MERGED_EVENTS,
   PROTOCOL_VERSION,
@@ -51,6 +52,7 @@ describe('protocol constants', () => {
     ['BIT_ALIVE', BIT_ALIVE],
     ['BIT_PRESENT', BIT_PRESENT],
     ['EVENT_SHOT', EVENT_SHOT],
+    ['EVENT_PLACE_ITEM', EVENT_PLACE_ITEM],
     ['CONTENT_ID_MAX_LENGTH', CONTENT_ID_MAX_LENGTH],
   ])('%s matches the Godot client', (name, expected) => {
     expect(readGdConstant(source, name)).toBe(expected);
@@ -103,6 +105,15 @@ describe('parseCommand', () => {
     // else's, which is a desync with extra steps.
     const parsed = parseCommand({ ...valid, e: [{ k: 99 }, { k: EVENT_SHOT, w: 1 }] });
     expect(parsed?.e).toEqual([{ k: EVENT_SHOT, w: 1 }]);
+  });
+
+  it('carries a placement cell through untouched, negatives included', () => {
+    // The cell is the whole payload of a placement: drop `ci`/`cj` from the
+    // copied-key list and every barrel silently lands on the grid origin
+    // instead of in front of the player -- on every client at once, so no
+    // desync fires to point at it.
+    const place = { k: EVENT_PLACE_ITEM, pi: 5, ci: -12, cj: 7 };
+    expect(parseCommand({ ...valid, e: [place] })?.e).toEqual([place]);
   });
 
   it('ignores an over-long hash', () => {

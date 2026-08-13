@@ -71,9 +71,9 @@ func _run() -> void:
 			"res://scripts/menu/map_selection.gd"
 		)
 		_expect(
-			map_selection_source.contains("LOCAL_LOBBY_PATH") and
-			map_selection_source.contains("GameSession.map_selection_mode"),
-			"MapSelection must route local multiplayer to the device join lobby",
+			map_selection_source.contains("change_scene_to_file(LOCAL_LOBBY_PATH)") and
+			not map_selection_source.contains("GameSession.configure_single()"),
+			"MapSelection must route both local modes to the character lobby",
 			failures
 		)
 		map_selection.free()

@@ -1,7 +1,6 @@
 [gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_controller"]
-[ext_resource type="PackedScene" path="res://assets/characters/Characters_Lis_SingleWeapon.gltf" id="2_model"]
 [ext_resource type="Script" path="res://scripts/player/equipment_controller.gd" id="6_equipment"]
 [ext_resource type="PackedScene" path="res://scenes/weapons/Pistol.tscn" id="7_pistol"]
 [ext_resource type="PackedScene" path="res://scenes/weapons/Smg.tscn" id="8_smg"]
@@ -13,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/player/equipment/OilBarrelEquipment.tscn" id="12_oil_barrel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PlayerEquipmentLabel.tscn" id="13_equipment_label"]
 [ext_resource type="AudioStream" path="res://assets/sfx/boxhead/creature_fall.mp3" id="14_fall_audio"]
+[ext_resource type="Script" path="res://scripts/player/character_visual_host.gd" id="17_visual_host"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.45
@@ -73,8 +73,7 @@ mesh = SubResource("TorusMesh_accent")
 
 [node name="VisualRoot" type="Node3D" parent="."]
 rotation_degrees = Vector3(0, 180, 0)
-
-[node name="Characters_Lis_SingleWeapon" parent="VisualRoot" instance=ExtResource("2_model")]
+script = ExtResource("17_visual_host")
 
 [node name="FunctionalRayOrigin" type="Marker3D" parent="."]
 position = Vector3(0, 1.1, 0)

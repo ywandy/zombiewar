@@ -44,25 +44,24 @@ func _test_reused_ground_splat_keeps_its_material(
 	failures: Array[String]
 ) -> void:
 	var splat := GroundBloodSplatScene.instantiate() as GroundBloodSplat
-	var texture := (splat.material_override as StandardMaterial3D).albedo_texture
 	splat.setup(
 		Vector3.ZERO,
 		Vector3.UP,
-		Vector2.ONE,
+		Vector2.ONE * 1.8,
 		0.0,
-		Color(0.4, 0.01, 0.02, 0.9),
-		texture,
-		0.4
+		Color(0.42, 0.005, 0.01, 0.96),
+		Color(0.58, 0.012, 0.018, 0.26),
+		0.30
 	)
 	var first_material_id := splat.material_override.get_instance_id()
 	splat.setup(
 		Vector3.ONE,
 		Vector3.UP,
-		Vector2.ONE * 1.2,
-		0.2,
-		Color(0.35, 0.01, 0.02, 0.92),
-		texture,
-		0.5
+		Vector2.ONE * 2.0,
+		0.0,
+		Color(0.38, 0.004, 0.008, 0.98),
+		Color(0.55, 0.01, 0.016, 0.30),
+		0.30
 	)
 	_expect(
 		splat.material_override.get_instance_id() == first_material_id,
@@ -91,8 +90,8 @@ func _test_ground_blood_queue_respects_frame_budget(
 	for request_index in range(5):
 		manager.queue_hit_splat(
 			Vector3(request_index, 0.0, 0.0),
-			Vector3.FORWARD,
-			1.0
+			1.0,
+			false
 		)
 	manager.call("_process", 0.0)
 	_expect(
@@ -180,11 +179,11 @@ func _test_demo_map_queues_ground_blood_requests(
 		failures
 	)
 	arena._on_sim_hit_event(_hit_event(true))
-	# 一次普通命中排一条血迹，一次击杀再多排一滩血泊：共 3 条。
+	# 普通命中和击杀各排一条脚底圆形血迹，共 2 条。
 	# 断言的是「排队」而不是「立即生成」——立即生成会在尸潮里把一帧顶爆。
 	_expect(
-		manager.get_pending_request_count() == pending_requests_before + 3,
-		"GameplayArena must queue hit and death blood work for later frames",
+		manager.get_pending_request_count() == pending_requests_before + 2,
+		"GameplayArena must queue one foot-centered blood pool per hit",
 		failures
 	)
 	arena.queue_free()
@@ -194,6 +193,7 @@ func _hit_event(killed: bool) -> Dictionary:
 	return {
 		"zombie_id": 1,
 		"position": Vector2(1.0, -1.0),
+		"zombie_position": Vector2(1.0, -1.0),
 		"height": 1.1,
 		"direction": Vector2.RIGHT,
 		"damage": 25.0,

@@ -1,0 +1,26 @@
+{
+  "id": "female_gunner",
+  "kind": "kits",
+  "task_id": "d6be34b3-0888-4830-adcb-585fdd4e5715",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d6be34b3-0888-4830-adcb-585fdd4e5715/tripo_pbr_model_d6be34b3-0888-4830-adcb-585fdd4e5715.glb?auth_key=1786665600-0593d31dd0313472388cfa43d1447e2c-0-47ddef0b933af97497b3d368cc94de68",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d6be34b3-0888-4830-adcb-585fdd4e5715/legacy_mesh.webp?auth_key=1786665600-ba69d8a70c5a3cac135a1680135862f1-0-15dc548b53834387c6d6e12c509c00bc",
+  "local_model": "assets/generated_models/tripo/kits/female_gunner/female_gunner_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/female_gunner/female_gunner_preview.webp",
+  "model_bytes": 2432376
+}

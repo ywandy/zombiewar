@@ -36,6 +36,17 @@ func _run() -> void:
 		"font coverage copy present",
 		failures
 	)
+	var source := FileAccess.get_file_as_string("res://scripts/menu/map_selection.gd")
+	_expect(
+		source.contains("change_scene_to_file(LOCAL_LOBBY_PATH)"),
+		"both local modes must continue from map selection to the character lobby",
+		failures
+	)
+	_expect(
+		not source.contains("GameSession.configure_single()"),
+		"map selection must not configure single gameplay before character choice",
+		failures
+	)
 	selection.queue_free()
 	await process_frame
 	_finish(failures)

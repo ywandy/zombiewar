@@ -2,6 +2,9 @@ extends Node
 class_name GameSessionState
 
 const ContentCatalogsScript = preload("res://scripts/gameplay/content_catalogs.gd")
+const LocalPlayerDescriptorScript = preload(
+	"res://scripts/input/local_player_descriptor.gd"
+)
 
 enum Mode {
 	SINGLE,
@@ -39,9 +42,13 @@ func select_map_scene(scene_path: String) -> void:
 func selected_game_scene_path(fallback: String) -> String:
 	return fallback if selected_map_scene_path.is_empty() else selected_map_scene_path
 
-func configure_single() -> void:
+func configure_single(player = null) -> void:
 	mode = Mode.SINGLE
-	local_players.clear()
+	var resolved = player
+	if resolved == null:
+		resolved = LocalPlayerDescriptorScript.new()
+		resolved.character_id = ContentCatalogsScript.characters().default_id()
+	local_players = [resolved]
 	map_id = ContentCatalogsScript.maps().default_id()
 	last_error = ""
 
@@ -63,5 +70,6 @@ func configure_online(players: Array, selected_map_id: StringName) -> void:
 
 func clear() -> void:
 	configure_single()
+	local_players.clear()
 	map_selection_mode = Mode.SINGLE
 	selected_map_scene_path = ""

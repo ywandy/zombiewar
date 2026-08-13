@@ -114,4 +114,9 @@ static func derive_profile(
 			float(penetration_coef_permille) / 1000.0, 0.0, 1.0
 		),
 		"pellet_count": clampi(pellet_count, 1, 32),
+		# 暂时没有改装件影响暴击，但这两项**必须原样带出来**：这个函数是重新
+		# 构造字典而不是改副本，漏掉的键会在玩家捡到第一个改装件的那一刻从
+		# profile 里消失，现象是「一开局能暴击，捡了个配件之后再也不暴了」。
+		"crit_chance_per_10000": int(base.get("crit_chance_per_10000", 0)),
+		"crit_multiplier_permille": int(base.get("crit_multiplier_permille", 1000)),
 	}

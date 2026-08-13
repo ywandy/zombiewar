@@ -8,7 +8,7 @@ profile_id = &"weapon_knife"
 display_name = "匕首"
 description = "近战武器"
 weapon_id = &"knife"
-icon_region = Rect2(0, 0, 64, 64)
+icon_region = Rect2(256, 0, 64, 64)
 
 [sub_resource type="Resource" id="InventoryProfile_pistol"]
 script = ExtResource("1_inventory_profile")
@@ -16,7 +16,7 @@ profile_id = &"weapon_pistol"
 display_name = "手枪"
 description = "无限弹药的标准配枪"
 weapon_id = &"pistol"
-icon_region = Rect2(64, 0, 64, 64)
+icon_region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="Resource" id="InventoryProfile_smg"]
 script = ExtResource("1_inventory_profile")
@@ -24,7 +24,7 @@ profile_id = &"weapon_smg"
 display_name = "冲锋枪"
 description = "高速自动武器"
 weapon_id = &"smg"
-icon_region = Rect2(128, 0, 64, 64)
+icon_region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="Resource" id="InventoryProfile_shotgun"]
 script = ExtResource("1_inventory_profile")
@@ -32,7 +32,7 @@ profile_id = &"weapon_shotgun"
 display_name = "散弹枪"
 description = "近距离高爆发武器"
 weapon_id = &"shotgun"
-icon_region = Rect2(192, 0, 64, 64)
+icon_region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="Resource" id="InventoryProfile_rifle"]
 script = ExtResource("1_inventory_profile")
@@ -40,7 +40,7 @@ profile_id = &"weapon_rifle"
 display_name = "步枪"
 description = "中远距离武器"
 weapon_id = &"rifle"
-icon_region = Rect2(256, 0, 64, 64)
+icon_region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="Resource" id="InventoryProfile_pistol_ammo"]
 script = ExtResource("1_inventory_profile")

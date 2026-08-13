@@ -386,6 +386,10 @@ func _compile_inventory_profiles(
 	indices.fill(-1)
 	for reward_profile_index in range(sorted_rewards.size()):
 		var reward := sorted_rewards[reward_profile_index]
+		# 补血是即时效果，不进背包也就没有 inventory_key，留 -1 由 SimWorld 的
+		# reward_heal_amount 表接管（见 SimWorld._plan_reward_acceptance）。
+		if not reward.needs_inventory_profile():
+			continue
 		var key := reward.get_inventory_key()
 		if key.is_empty() or not profile_indices_by_id.has(key):
 			errors.append(

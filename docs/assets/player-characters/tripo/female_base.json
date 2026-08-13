@@ -1,0 +1,26 @@
+{
+  "id": "female_base",
+  "kind": "bases",
+  "task_id": "83381270-5a8f-4583-95c0-3bd3d5647020",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 18000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/83381270-5a8f-4583-95c0-3bd3d5647020/tripo_pbr_model_83381270-5a8f-4583-95c0-3bd3d5647020.glb?auth_key=1786665600-c531ec042da5657148bd206f1dfd1a75-0-0da6c8f5d6fe8a325c8b258ed89b7a7c",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/83381270-5a8f-4583-95c0-3bd3d5647020/legacy_mesh.webp?auth_key=1786665600-afc3e319b0c2e7d37a9ced7a0fef6c58-0-ee3bebc7f82faf06ec315d007a274cd5",
+  "local_model": "assets/generated_models/tripo/bases/female_base/female_base_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/bases/female_base/female_base_preview.webp",
+  "model_bytes": 2550380
+}

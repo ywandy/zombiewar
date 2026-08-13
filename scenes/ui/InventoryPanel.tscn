@@ -1,93 +1,250 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="1_script"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/ui/backpack/frame_outer.png" id="3_frame"]
+[ext_resource type="Texture2D" path="res://assets/ui/backpack/title_banner_blank.png" id="4_banner"]
+[ext_resource type="Texture2D" path="res://assets/ui/backpack/tag_paper.png" id="5_tag"]
+[ext_resource type="Texture2D" path="res://assets/ui/backpack/close_button.png" id="6_close"]
+[ext_resource type="Texture2D" path="res://assets/ui/backpack/name_card.png" id="7_namecard"]
+[ext_resource type="Texture2D" path="res://assets/ui/backpack/stats_frame.png" id="8_stats"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inventory"]
-bg_color = Color(0.035, 0.043, 0.045, 0.98)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.72, 0.2, 0.14, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-content_margin_left = 20.0
-content_margin_top = 16.0
-content_margin_right = 20.0
-content_margin_bottom = 16.0
+[sub_resource type="Theme" id="theme_inventory"]
+default_font = ExtResource("2_font")
+default_font_size = 16
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stats"]
-bg_color = Color(0.05, 0.062, 0.066, 0.9)
+[sub_resource type="StyleBoxFlat" id="style_detail"]
+bg_color = Color(0.035, 0.037, 0.043, 0.72)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.25, 0.3, 0.24, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-content_margin_left = 12.0
-content_margin_top = 10.0
-content_margin_right = 12.0
-content_margin_bottom = 10.0
+border_color = Color(0.36, 0.26, 0.16, 0.75)
+content_margin_left = 18.0
+content_margin_top = 12.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
 
 [node name="InventoryPanel" type="Control"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("theme_inventory")
 script = ExtResource("1_script")
 
 [node name="Scrim" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0, 0, 0, 0.72)
+color = Color(0.008, 0.008, 0.012, 0.8)
 
-[node name="Margin" type="MarginContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -280.0
-offset_right = 420.0
-offset_bottom = 280.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Interior" type="ColorRect" parent="."]
+anchor_left = 0.065625
+anchor_top = 0.098611
+anchor_right = 0.934375
+anchor_bottom = 0.900278
+mouse_filter = 2
+color = Color(0.043, 0.045, 0.052, 0.3)
 
-[node name="Panel" type="PanelContainer" parent="Margin"]
-theme_override_styles/panel = SubResource("StyleBoxFlat_inventory")
+[node name="Frame" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("3_frame")
+expand_mode = 1
 
-[node name="VBox" type="VBoxContainer" parent="Margin/Panel"]
+[node name="TitleBanner" type="TextureRect" parent="."]
+anchor_left = 0.360938
+anchor_top = 0.005556
+anchor_right = 0.639062
+anchor_bottom = 0.165278
+mouse_filter = 2
+texture = ExtResource("4_banner")
+expand_mode = 1
 
-[node name="TitleLabel" type="Label" parent="Margin/Panel/VBox"]
+[node name="TitleLabel" type="Label" parent="TitleBanner"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -2.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.9, 0.85, 1)
+theme_override_colors/font_shadow_color = Color(0.29, 0.03, 0.02, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 26
-theme_override_colors/font_color = Color(0.95, 0.93, 0.89, 1)
+theme_override_font_sizes/font_size = 42
 text = "背包"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="MaterialLabel" type="Label" parent="Margin/Panel/VBox"]
+[node name="MaterialTag" type="TextureRect" parent="."]
+anchor_left = 0.428125
+anchor_top = 0.155556
+anchor_right = 0.571875
+anchor_bottom = 0.236111
+mouse_filter = 2
+texture = ExtResource("5_tag")
+expand_mode = 1
+
+[node name="MaterialLabel" type="Label" parent="MaterialTag"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.16, 0.13, 0.11, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.95, 0.66, 0.0, 1)
 text = "材料 0"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Content" type="HBoxContainer" parent="Margin/Panel/VBox"]
-theme_override_constants/separation = 16
+[node name="CloseButton" type="TextureButton" parent="."]
+anchor_left = 0.871875
+anchor_top = 0.145833
+anchor_right = 0.907813
+anchor_bottom = 0.209722
+texture_normal = ExtResource("6_close")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="StatsPanel" type="PanelContainer" parent="Margin/Panel/VBox/Content"]
-custom_minimum_size = Vector2(200, 0)
-theme_override_styles/panel = SubResource("StyleBoxFlat_stats")
+[node name="NameCard" type="TextureRect" parent="."]
+anchor_left = 0.078125
+anchor_top = 0.161111
+anchor_right = 0.3125
+anchor_bottom = 0.272222
+mouse_filter = 2
+texture = ExtResource("7_namecard")
+expand_mode = 1
 
-[node name="StatsBox" type="VBoxContainer" parent="Margin/Panel/VBox/Content/StatsPanel"]
+[node name="Accent" type="ColorRect" parent="NameCard"]
+anchor_left = 0.07
+anchor_top = 0.5
+anchor_right = 0.07
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 11.0
+rotation = 0.785398
+pivot_offset = Vector2(11, 11)
+mouse_filter = 2
+color = Color(0.84, 0.23, 0.2, 1)
+
+[node name="NameLabel" type="Label" parent="NameCard"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 44.0
+offset_top = -17.0
+offset_right = -96.0
+offset_bottom = 17.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.93, 0.91, 0.86, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 21
+text = "幸存者"
+vertical_alignment = 1
+clip_text = true
+
+[node name="Portrait" type="TextureRect" parent="NameCard"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -104.0
+offset_top = -104.0
+offset_right = -2.0
+offset_bottom = -2.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StatsPanel" type="TextureRect" parent="."]
+anchor_left = 0.078125
+anchor_top = 0.286111
+anchor_right = 0.3125
+anchor_bottom = 0.827778
+mouse_filter = 2
+texture = ExtResource("8_stats")
+expand_mode = 1
+
+[node name="StatsBox" type="VBoxContainer" parent="StatsPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = 24.0
+offset_right = -26.0
+offset_bottom = -24.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="TabRow" type="HBoxContainer" parent="."]
+anchor_left = 0.335938
+anchor_top = 0.236111
+anchor_right = 0.929688
+anchor_bottom = 0.288889
+theme_override_constants/separation = 10
+
+[node name="TabLine" type="ColorRect" parent="."]
+anchor_left = 0.335938
+anchor_top = 0.294444
+anchor_right = 0.929688
+anchor_bottom = 0.297222
+mouse_filter = 2
+color = Color(0.45, 0.12, 0.08, 0.85)
+
+[node name="Grid" type="GridContainer" parent="."]
+anchor_left = 0.335938
+anchor_top = 0.313889
+anchor_right = 0.928125
+anchor_bottom = 0.655556
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 6
+
+[node name="Detail" type="PanelContainer" parent="."]
+anchor_left = 0.335938
+anchor_top = 0.680556
+anchor_right = 0.928125
+anchor_bottom = 0.833333
+mouse_filter = 2
+theme_override_styles/panel = SubResource("style_detail")
+
+[node name="DetailBox" type="VBoxContainer" parent="Detail"]
+mouse_filter = 2
 theme_override_constants/separation = 6
 
-[node name="Sections" type="VBoxContainer" parent="Margin/Panel/VBox/Content"]
-size_flags_horizontal = 3
-theme_override_constants/separation = 16
+[node name="DetailName" type="Label" parent="Detail/DetailBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.68, 0.24, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 20
+text = "物品详情"
+
+[node name="DetailDesc" type="Label" parent="Detail/DetailBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.68, 0.66, 0.61, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 15
+text = "把鼠标移到格子上查看物品"
+autowrap_mode = 2
+
+[node name="HintLabel" type="Label" parent="."]
+anchor_left = 0.09
+anchor_top = 0.841667
+anchor_right = 0.928125
+anchor_bottom = 0.886111
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.62, 0.6, 0.55, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 15
+text = "点击上方分类切换 / B 键或右上角关闭背包"
+vertical_alignment = 1

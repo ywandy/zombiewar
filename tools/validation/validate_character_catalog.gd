@@ -14,7 +14,21 @@ extends SceneTree
 const ContentCatalogsScript = preload("res://scripts/gameplay/content_catalogs.gd")
 const LobbyProtocolScript = preload("res://scripts/net/lobby_protocol.gd")
 
-const MINIMUM_CHARACTER_COUNT := 4
+const EXPECTED_CHARACTER_IDS: Array[StringName] = [
+	&"male_assault",
+	&"female_assault",
+	&"male_gunner",
+	&"female_gunner",
+	&"male_medic",
+	&"female_medic",
+	&"male_demolition",
+	&"female_demolition",
+	&"male_riot",
+	&"female_riot",
+]
+const RETIRED_CHARACTER_IDS: Array[StringName] = [
+	&"survivor_red", &"survivor_blue", &"survivor_amber", &"survivor_green",
+]
 
 ## 允许的被动 id。与 character_definition.gd 的注释保持一致。
 const VALID_PASSIVE_IDS := [&"", &"suppression", &"fortify", &"medic_aura", &"blast_armor"]
@@ -33,9 +47,9 @@ func _run() -> void:
 		return
 
 	_expect(
-		catalog.entries.size() >= MINIMUM_CHARACTER_COUNT,
-		"角色目录至少要有 %d 个角色，实际 %d" % [
-			MINIMUM_CHARACTER_COUNT, catalog.entries.size()
+		catalog.entries.size() == EXPECTED_CHARACTER_IDS.size(),
+		"角色目录必须恰好有 %d 个角色，实际 %d" % [
+			EXPECTED_CHARACTER_IDS.size(), catalog.entries.size()
 		],
 		failures
 	)
@@ -61,6 +75,21 @@ func _run() -> void:
 			"角色 %s 缺少显示名" % id,
 			failures
 		)
+		_expect(
+			definition.model_scene != null,
+			"角色 %s 缺少 model_scene" % id,
+			failures
+		)
+		if definition.model_scene != null:
+			_expect(
+				definition.model_scene.resource_path.begins_with(
+					"res://assets/characters/generated/"
+				),
+				"角色 %s 的模型必须来自 assets/characters/generated：%s" % [
+					id, definition.model_scene.resource_path
+				],
+				failures
+			)
 		# 配色是四个人在场上唯一的区分手段，撞色等于没做区分。
 		var color_key := "%d_%d_%d" % [
 			roundi(definition.accent_color.r * 255.0),
@@ -101,6 +130,19 @@ func _run() -> void:
 			"角色 %s 的 signature_weapon_id '%s' 不是已知武器" % [
 				id, definition.signature_weapon_id
 			],
+			failures
+		)
+
+	var actual_ids := catalog.ids()
+	_expect(
+		actual_ids == EXPECTED_CHARACTER_IDS,
+		"角色目录顺序必须为 %s，实际 %s" % [EXPECTED_CHARACTER_IDS, actual_ids],
+		failures
+	)
+	for retired_id in RETIRED_CHARACTER_IDS:
+		_expect(
+			catalog.get_by_id(retired_id) == null,
+			"退役角色 id %s 必须返回 null" % retired_id,
 			failures
 		)
 

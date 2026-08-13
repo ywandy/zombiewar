@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="RangedWeaponDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="RangedWeaponDefinition" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/combat/weapons/ranged_weapon_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://assets/weapons/generated/m4a1.glb" id="2_visual"]
 
 [resource]
 script = ExtResource("1_definition")
@@ -15,9 +16,11 @@ spread_increase_per_shot_degrees = 2.0
 spread_recovery_degrees_per_second = 6.0
 weapon_id = &"shotgun"
 display_name = "散弹枪"
-visual_node_name = &"Shotgun"
+visual_scene = ExtResource("2_visual")
 attacks_per_second = 1.2
 damage = 16.0
+crit_chance_percent = 12.0
+crit_multiplier = 2.0
 idle_animation = &"Idle_Gun"
 run_animation = &"Run_Gun"
 visual_recoil_kick = 0.22

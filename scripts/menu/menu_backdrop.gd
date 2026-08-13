@@ -1,5 +1,11 @@
 extends Node3D
 
+const WeaponVisualBindingScript = preload(
+	"res://scripts/combat/weapons/weapon_visual_binding.gd"
+)
+const ContentCatalogsScript = preload("res://scripts/gameplay/content_catalogs.gd")
+const DISPLAY_WEAPON_DEFINITION = preload("res://resources/weapons/smg.tres")
+
 ## The menu backdrop is a living diorama: the camera never stops drifting, the
 ## red warning light sweeps and breathes like an alarm state, and ash motes rise
 ## through the frame. All of it is cheap ambient motion so the menu feels alive
@@ -14,13 +20,37 @@ var elapsed := 0.0
 var base_camera_yaw := 0.0
 var base_light_energy := 6.2
 var base_fill_energy := 3.0
+var player_weapon_binding: WeaponVisualBinding
 
 func _ready() -> void:
 	base_camera_yaw = camera_rig.rotation.y
 	camera.look_at(Vector3(0.0, 1.35, -1.5), Vector3.UP)
-	_play_model_animation($SetDressing/PlayerHero, &"Idle_Gun")
+	_install_player_hero()
 	_play_model_animation($SetDressing/ZombieBasic, &"Walk")
 	_play_model_animation($SetDressing/ZombieChubby, &"Idle_Attack")
+
+func _install_player_hero() -> void:
+	var catalog = ContentCatalogsScript.characters()
+	if catalog == null:
+		push_error("Menu backdrop character catalog is unavailable")
+		return
+	var definition = catalog.get_by_id(catalog.default_id())
+	if definition == null or definition.model_scene == null:
+		push_error("Menu backdrop default character model is unavailable")
+		return
+	var character_model := definition.model_scene.instantiate() as Node3D
+	if character_model == null:
+		push_error("Menu backdrop default character model could not instantiate")
+		return
+	character_model.name = "CharacterModel"
+	$SetDressing/PlayerHero.add_child(character_model)
+	player_weapon_binding = WeaponVisualBindingScript.new()
+	player_weapon_binding.bind(
+		character_model,
+		DISPLAY_WEAPON_DEFINITION.visual_scene,
+		DISPLAY_WEAPON_DEFINITION.visual_transform
+	)
+	_play_model_animation(character_model, &"Idle_Gun")
 
 func _process(delta: float) -> void:
 	elapsed += delta

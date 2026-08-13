@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: orthographic multi-view source art for image-to-3D, isolated modular character kit
+Input images: Image 1 is the game art-direction reference only. Image 2 is the approved male base and is the authoritative 4.5-head A-pose registration, scale, color, line weight, and material reference.
+Primary request: create one male assault-class modular equipment kit as a separated-parts orthographic layout registered to the invisible body from Image 2. This is not a complete person and contains no base body.
+Parts, exactly once each: assault head-and-face shell with short angular hair and a restrained dark red headband; medium angular chest rig; left and right elbow guard; compact tactical backpack; left and right waist pouch; left and right knee pad. Arrange every part at its natural front-view location around an invisible 4.5-head A-pose body, with visible clear air gaps between all parts. Maintain bilateral pieces as separate objects.
+Style: original chunky 2.5D survival-game equipment; bold dark ink-like silhouette; hand-painted wear; angular readable shapes; purple-black armor and fabric with restrained red identifiers; matching Image 2 exactly.
+Camera: true orthographic exact front view, eye-level, no perspective, centered on the same body registration and foot baseline as Image 2; 2048-square framing with generous padding.
+Backdrop: perfectly flat uniform light gray, no vignette, no gradient, no horizon, no floor, no cast or contact shadow.
+Constraints: separated floating equipment components only; same number of components will be used in every view; no overlap, no touching, no hidden pieces; no text; no watermark.
+Avoid: torso body, neck, skin below the head shell, arms, hands, legs, feet, full jumpsuit, complete human silhouette, weapon, gun, holster, helmet, extra pouches, duplicate parts, fused accessories, scenery, gradients, photorealism.

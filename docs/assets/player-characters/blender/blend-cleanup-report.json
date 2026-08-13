@@ -1,0 +1,87 @@
+[
+  {
+    "file": "assets/characters/generated/blend/female_assault.blend",
+    "before_mb": 42.97,
+    "after_mb": 5.82
+  },
+  {
+    "file": "assets/characters/generated/blend/female_demolition.blend",
+    "before_mb": 60.65,
+    "after_mb": 6.01
+  },
+  {
+    "file": "assets/characters/generated/blend/female_gunner.blend",
+    "before_mb": 34.44,
+    "after_mb": 5.53
+  },
+  {
+    "file": "assets/characters/generated/blend/female_medic.blend",
+    "before_mb": 52.01,
+    "after_mb": 6.17
+  },
+  {
+    "file": "assets/characters/generated/blend/female_riot.blend",
+    "before_mb": 69.55,
+    "after_mb": 6.1
+  },
+  {
+    "file": "assets/characters/generated/blend/male_assault.blend",
+    "before_mb": 38.71,
+    "after_mb": 5.91
+  },
+  {
+    "file": "assets/characters/generated/blend/male_demolition.blend",
+    "before_mb": 56.25,
+    "after_mb": 5.83
+  },
+  {
+    "file": "assets/characters/generated/blend/male_gunner.blend",
+    "before_mb": 30.45,
+    "after_mb": 5.96
+  },
+  {
+    "file": "assets/characters/generated/blend/male_medic.blend",
+    "before_mb": 47.36,
+    "after_mb": 6.01
+  },
+  {
+    "file": "assets/characters/generated/blend/male_riot.blend",
+    "before_mb": 65.05,
+    "after_mb": 5.98
+  },
+  {
+    "file": "assets/weapons/generated/blend/ak47.blend",
+    "before_mb": 83.3,
+    "after_mb": 2.41
+  },
+  {
+    "file": "assets/weapons/generated/blend/hk45c.blend",
+    "before_mb": 90.85,
+    "after_mb": 3.08
+  },
+  {
+    "file": "assets/weapons/generated/blend/landmine.blend",
+    "before_mb": 92.67,
+    "after_mb": 1.87
+  },
+  {
+    "file": "assets/weapons/generated/blend/m4a1.blend",
+    "before_mb": 85.66,
+    "after_mb": 2.47
+  },
+  {
+    "file": "assets/weapons/generated/blend/mp5.blend",
+    "before_mb": 95.18,
+    "after_mb": 2.63
+  },
+  {
+    "file": "assets/weapons/generated/blend/rpg.blend",
+    "before_mb": 81.0,
+    "after_mb": 2.7
+  },
+  {
+    "file": "assets/weapons/generated/blend/tactical_knife.blend",
+    "before_mb": 87.89,
+    "after_mb": 2.35
+  }
+]

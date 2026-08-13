@@ -1,0 +1,464 @@
+{
+  "generated_at": "2026-08-13T05:25:04.590Z",
+  "bucket_prefix": "zombiewar/player-character-production/2026-08-13",
+  "count": 76,
+  "total_bytes": 357971164,
+  "objects": [
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/male_base/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/front.png",
+      "size": 5210157,
+      "sha256": "dec4d107428cfb7e45dea21d12bdd5281c37e589cee8a2a0db728056769a2a2f"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/male_base/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/left.png",
+      "size": 5155387,
+      "sha256": "8e11373d7797cb4203ede727b08f698b0b732bb365cacb225365c488636334a6"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/male_base/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/back.png",
+      "size": 5365648,
+      "sha256": "30ff1c10e0549267300d652f39e77dfb97f689b52c32f250ce60cccc528fac35"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/male_base/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/male_base/right.png",
+      "size": 4753781,
+      "sha256": "046c982f9b315dd793e9c3f908f22bf3029aff2fb1fbe035f2bace5a069e86d6"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/female_base/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/front.png",
+      "size": 4767443,
+      "sha256": "ac9657f399bd22ab8efef54242acb8978d430dcc10c435e5d64c63c3d602fdf7"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/female_base/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/left.png",
+      "size": 4813904,
+      "sha256": "51f61600a509d18b9be9a3a0938d49435f339b9e2b4c70b0a948dfd866ea7d23"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/female_base/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/back.png",
+      "size": 4904689,
+      "sha256": "d62aea56ec3b70a252500119844378ddc523a4a5a06e2fd99a5fe39e733827a0"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/bases/female_base/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/bases/female_base/right.png",
+      "size": 4979316,
+      "sha256": "f08f3426feb0d51687651faf0ab8a500c6bd01ad620d14792e634ee6c788286d"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_gunner/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/front.png",
+      "size": 4025812,
+      "sha256": "e1c32b5d7557ebc02812983791334a70b77494c7046aaf5a225659ea16dd2541"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_gunner/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/left.png",
+      "size": 4796402,
+      "sha256": "6dad513330fd9003d4ca4c7eb7adc36d6997701cf4300b80ce526d5611f0c6b9"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_gunner/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/back.png",
+      "size": 5287497,
+      "sha256": "21a297dbdf39d530e81175d55ec4f8d9848cff23e1e5a770bb98790ce0981e9b"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_gunner/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_gunner/right.png",
+      "size": 4885205,
+      "sha256": "4991cfe8c255973de20689fb98774c8361ba4a86728d8dafeffdd4926587a0e3"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_gunner/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/front.png",
+      "size": 5230708,
+      "sha256": "3d64a08be26ced38b72a41e7f7f709fb93e61af72a60ab3b0541fd9aa13bcd47"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_gunner/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/left.png",
+      "size": 5224310,
+      "sha256": "5634975a58eb42e1d4d895f769add1f48523b8785ced9e155fa45a2ade406b0b"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_gunner/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/back.png",
+      "size": 5439328,
+      "sha256": "09d449df3a3a22b679423079ad76576537b3bb641d6b0ce8b9d2a7da9a0bd52d"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_gunner/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_gunner/right.png",
+      "size": 5010619,
+      "sha256": "416344e5c443ca35695c241ddd7c75bb4f302ad8a899d699258652d4f4d2321c"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_assault/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/front.png",
+      "size": 4996205,
+      "sha256": "9f3024024649924b0f1208c2c3c2cd2c0b987008830513c641b777c8ac143e54"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_assault/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/left.png",
+      "size": 5026428,
+      "sha256": "1cdc2461443f15d7dd8f26b3916cc6050c2ff01cc2348213b3b37d445469a0a6"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_assault/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/back.png",
+      "size": 5060329,
+      "sha256": "91cc372fedf3be0cd0f8caa8b9227c96a3ae9adbb22fc2eab8662aaa36c21c69"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_assault/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_assault/right.png",
+      "size": 4724034,
+      "sha256": "ece8e23e82b6b68487e3204ce827258ee22849843da99015a9c18f4229bd7ab4"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_assault/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/front.png",
+      "size": 4948495,
+      "sha256": "17fca360c592330738e4720c22efe37bad5d19f2b215faf45bcc7579049ced7a"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_assault/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/left.png",
+      "size": 4829630,
+      "sha256": "1c3bbc06005f8327b3dae3eba281243ef4b845a8cf06a4e9f653a12ed0f2b5ca"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_assault/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/back.png",
+      "size": 5110432,
+      "sha256": "b96bc4bd9a0504ab8437aa0785af8065a1bb918d9cf357aab56dc49d6d4a8826"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_assault/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/right.png",
+      "size": 4759867,
+      "sha256": "e4459b24cd9b100d37460f04fb72c9e9adf60824c1229ec17bfcd9c1ac49e5f1"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_medic/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/front.png",
+      "size": 5199844,
+      "sha256": "1c99e611ab1c964f4f6da256541b3c6dff20fdc124ecbab8d4ac2624d54e73f3"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_medic/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/left.png",
+      "size": 3136953,
+      "sha256": "8309d8952714c44942e4188efec0063e1c294c4821902dafb018d62141a2574a"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_medic/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/back.png",
+      "size": 5098139,
+      "sha256": "def80fbe158de578fb0de6ee73d9665e7ce1164156ec37661159e6133af9ff00"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_medic/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_medic/right.png",
+      "size": 5258939,
+      "sha256": "14ba265b63d9400f3f76901a856f90f39dfdf6ad1f777c91578d70cd0544b197"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_medic/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/front.png",
+      "size": 5324060,
+      "sha256": "76c5b5b9a43ddf7f4441bbd78cf7967c2a534667e66ed30a41f38f6dfd85cab3"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_medic/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/left.png",
+      "size": 3152738,
+      "sha256": "e2c3bc21bb9ee5b1169bfb3d243e3f85ae385c06c1fc046aa7a4a8c50ef7f31f"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_medic/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/back.png",
+      "size": 5715963,
+      "sha256": "fdd6738c814600508dad2a33605fb66330c8615cdb56e1f11e3b096e1219d633"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_medic/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/right.png",
+      "size": 5329034,
+      "sha256": "a1df3240499ed2c07e728ec31e0e18aac238ab054c53402a69f2d600f791568e"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_demolition/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/front.png",
+      "size": 5511344,
+      "sha256": "6f16fc0403fb93077e2f956f6e8b1d64f6e1609eada655ad3666669914fdb4bc"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_demolition/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/left.png",
+      "size": 3611744,
+      "sha256": "6b58af9063446f2732fac18f7497da2040323a83a9c90194a4df96797d955ad2"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_demolition/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/back.png",
+      "size": 5352559,
+      "sha256": "e29b05145c0136b867afaef1147c2dc2f170f04ce3b33ab889bcf1bffabaf6a9"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_demolition/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_demolition/right.png",
+      "size": 5303590,
+      "sha256": "0d6703a8207ec2dce97cf45725e8e515e3460a2a571cc89d56761c5d036feda5"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_demolition/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/front.png",
+      "size": 5045307,
+      "sha256": "dc9d004fcb12587fea72d6cfbe09f47d2994d70dfa438c590758fa81010fa95f"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_demolition/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/left.png",
+      "size": 5020391,
+      "sha256": "45f0721715d93822f995f6bd388e83b5617da8d472e681e9eb44f476388e7424"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_demolition/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/back.png",
+      "size": 5439191,
+      "sha256": "dee8cb9dee3424496c34410f1c256519cf450b5164cb820474cd171b0bffcc71"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_demolition/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_demolition/right.png",
+      "size": 4997154,
+      "sha256": "528e25f0b2ea8d5c33d9f255de9815793e8cdff76cde1a9d6138858c098f88b3"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_riot/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/front.png",
+      "size": 5333057,
+      "sha256": "0d9458261fd2a4ed7ceb44e8bf10d5770ba64c11a67255d6dbd0c9bfbc313435"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_riot/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/left.png",
+      "size": 5465717,
+      "sha256": "a4e7b7b28d86ef16d160b7895b82c5941d966aa887eab02ed1567d238cd8bb34"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_riot/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/back.png",
+      "size": 5376245,
+      "sha256": "18eaee36476065fa41f05b742d2ed9600e080d562e8fe00e34cdb73a8403cafe"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/male_riot/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/male_riot/right.png",
+      "size": 5295476,
+      "sha256": "2292ddcf0249072b3f5f241c5368e166f01fb5fb414a2b2d94a1d2901dbb671f"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_riot/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/front.png",
+      "size": 4552689,
+      "sha256": "f40229b017e2eb72a75caa3c195600356137d958a8e632c9fe7c86b2c68958f3"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_riot/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/left.png",
+      "size": 5156744,
+      "sha256": "aceb0db87889ebf9b42e8cc29b298b895b7775d5264a694e5c47890259025f03"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_riot/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/back.png",
+      "size": 5489423,
+      "sha256": "8110e94298674738739303b714d3701d85e566564c1829f70888811fba0a14eb"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/kits/female_riot/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_riot/right.png",
+      "size": 5065273,
+      "sha256": "8d5f3b3322ee52399bd57c61d19d8edb3029a0d90f0c9b88fca6eec3ed32b5db"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/rpg/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/front.png",
+      "size": 3192695,
+      "sha256": "a9482ddc1207e431ae23920bf8c29c3541bf2f16b24b82b4459e114b801b4781"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/rpg/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/left.png",
+      "size": 4687168,
+      "sha256": "c467059e7d53abda7b9b9faff918ff8a003893e24d9df85e4b52cffefb50ad81"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/rpg/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/back.png",
+      "size": 4961821,
+      "sha256": "bebae7d5a8996bc7c8e2d83d0e5956cacb344a0e5f3c9c0c197aaa0f72b3acad"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/rpg/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/rpg/right.png",
+      "size": 2821690,
+      "sha256": "49e01fe0b89ae4ff456c431326c12ed5ac18d36c77c4335892458ee61c81361a"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/ak47/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/front.png",
+      "size": 3026286,
+      "sha256": "deb3e52046cdae61ef25bc15493889711ee52f2e6cbc9fae59963bd89c31ad2a"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/ak47/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/left.png",
+      "size": 2465175,
+      "sha256": "2ddaac99dca224426847d656d2cd5f7372755e7834daf5f6aa9806b278d76ad8"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/ak47/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/back.png",
+      "size": 4741657,
+      "sha256": "5eeed4dae4b6e9963986915c019a2eb985d290d70e14e7713a2033e355594262"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/ak47/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/right.png",
+      "size": 4288405,
+      "sha256": "150f9bcd0f2bdcc48b99af2f15de6b74f547f6aa952db9408a56a68991044f08"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/m4a1/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/front.png",
+      "size": 3009091,
+      "sha256": "e8fdfed85e7eb93dc6bafad0be993a39f5bfdbdccc283cb3a121372605bdce57"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/m4a1/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/left.png",
+      "size": 4383188,
+      "sha256": "ed1bfe6ed6550905f5c6a1b72e0735b1fe52b1bc5f0db375ecd068a277ddc556"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/m4a1/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/back.png",
+      "size": 4684853,
+      "sha256": "36f9608eb7c93e3334dc199312753e9f4eb62d2573fb304c8bc131dd1a48f7df"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/m4a1/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/m4a1/right.png",
+      "size": 4411512,
+      "sha256": "1efbe6b4cea1102846390391716daac6403c6085e15cc751f872e0752c80547b"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/front.png",
+      "size": 4999269,
+      "sha256": "daa58fea020898ed5195f7c3f6e466aeb954a6458b93845ac9ee6550120c6c93"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/left.png",
+      "size": 5069181,
+      "sha256": "8f96ae02e84604e8cc09739e83cc01d3c219d7e3abe38390d15b3e4a50039c70"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/back.png",
+      "size": 4959961,
+      "sha256": "80a4e6bacb8b4289c0bb6a07c9dc4334db08f4022314ac2e98aae85d8a54ff53"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/tactical_knife/right.png",
+      "size": 4586873,
+      "sha256": "b25b5d2d821be231c307f71caf9922016c1940e3fb44f94fe85b5ae3fe873887"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/hk45c/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/front.png",
+      "size": 5374690,
+      "sha256": "9e13b03f4e6a1648a24f138be6a06e71175e98a6430f51d751c1a1c443c88b1a"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/hk45c/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/left.png",
+      "size": 4656302,
+      "sha256": "9b41c71c8c7668c10f3628802af73dcd5eadfac92faea543ff147ac83eb95de1"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/hk45c/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/back.png",
+      "size": 5723675,
+      "sha256": "a6f74228b7eb8bd21b60b128de5632cdbe98bda3dcd5741fc6e20fdbc309557d"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/hk45c/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/right.png",
+      "size": 4876493,
+      "sha256": "eb5d369044ea2b98c1577a3c8795590d0b15f2b68f3356ab8c0dc2c905bd9268"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/landmine/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/front.png",
+      "size": 4104056,
+      "sha256": "57016f9543a1043e3411c0fa2fbde46a174291a6b038e489f7e282d5a3243b98"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/landmine/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/left.png",
+      "size": 2822161,
+      "sha256": "286aa460b8a89c72213fb0ae31ea5c4c6df70d7a045061cdf26ec50d27439b56"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/landmine/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/back.png",
+      "size": 5586780,
+      "sha256": "c6b474d42d7a44e7cc4b19478f2e7351f7e39319c7a746317dbd1d9d9710735d"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/landmine/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/landmine/right.png",
+      "size": 3027866,
+      "sha256": "15e6fbc282c7f342a8dfcd774e8a4977a18ba4eda8f6ff1a09969f94a67d8d16"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/mp5/front.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/front.png",
+      "size": 3664452,
+      "sha256": "c25a53407a178ce28860fd83bff7c652099050d6b50c1fc95769fbbb8ffd3440"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/mp5/left.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/left.png",
+      "size": 4490896,
+      "sha256": "0697c0972bc9e31e5242998307462d52d7b81d580b3ef69843378f9058488aa7"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/mp5/back.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/back.png",
+      "size": 5196487,
+      "sha256": "cc6192e6f40e479a184ac494d576f65b1e971973bf36f3791451a7d48c549c6d"
+    },
+    {
+      "key": "zombiewar/player-character-production/2026-08-13/weapons/mp5/right.png",
+      "url": "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/mp5/right.png",
+      "size": 2621281,
+      "sha256": "cdffd3f9760f3bd20100554143746316d2d99f672b9b89614778d07730019fbb"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: right orthographic image-to-3D source art for a modular male body base
+Input images: Image 1 is the approved full-character style gate. Image 2 is the approved undecorated male base exact front view and is authoritative for identity, 3.5-head squat proportions, A-pose, clothing seams, palette, rough ink, wear, crop and scale.
+Primary request: render the exact same undecorated base from the subject's exact right profile. Change only the camera.
+Camera: true orthographic exact 90-degree right profile, eye-level, no perspective and no three-quarter angle. Nose and chest point toward image left. Preserve the same body height, foot baseline, center and padding as Image 2.
+Invariants: same oversized square head, short thick limbs, huge hands and boots, face, spiky hair, battered purple-black undersuit, off-white gloves and boots, seams, patches, scratches, colors and A-pose in 3D. Reconstruct hidden geometry coherently; do not mirror-paste.
+Backdrop: perfectly flat uniform #D8D8D8 light gray, no vignette, gradient, texture, floor or shadow.
+Rendering: identical thick uneven black contour, scratchy inner ink and flat dirty cel shading.
+Constraints: one complete subject; no class equipment; no weapon; no text; no watermark.
+Avoid: front or three-quarter view, altered identity, tall anatomy, new accessories, glossy rendering, scenery, extra limbs, fused fingers.

@@ -1,0 +1,26 @@
+{
+  "id": "hk45c",
+  "kind": "weapons",
+  "task_id": "ac27e3ff-7191-49d9-84e2-04161ba8dbd2",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 5000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/hk45c/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ac27e3ff-7191-49d9-84e2-04161ba8dbd2/tripo_pbr_model_ac27e3ff-7191-49d9-84e2-04161ba8dbd2.glb?auth_key=1786665600-ea757ddfe468242b7c79ca3257255afc-0-2d9a75cd4f57890c4cf809799241bd65",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ac27e3ff-7191-49d9-84e2-04161ba8dbd2/legacy_mesh.webp?auth_key=1786665600-3ebdda88649db5e84c624f0ec1dac1d7-0-121289534df327307ede71471fa1241b",
+  "local_model": "assets/generated_models/tripo/weapons/hk45c/hk45c_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/weapons/hk45c/hk45c_preview.webp",
+  "model_bytes": 3227772
+}

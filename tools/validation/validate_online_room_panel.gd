@@ -52,7 +52,7 @@ func _run() -> void:
 		},
 		{
 			"slot": 1, "player_id": "p1", "nickname": "小明",
-			"ready": false, "connected": true, "character_id": "male_medic",
+			"ready": false, "connected": true, "character_id": "female_medic",
 		},
 	]
 	room.apply_roster(roster, 0, "lobby", 0, default_map)

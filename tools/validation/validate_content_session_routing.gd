@@ -33,6 +33,26 @@ func _run() -> void:
 		"单机会话必须落在默认地图，实际 %s" % session.map_id,
 		failures
 	)
+	_expect(
+		session.local_players.size() == 1,
+		"单机会话必须保存显式 P1 描述符",
+		failures
+	)
+	if session.local_players.size() == 1:
+		_expect(
+			session.local_players[0].character_id == characters.default_id(),
+			"直接建立单机会话时必须使用默认角色",
+			failures
+		)
+	var selected_single = LocalPlayerDescriptorScript.new()
+	selected_single.character_id = &"female_medic"
+	session.configure_single(selected_single)
+	_expect(
+		session.local_players.size() == 1 and
+			session.local_players[0].character_id == &"female_medic",
+		"单机会话必须保留大厅选定的角色",
+		failures
+	)
 
 	var local_descriptor = LocalPlayerDescriptorScript.new()
 	_expect(
@@ -50,11 +70,11 @@ func _run() -> void:
 
 	var online_descriptor = OnlinePlayerDescriptorScript.new()
 	online_descriptor.player_index = 0
-	online_descriptor.character_id = &"male_medic"
+	online_descriptor.character_id = &"female_medic"
 	session.configure_online([online_descriptor], &"demo")
 	_expect(session.map_id == &"demo", "联机会话的地图必须来自 start 消息", failures)
 	_expect(
-		session.local_players[0].character_id == &"male_medic",
+		session.local_players[0].character_id == &"female_medic",
 		"联机描述符必须带上角色 id",
 		failures
 	)
@@ -73,6 +93,7 @@ func _run() -> void:
 		"clear() 之后必须回到默认地图而不是空 id",
 		failures
 	)
+	_expect(session.local_players.is_empty(), "clear() 必须清空单机描述符", failures)
 
 	session.queue_free()
 	await process_frame

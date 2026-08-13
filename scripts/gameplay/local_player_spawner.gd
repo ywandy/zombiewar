@@ -30,14 +30,7 @@ func spawn_players(
 	if session == null:
 		return _fail_spawn(spawned, "GameSession is unavailable")
 	session.last_error = ""
-	var descriptors: Array = []
-	if session.mode in [
-		GameSessionScript.Mode.LOCAL_MULTIPLAYER,
-		GameSessionScript.Mode.ONLINE_MULTIPLAYER,
-	]:
-		descriptors = session.local_players
-	else:
-		descriptors = [null]
+	var descriptors: Array = session.local_players
 	if descriptors.is_empty() or descriptors.size() > spawn_points.size():
 		return _fail_spawn(spawned, "Local player session has no valid spawn slots")
 	if player_scene == null:
@@ -50,7 +43,9 @@ func spawn_players(
 	for index in range(descriptors.size()):
 		var input_source = single_player_input
 		var descriptor = descriptors[index]
-		if descriptor != null:
+		if session.mode == GameSessionScript.Mode.SINGLE:
+			input_source = single_player_input
+		elif descriptor != null:
 			# 联机的本机座位刻意返回 null：它要复用竞技场那一个已经接好触屏
 			# 摇杆的输入源实例，而不是新建一个没人给它喂输入的。
 			# 只认 is_local 这一条替换理由——本地多人下 create_input_source()
@@ -69,19 +64,30 @@ func spawn_players(
 		var spawn_position = _find_open_spawn_position(container, spawn_points[index])
 		if spawn_position == null:
 			return _fail_spawn(spawned, "Player %d has no open spawn position" % (index + 1))
+		# 三种模式的描述符同形，都带 character_id；只有输入源创建按模式分叉。
+		var catalog = ContentCatalogsScript.characters()
+		if catalog == null:
+			return _fail_spawn(spawned, "Character catalog is unavailable")
+		var character_id: StringName = catalog.default_id()
+		if descriptor != null and "character_id" in descriptor and String(descriptor.character_id) != "":
+			character_id = descriptor.character_id
+		var character = catalog.get_by_id(character_id)
+		if character == null:
+			return _fail_spawn(
+				spawned,
+				"Player %d has unknown character id '%s'" % [index + 1, character_id]
+			)
+		if character.model_scene == null:
+			return _fail_spawn(
+				spawned,
+				"Player %d character '%s' has no model scene" % [index + 1, character_id]
+			)
 		var player := player_scene.instantiate() as PlayerController
 		if player == null:
 			return _fail_spawn(spawned, "Player %d could not be instantiated" % (index + 1))
 		player.name = "P%d" % (index + 1)
 		player.player_index = index
-		# 两个描述符同形，都带 character_id；单机的 descriptor 为 null，走默认角色。
-		var catalog = ContentCatalogsScript.characters()
-		var character_id: StringName = catalog.default_id()
-		if descriptor != null and "character_id" in descriptor and String(descriptor.character_id) != "":
-			character_id = descriptor.character_id
-		var character = catalog.get_by_id(character_id)
-		if character != null:
-			player.apply_character_definition(character)
+		player.apply_character_definition(character)
 		player.screen_safe_margin_ratio = safe_margin_ratio
 		player.set_input_source(input_source)
 		player.set_place_item_service(place_item_service)
@@ -90,7 +96,7 @@ func spawn_players(
 		# 自动装备本命武器。add_child 之后 equipment 才初始化（@onready），
 		# 所以放在这里而不是 apply_character_definition 里。武器本就在
 		# Player.tscn 的 loadout 里；get_slot_for_item 拿不到（未知 id）则跳过。
-		if character != null and String(character.signature_weapon_id) != "":
+		if String(character.signature_weapon_id) != "":
 			var sig_slot := player.equipment.get_slot_for_item(character.signature_weapon_id)
 			if sig_slot >= 0:
 				player.equipment.equip_slot(sig_slot)

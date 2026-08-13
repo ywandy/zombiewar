@@ -1,50 +1,291 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/shop_panel.gd" id="1_script"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSansSC-UI.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/ui/shop/title_lockup.png" id="3_title"]
+[ext_resource type="Texture2D" path="res://assets/ui/shop/material_plate.png" id="4_plate"]
+[ext_resource type="Texture2D" path="res://assets/ui/shop/icon_material_crate.png" id="5_crate"]
+
+[sub_resource type="Theme" id="theme_shop"]
+default_font = ExtResource("2_font")
+default_font_size = 16
+
+[sub_resource type="StyleBoxFlat" id="style_timer_bg"]
+bg_color = Color(0.05, 0.05, 0.06, 0.8)
+border_color = Color(0.32, 0.29, 0.22, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="style_timer_fill"]
+bg_color = Color(0.95, 0.7, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="ShopPanel" type="Control"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource("1_script")
-
-[node name="Background" type="ColorRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color(0, 0, 0, 0.6)
-
-[node name="Margin" type="MarginContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -260.0
-offset_right = 420.0
-offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("theme_shop")
+script = ExtResource("1_script")
 
-[node name="VBox" type="VBoxContainer" parent="Margin"]
+[node name="Backdrop" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+color = Color(0.02, 0.02, 0.031, 0.72)
 
-[node name="TitleLabel" type="Label" parent="Margin/VBox"]
+[node name="Layout" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="TitleTex" type="TextureRect" parent="Layout"]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_title")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SubtitleRow" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="LineLeft" type="ColorRect" parent="Layout/SubtitleRow"]
+custom_minimum_size = Vector2(64, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.55, 0.44, 0.24, 0.7)
+
+[node name="DiamondLeft" type="Control" parent="Layout/SubtitleRow"]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Shape" type="ColorRect" parent="Layout/SubtitleRow/DiamondLeft"]
+offset_left = 1.2
+offset_top = 1.2
+offset_right = 7.8
+offset_bottom = 7.8
+pivot_offset = Vector2(3.3, 3.3)
+rotation = 0.785398
+mouse_filter = 2
+color = Color(0.85, 0.7, 0.36, 0.95)
+
+[node name="SubtitleLabel" type="Label" parent="Layout/SubtitleRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.73, 0.62, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "选择一项强化"
+
+[node name="DiamondRight" type="Control" parent="Layout/SubtitleRow"]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Shape" type="ColorRect" parent="Layout/SubtitleRow/DiamondRight"]
+offset_left = 1.2
+offset_top = 1.2
+offset_right = 7.8
+offset_bottom = 7.8
+pivot_offset = Vector2(3.3, 3.3)
+rotation = 0.785398
+mouse_filter = 2
+color = Color(0.85, 0.7, 0.36, 0.95)
+
+[node name="LineRight" type="ColorRect" parent="Layout/SubtitleRow"]
+custom_minimum_size = Vector2(64, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.55, 0.44, 0.24, 0.7)
+
+[node name="GapTitle" type="Control" parent="Layout"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MaterialPlate" type="Control" parent="Layout"]
+custom_minimum_size = Vector2(216, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="PlateTex" type="TextureRect" parent="Layout/MaterialPlate"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_plate")
+expand_mode = 1
+
+[node name="Content" type="VBoxContainer" parent="Layout/MaterialPlate"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="CaptionLabel" type="Label" parent="Layout/MaterialPlate/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.68, 0.58, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 13
+text = "当前材料"
+horizontal_alignment = 1
+
+[node name="AmountRow" type="HBoxContainer" parent="Layout/MaterialPlate/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="CrateIcon" type="TextureRect" parent="Layout/MaterialPlate/Content/AmountRow"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_crate")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AmountLabel" type="Label" parent="Layout/MaterialPlate/Content/AmountRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.75, 0.18, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(1, 0.92, 0.72, 1)
-text = "波间商店"
-horizontal_alignment = 1
+text = "0"
+vertical_alignment = 1
 
-[node name="MaterialLabel" type="Label" parent="Margin/VBox"]
+[node name="GapPlateTop" type="Control" parent="Layout"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TimerRow" type="HBoxContainer" parent="Layout"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TimerBar" type="ProgressBar" parent="Layout/TimerRow"]
+custom_minimum_size = Vector2(210, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("style_timer_bg")
+theme_override_styles/fill = SubResource("style_timer_fill")
+max_value = 1.0
+step = 0.001
+value = 1.0
+show_percentage = false
+
+[node name="TimerLabel" type="Label" parent="Layout/TimerRow"]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.79, 0.62, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.95, 0.66, 0.0, 1)
-text = "材料：0"
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+text = "15.0s"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="OffersContainer" type="HBoxContainer" parent="Margin/VBox"]
-theme_override_constants/separation = 16
+[node name="GapPlate" type="Control" parent="Layout"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CardsRow" type="HBoxContainer" parent="Layout"]
+custom_minimum_size = Vector2(0, 384)
+layout_mode = 2
+theme_override_constants/separation = 32
 alignment = 1
+
+[node name="GapCards" type="Control" parent="Layout"]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FooterRow" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="LineLeft" type="ColorRect" parent="Layout/FooterRow"]
+custom_minimum_size = Vector2(80, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.5, 0.4, 0.22, 0.6)
+
+[node name="DiamondLeft" type="Control" parent="Layout/FooterRow"]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Shape" type="ColorRect" parent="Layout/FooterRow/DiamondLeft"]
+offset_left = 1.2
+offset_top = 1.2
+offset_right = 7.8
+offset_bottom = 7.8
+pivot_offset = Vector2(3.3, 3.3)
+rotation = 0.785398
+mouse_filter = 2
+color = Color(0.8, 0.66, 0.34, 0.9)
+
+[node name="FooterLabel" type="Label" parent="Layout/FooterRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.7, 0.6, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 15
+text = "强化效果可叠加，助你在末日中存活更久！"
+
+[node name="DiamondRight" type="Control" parent="Layout/FooterRow"]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Shape" type="ColorRect" parent="Layout/FooterRow/DiamondRight"]
+offset_left = 1.2
+offset_top = 1.2
+offset_right = 7.8
+offset_bottom = 7.8
+pivot_offset = Vector2(3.3, 3.3)
+rotation = 0.785398
+mouse_filter = 2
+color = Color(0.8, 0.66, 0.34, 0.9)
+
+[node name="LineRight" type="ColorRect" parent="Layout/FooterRow"]
+custom_minimum_size = Vector2(80, 1)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.5, 0.4, 0.22, 0.6)

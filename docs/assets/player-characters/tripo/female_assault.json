@@ -1,0 +1,26 @@
+{
+  "id": "female_assault",
+  "kind": "kits",
+  "task_id": "ba1c48f8-d239-4095-8096-bdd5f17fdcbc",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_assault/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ba1c48f8-d239-4095-8096-bdd5f17fdcbc/tripo_pbr_model_ba1c48f8-d239-4095-8096-bdd5f17fdcbc.glb?auth_key=1786665600-70632f936e4640b89cc8d133db49d14d-0-d9d0fc1ebace35c46acab703f1f23f88",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/ba1c48f8-d239-4095-8096-bdd5f17fdcbc/legacy_mesh.webp?auth_key=1786665600-c94ac6ff12f1151d38def7c60262a78a-0-d9c5666ed960a76b50f3d53f11d199bb",
+  "local_model": "assets/generated_models/tripo/kits/female_assault/female_assault_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/female_assault/female_assault_preview.webp",
+  "model_bytes": 2725180
+}

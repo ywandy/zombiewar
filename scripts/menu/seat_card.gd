@@ -102,6 +102,7 @@ func set_occupied(
 	next_button.visible = can_switch
 	var accent := character.accent_color if character != null else Color.WHITE
 	accent_rule.color = accent
+	preview.set_character_definition(character)
 	preview.set_accent_color(accent)
 	preview.set_online(true)
 	# 本机那张卡靠更亮的描边区分，不做单独的放大预览。

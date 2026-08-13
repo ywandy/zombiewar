@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="RangedWeaponDefinition" format=3 uid="uid://c6857jnl8jos"]
+[gd_resource type="Resource" script_class="RangedWeaponDefinition" load_steps=3 format=3 uid="uid://c6857jnl8jos"]
 
 [ext_resource type="Script" uid="uid://brtfga3pmigpt" path="res://scripts/combat/weapons/ranged_weapon_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://assets/weapons/generated/hk45c.glb" id="2_visual"]
 
 [resource]
 script = ExtResource("1_definition")
@@ -12,9 +13,11 @@ spread_increase_per_shot_degrees = 0.8
 spread_recovery_degrees_per_second = 1.8
 weapon_id = &"pistol"
 display_name = "手枪"
-visual_node_name = &"Pistol"
+visual_scene = ExtResource("2_visual")
 attacks_per_second = 3.0
 damage = 35.0
+crit_chance_percent = 22.0
+crit_multiplier = 2.6
 idle_animation = &"Idle_Gun"
 run_animation = &"Run_Gun"
 visual_recoil_kick = 0.1

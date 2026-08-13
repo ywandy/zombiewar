@@ -1,0 +1,26 @@
+{
+  "id": "female_medic",
+  "kind": "kits",
+  "task_id": "a56ef5bc-4304-46bf-938f-7bbf165efcbc",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 12000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/kits/female_medic/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/a56ef5bc-4304-46bf-938f-7bbf165efcbc/tripo_pbr_model_a56ef5bc-4304-46bf-938f-7bbf165efcbc.glb?auth_key=1786665600-58d116ba3ff6efa3b0e4f1dd8f571787-0-359c0cdada88a03035709e30f93a4686",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/a56ef5bc-4304-46bf-938f-7bbf165efcbc/legacy_mesh.webp?auth_key=1786665600-369fb7e697f088bdf77d2805569dbc4b-0-fdc01dd5dca044b3a463afde36b903e0",
+  "local_model": "assets/generated_models/tripo/kits/female_medic/female_medic_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/kits/female_medic/female_medic_preview.webp",
+  "model_bytes": 3071680
+}

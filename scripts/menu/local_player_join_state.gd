@@ -13,17 +13,27 @@ func try_join(source_kind: int, device_id: int = -1) -> int:
 		return -1
 	if not _is_valid_source(source_kind, device_id):
 		return -1
+	if find_player_index(source_kind, device_id) >= 0:
+		return -1
 	var descriptor = LocalPlayerDescriptorScript.new()
 	descriptor.player_index = players.size()
 	descriptor.source_kind = source_kind
 	descriptor.gamepad_device_id = device_id
 	descriptor.online = true
-	var key := descriptor.source_key()
-	for player in players:
-		if player.source_key() == key:
-			return -1
 	players.append(descriptor)
 	return descriptor.player_index
+
+func find_player_index(source_kind: int, device_id: int = -1) -> int:
+	for index in range(players.size()):
+		var player = players[index]
+		if player.source_kind != source_kind:
+			continue
+		if (
+			source_kind != LocalPlayerDescriptorScript.SourceKind.GAMEPAD or
+			player.gamepad_device_id == device_id
+		):
+			return index
+	return -1
 
 func set_gamepad_online(device_id: int, online: bool) -> void:
 	for player in players:

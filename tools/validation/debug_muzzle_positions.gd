@@ -6,9 +6,11 @@ extends SceneTree
 ##     --script tools/validation/debug_muzzle_positions.gd
 
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 
 func _initialize() -> void:
 	var player := PlayerScene.instantiate()
+	PlayerFixture.apply_default_character(player)
 	root.add_child(player)
 	await process_frame
 	await process_frame
@@ -41,7 +43,7 @@ func _initialize() -> void:
 	_p("visual_anchor fwd(-Z)", -anchor.global_basis.z.normalized())
 	_p("visual_anchor fwd flat", WeaponMath.flat_direction(-anchor.global_basis.z))
 
-	var origin := weapon._sync_muzzle_to_capsule()
+	var origin := weapon._sync_muzzle_to_weapon_front()
 	_p(">>> synced muzzle pos", muzzle.global_position)
 	_p(">>> synced muzzle -Z", -muzzle.global_basis.z.normalized())
 	_p(">>> returned origin", origin)

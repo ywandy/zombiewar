@@ -1,0 +1,26 @@
+{
+  "id": "ak47",
+  "kind": "weapons",
+  "task_id": "d2f94a44-910d-448f-ab54-d84947101bef",
+  "status": "success",
+  "progress": 100,
+  "consumed_credit": 40,
+  "face_limit": 5000,
+  "view_order": [
+    "front",
+    "left",
+    "back",
+    "right"
+  ],
+  "input_urls": [
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/front.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/left.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/back.png",
+    "https://pub-fadbc81cdd994779b0107bf216f8a889.r2.dev/zombiewar/player-character-production/2026-08-13/weapons/ak47/right.png"
+  ],
+  "model_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d2f94a44-910d-448f-ab54-d84947101bef/tripo_pbr_model_d2f94a44-910d-448f-ab54-d84947101bef.glb?auth_key=1786665600-c5eddd6410d7a524fb20998c64b6424f-0-e3f11c06120b9999a11ef02f05fc7509",
+  "preview_url": "https://tripo-data.rg2.download.data.tripo3d.com/tcli_11c20083e0654b9793c1e09a5972f15e/20260813/d2f94a44-910d-448f-ab54-d84947101bef/legacy_mesh.webp?auth_key=1786665600-6b4e470f98e4297106bdbeca4b24178a-0-b05a17009e3c231ccae6781eca3fc3e6",
+  "local_model": "assets/generated_models/tripo/weapons/ak47/ak47_tripo.glb",
+  "local_preview": "assets/generated_models/tripo/weapons/ak47/ak47_preview.webp",
+  "model_bytes": 2549180
+}

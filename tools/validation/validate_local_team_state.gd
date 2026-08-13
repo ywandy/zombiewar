@@ -2,6 +2,7 @@ extends SceneTree
 
 const TEAM_STATE_PATH := "res://scripts/gameplay/local_team_state.gd"
 const PlayerScene := preload("res://scenes/player/Player.tscn")
+const PlayerFixture := preload("res://tools/validation/support/player_fixture.gd")
 const SinglePlayerInputSourceScript = preload("res://scripts/input/single_player_input_source.gd")
 const TouchInputSourceScript = preload("res://scripts/input/touch_input_source.gd")
 
@@ -21,6 +22,7 @@ func _run() -> void:
 	for index in range(4):
 		var player = PlayerScene.instantiate() as PlayerController
 		player.player_index = index
+		PlayerFixture.apply_default_character(player)
 		root.add_child(player)
 		player.set_physics_process(false)
 		players.append(player)
@@ -49,6 +51,7 @@ func _run() -> void:
 	_expect(team.sample_restart_requested(), "P1 confirm must restart after team defeat", failures)
 
 	var single_player = PlayerScene.instantiate() as PlayerController
+	PlayerFixture.apply_default_character(single_player)
 	root.add_child(single_player)
 	single_player.set_physics_process(false)
 	single_player.defeated = true

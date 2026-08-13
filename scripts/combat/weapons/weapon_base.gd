@@ -3,6 +3,9 @@ class_name WeaponBase
 
 const HitResult = preload("res://scripts/combat/hit_result.gd")
 const WeaponMath = preload("res://scripts/combat/weapon_math.gd")
+const WeaponVisualBindingScript = preload(
+	"res://scripts/combat/weapons/weapon_visual_binding.gd"
+)
 
 signal attack_started(animation_name: StringName, lock_duration: float)
 signal attack_resolved(
@@ -20,6 +23,7 @@ var wielder: CharacterBody3D
 var character_visual_root: Node3D
 var functional_ray_origin: Marker3D
 var visual_anchor: Node3D
+var visual_binding: WeaponVisualBinding
 var trigger_pressed := false
 var trigger_just_pressed := false
 var aim_direction := Vector3.FORWARD
@@ -45,11 +49,25 @@ func bind_context(
 	wielder = value_wielder
 	character_visual_root = value_visual_root
 	functional_ray_origin = value_functional_ray_origin
-	visual_anchor = character_visual_root.find_child(
-		String(definition.visual_node_name),
-		true,
-		false
-	) as Node3D
+	_clear_visual_instance()
+	visual_anchor = null
+	if definition == null:
+		return
+	visual_binding = WeaponVisualBindingScript.new()
+	visual_anchor = visual_binding.bind(
+		character_visual_root,
+		definition.visual_scene,
+		definition.visual_transform
+	)
+
+func _exit_tree() -> void:
+	_clear_visual_instance()
+
+func _clear_visual_instance() -> void:
+	if visual_binding != null:
+		visual_binding.clear()
+	visual_binding = null
+	visual_anchor = null
 
 func set_attack_input(
 	value_trigger_pressed: bool,
@@ -77,6 +95,8 @@ func set_equipped(value: bool) -> void:
 	set_physics_process(value)
 	if visual_anchor != null:
 		visual_anchor.visible = value
+	if visual_binding != null:
+		visual_binding.set_visible(value)
 	if not value:
 		cancel_attack()
 

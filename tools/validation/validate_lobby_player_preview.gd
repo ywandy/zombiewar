@@ -1,6 +1,7 @@
 extends SceneTree
 
 const PREVIEW_SCENE_PATH := "res://scenes/menu/LobbyPlayerPreview.tscn"
+const ContentCatalogsScript := preload("res://scripts/gameplay/content_catalogs.gd")
 
 func _init() -> void:
 	call_deferred("_run")
@@ -16,10 +17,25 @@ func _run() -> void:
 	var preview = scene.instantiate()
 	root.add_child(preview)
 	await process_frame
+	_expect(
+		preview.get_node_or_null("ModelAnchor/CharacterModel") == null,
+		"preview must stay empty until a catalog definition is assigned",
+		failures
+	)
+	var catalog = ContentCatalogsScript.characters()
+	var definition = catalog.get_by_id(&"male_assault") if catalog != null else null
+	_expect(definition != null, "male_assault must exist in the character catalog", failures)
+	if definition != null:
+		preview.set_character_definition(definition)
+	await process_frame
 	var character_model := preview.get_node_or_null("ModelAnchor/CharacterModel")
 	_expect(character_model != null, "preview must instantiate the real character GLTF", failures)
 	if character_model != null:
-		_expect(character_model.scene_file_path == "res://assets/characters/Characters_Lis_SingleWeapon.gltf", "preview character must come from the approved GLTF", failures)
+		_expect(
+			character_model.scene_file_path == "res://assets/characters/generated/male_assault.glb",
+			"preview character must come from the selected catalog definition",
+			failures
+		)
 		_expect(character_model.find_child("AnimationPlayer", true, false) is AnimationPlayer, "real character preview must contain AnimationPlayer", failures)
 		# 待机动画必须**循环**。GLTF 导进来的 Idle_Gun 是 loop_mode = NONE：
 		# 长 1 秒、播完停死在最后一帧，而它幅度只有 0.034，停住就和静态图一样。
@@ -48,11 +64,30 @@ func _run() -> void:
 			"ModelAnchor 不得旋转，否则角色背对镜头",
 			failures
 		)
-		var smg := character_model.find_child("SMG", true, false) as Node3D
-		_expect(smg != null and smg.visible, "preview must show SMG", failures)
-		for hidden_weapon in ["Axe", "Guitar", "Knife", "Pistol", "Ri" + "fle", "Shotgun", "Spear", "WoodenBat_Barbed", "WoodenBat_Saw"]:
-			var weapon := character_model.find_child(hidden_weapon, true, false) as Node3D
-			_expect(weapon == null or not weapon.visible, "%s must be hidden in lobby preview" % hidden_weapon, failures)
+		var smg := character_model.find_child("mp5Visual", true, false) as Node3D
+		_expect(smg != null and smg.visible, "preview must show the independently bound SMG", failures)
+		var socket := character_model.find_child("WeaponHandSocket", true, false) as Node3D
+		_expect(socket != null and smg != null and smg.get_parent() == socket, "preview SMG must be parented to WeaponHandSocket", failures)
+
+	var invalid_same_id := CharacterDefinition.new()
+	invalid_same_id.character_id = &"male_assault"
+	preview.set_character_definition(invalid_same_id)
+	await process_frame
+	_expect(
+		preview.get_node_or_null("ModelAnchor/CharacterModel") == null,
+		"an invalid same-id definition must clear the existing preview",
+		failures
+	)
+	if definition != null:
+		preview.set_character_definition(definition)
+	await process_frame
+	preview.set_character_definition(null)
+	await process_frame
+	_expect(
+		preview.get_node_or_null("ModelAnchor/CharacterModel") == null,
+		"clearing a preview definition must not restore a legacy fallback",
+		failures
+	)
 
 	_expect(preview.find_children("*", "CollisionShape3D", true, false).is_empty(), "preview must not contain collision shapes", failures)
 	_expect(preview.find_child("EquipmentController", true, false) == null, "preview must not contain EquipmentController", failures)
@@ -86,13 +121,18 @@ func _run() -> void:
 	await process_frame
 
 	var lobby_scene := load("res://scenes/menu/LocalMultiplayerLobby.tscn") as PackedScene
+	var session := root.get_node_or_null("GameSession")
+	if session != null:
+		session.begin_map_selection(session.Mode.LOCAL_MULTIPLAYER)
 	var lobby = lobby_scene.instantiate()
 	root.add_child(lobby)
 	await process_frame
 	_expect(lobby.get_node_or_null("LobbyWorld/Slots/P1/LobbyPlayerPreview") == null, "empty lobby slot must not contain a character preview", failures)
-	lobby.join_state.try_join(0)
+	lobby.selection_state.try_join(0)
 	lobby._sync_slots()
 	_expect(lobby.get_node_or_null("LobbyWorld/Slots/P1/LobbyPlayerPreview") != null, "joined lobby slot must instantiate a character preview", failures)
+	if session != null:
+		session.clear()
 	lobby.queue_free()
 	await process_frame
 

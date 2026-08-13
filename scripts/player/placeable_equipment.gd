@@ -11,6 +11,12 @@ class_name PlaceableEquipment
 var remaining_count := -1
 var place_item_service
 var requester: CharacterBody3D
+## 放置成功后把「扣一个油桶」交给上层翻译成模拟层账本的支出。
+## 与武器一样，这个节点不认识玩家槽位，也不认识背包 profile 下标。
+var sim_request_sink := Callable()
+
+func set_sim_request_sink(value: Callable) -> void:
+	sim_request_sink = value
 
 func _ready() -> void:
 	_ensure_count_initialized()
@@ -36,9 +42,33 @@ func set_use_input(_pressed: bool, just_pressed: bool, aim: Vector3) -> void:
 		origin = requester.global_position
 	elif is_inside_tree():
 		origin = global_position
-	if place_item_service.request_place_item(requester, origin, aim * placement_direction_scale, item_scene):
-		remaining_count -= 1
-		count_changed.emit(remaining_count)
+	# 本机只决定「往哪个格子放」，放置本身与扣账都交给上层走帧：
+	# 联机下各端必须在同一 tick 上得到同一个桶，否则油桶既是阻挡几何、
+	# 又是进帧哈希的模拟实体，只在一端出现就等于当场分叉。
+	var cell: Vector2i = place_item_service.resolve_placement_cell(
+		requester, origin, aim * placement_direction_scale
+	)
+	if cell == PlaceItemService.INVALID_CELL:
+		return
+	if sim_request_sink.is_valid():
+		sim_request_sink.call({
+			"kind": &"place_item",
+			"item_id": item_id,
+			"cell": cell,
+		})
+
+## 放下去的是哪个场景。竞技场按帧落地时要取它——包括远端座位的放置：
+## 各端为同一座位建的是同一份 loadout，因此取到的是同一个场景。
+func get_place_item_scene() -> PackedScene:
+	return item_scene
+
+## 模拟层账本刷下来的权威数量。
+func apply_authoritative_count(value: int) -> void:
+	var next_count := clampi(value, 0, maxi(max_count, 0))
+	if next_count == remaining_count:
+		return
+	remaining_count = next_count
+	count_changed.emit(remaining_count)
 
 func is_available() -> bool:
 	_ensure_count_initialized()

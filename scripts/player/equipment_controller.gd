@@ -8,9 +8,8 @@ const RangedWeaponScript = preload("res://scripts/combat/weapons/ranged_weapon.g
 const LEGACY_LONG_GUN_MODEL_NAME := StringName("Ri" + "fle")
 const EMBEDDED_WEAPON_NAMES: Array[StringName] = [
 	&"Axe", &"Guitar", &"Knife", &"Pistol", LEGACY_LONG_GUN_MODEL_NAME, &"Shotgun", &"SMG",
-	&"Spear", &"WoodenBat_Barbed", &"WoodenBat_Saw",
+	&"Spear", &"WoodenBat_Barbed", &"WoodenBat_Saw", &"PreviewWeapon",
 ]
-
 signal attack_started(animation_name: StringName, lock_duration: float)
 signal attack_resolved(
 	origin: Vector3,
@@ -25,6 +24,11 @@ signal equipment_changed(display_name: String, count_text: String)
 @export var loadout: Array[PackedScene] = []
 @export_range(0, 8, 1) var starting_slot := 0
 
+## 背包分类，与 InventoryProfile.Category / SimWorld.INVENTORY_CATEGORY_* 一致。
+const INVENTORY_CATEGORY_WEAPON := 0
+const INVENTORY_CATEGORY_AMMO := 1
+const INVENTORY_CATEGORY_OIL := 2
+
 var equipment_items: Array = []
 var current_slot := -1
 var current_item
@@ -33,6 +37,11 @@ var switch_guard := Callable()
 var place_item_service
 var warned_unknown_item_ids: Dictionary = {}
 var sim_request_sink := Callable()
+## 模拟层背包 profile 表（category / weapon_id），下标即 profile_index。
+var inventory_profiles: Array[Dictionary] = []
+## 上一次应用过的快照，用来跳过没有变化的刷新。
+var mirrored_slot_profiles := PackedInt32Array()
+var mirrored_slot_amounts := PackedInt32Array()
 
 func set_sim_request_sink(value: Callable) -> void:
 	sim_request_sink = value
@@ -59,7 +68,6 @@ func setup(
 		return
 	initialized = true
 	switch_guard = value_switch_guard
-	_hide_embedded_weapons(visual_root)
 	for item_scene in loadout:
 		if item_scene == null:
 			push_warning("EquipmentController skipped a null equipment scene")
@@ -122,6 +130,91 @@ func add_ammo(item_id: StringName, amount: int) -> int:
 	if item == null or not item.is_available() or not item is RangedWeaponScript:
 		return 0
 	return (item as RangedWeapon).add_ammo(amount)
+
+## ---- 模拟层背包镜像 ----
+## 这个控制器**不记账**：拥有哪些武器、每把枪几发子弹、还剩几个油桶，全部由
+## SimWorld 的槽位数组说了算，这里只是把那份快照翻译成节点状态。
+##
+## 反过来写（节点自己加减、再想办法同步回模拟层）就是这套系统之前那个 bug 的
+## 来源：两份计数各自演化，谁也不知道对方少了几发。
+
+func bind_inventory_profiles(profiles: Array[Dictionary]) -> void:
+	inventory_profiles = profiles
+	mirrored_slot_profiles = PackedInt32Array()
+	mirrored_slot_amounts = PackedInt32Array()
+
+## 应用模拟层某个座位的 12 格快照。内容与上次一致时直接跳过。
+func apply_inventory_snapshot(
+	slot_profiles: PackedInt32Array,
+	slot_amounts: PackedInt32Array
+) -> void:
+	if inventory_profiles.is_empty():
+		return
+	if slot_profiles == mirrored_slot_profiles and slot_amounts == mirrored_slot_amounts:
+		return
+	mirrored_slot_profiles = slot_profiles.duplicate()
+	mirrored_slot_amounts = slot_amounts.duplicate()
+	# profile_index -> 数量。空槽与未持有的东西不进表，取值时按 0 处理。
+	var amount_by_profile: Dictionary = {}
+	for slot_index in range(slot_profiles.size()):
+		var profile_index := slot_profiles[slot_index]
+		if profile_index < 0:
+			continue
+		amount_by_profile[profile_index] = int(slot_amounts[slot_index])
+	for profile_index in range(inventory_profiles.size()):
+		var profile := inventory_profiles[profile_index]
+		var amount := int(amount_by_profile.get(profile_index, 0))
+		match int(profile.get("category", -1)):
+			INVENTORY_CATEGORY_WEAPON:
+				var weapon = get_item_by_id(profile.get("weapon_id", StringName()))
+				if weapon != null:
+					weapon.set_owned(amount > 0)
+			INVENTORY_CATEGORY_AMMO:
+				# 上限 0 的弹药档案是无限弹武器（手枪），它永远没有槽位，
+				# 跟着刷会把它的显示值按成 0。
+				if int(profile.get("max_stack", 0)) <= 0:
+					continue
+				var gun = get_item_by_id(profile.get("weapon_id", StringName()))
+				if gun is RangedWeaponScript:
+					(gun as RangedWeapon).apply_authoritative_ammo(amount)
+			INVENTORY_CATEGORY_OIL:
+				for item in equipment_items:
+					if item.has_method(&"apply_authoritative_count"):
+						item.apply_authoritative_count(amount)
+	_reconcile_current_item()
+
+## 快照可能把当前手持的东西拿走（打光、油桶用完、武器被撤销）。
+func _reconcile_current_item() -> void:
+	if current_item != null and current_item.is_available():
+		_emit_equipment_changed()
+		return
+	if not equip_next():
+		_clear_current()
+
+## 开局自带的装备，交给竞技场记进模拟层账本。
+## category 与 InventoryProfile.Category 对齐；模拟层据此反查 profile 下标。
+func starting_inventory_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for item in equipment_items:
+		if item.has_method(&"apply_authoritative_count"):
+			var count := int(item.get_remaining_count())
+			if count > 0:
+				entries.append({
+					"category": INVENTORY_CATEGORY_OIL,
+					"item_id": item.get_item_id(),
+					"amount": count,
+				})
+			continue
+		if item is WeaponBaseScript and (item as WeaponBase).is_owned():
+			entries.append({
+				"category": INVENTORY_CATEGORY_WEAPON,
+				"item_id": item.get_item_id(),
+				"amount": 1,
+			})
+	return entries
+
+func equip_item(item_id: StringName) -> bool:
+	return equip_slot(get_slot_for_item(item_id))
 
 func equip_previous() -> bool:
 	var slot := _find_available_slot(current_slot, -1)
@@ -237,12 +330,6 @@ func _on_item_count_changed(_remaining_count: int, item) -> void:
 			_clear_current()
 		return
 	_emit_equipment_changed()
-
-func _hide_embedded_weapons(visual_root: Node3D) -> void:
-	for weapon_name in EMBEDDED_WEAPON_NAMES:
-		var embedded_visual := visual_root.find_child(String(weapon_name), true, false) as Node3D
-		if embedded_visual != null:
-			embedded_visual.visible = false
 
 func _on_attack_started(animation_name: StringName, lock_duration: float) -> void:
 	attack_started.emit(animation_name, lock_duration)
