@@ -14,8 +14,19 @@
 	],
 	"nodes":[
 		{
+			"children":[
+				1
+			],
 			"mesh":0,
 			"name":"SMG"
+		},
+		{
+			"name":"MuzzleSocket",
+			"translation":[
+				0.6346,
+				0.2511,
+				0.497
+			]
 		}
 	],
 	"materials":[

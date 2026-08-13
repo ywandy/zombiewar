@@ -41,7 +41,7 @@ func _initialize() -> void:
 	_p("visual_anchor fwd(-Z)", -anchor.global_basis.z.normalized())
 	_p("visual_anchor fwd flat", WeaponMath.flat_direction(-anchor.global_basis.z))
 
-	var origin := weapon._sync_muzzle_to_capsule()
+	var origin := weapon._sync_muzzle_to_weapon_front()
 	_p(">>> synced muzzle pos", muzzle.global_position)
 	_p(">>> synced muzzle -Z", -muzzle.global_basis.z.normalized())
 	_p(">>> returned origin", origin)

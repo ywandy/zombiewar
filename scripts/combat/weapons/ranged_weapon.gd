@@ -4,6 +4,7 @@ class_name RangedWeapon
 const TRACER_SCENE := preload("res://scenes/fx/ShotTracer.tscn")
 const MuzzleFlash = preload("res://scripts/fx/muzzle_flash.gd")
 const WeaponTrigger = preload("res://scripts/combat/weapons/weapon_trigger.gd")
+const VISUAL_MUZZLE_SOCKET_NAME := "MuzzleSocket"
 const WALL_IMPACT_SOUNDS := [
 	preload("res://assets/sfx/boxhead/bullet_wall_1.mp3"),
 	preload("res://assets/sfx/boxhead/bullet_wall_2.mp3"),
@@ -32,6 +33,7 @@ var predicted_spend_frames := 0
 ## tick 超出 8 条的事件丢了），预扣必须自己过期，否则显示值会永远比账本少几发。
 const PREDICTION_TTL_FRAMES := 120
 var spatial_sfx_pool: SpatialSfxPool
+var visual_muzzle_socket: Node3D
 ## 音高与选音是纯表现，不进模拟层：散布已经由 Stream.WEAPON_SPREAD
 ## 在各端确定性地算过了，这里再摇一次骰子不影响任何判定。
 var audio_rng := RandomNumberGenerator.new()
@@ -56,9 +58,23 @@ func bind_context(
 		value_visual_root,
 		value_functional_ray_origin
 	)
+	visual_muzzle_socket = null
 	if visual_anchor != null:
+		visual_muzzle_socket = visual_anchor.find_child(
+			VISUAL_MUZZLE_SOCKET_NAME,
+			true,
+			false
+		) as Node3D
+		if visual_muzzle_socket == null:
+			push_warning(
+				"Weapon %s visual model has no %s" % [
+					String(definition.weapon_id),
+					VISUAL_MUZZLE_SOCKET_NAME,
+				]
+			)
 		top_level = true
 		_sync_to_visual_anchor()
+		_sync_muzzle_to_weapon_front()
 
 func _physics_process(delta: float) -> void:
 	weapon_trigger.tick(delta)
@@ -170,7 +186,7 @@ func set_equipped(value: bool) -> void:
 
 func _process(_delta: float) -> void:
 	_sync_to_visual_anchor()
-	_sync_muzzle_to_capsule()
+	_sync_muzzle_to_weapon_front()
 
 func cancel_attack() -> void:
 	super.cancel_attack()
@@ -194,7 +210,8 @@ func get_ray_origin() -> Vector3:
 func _fire(shot_direction: Vector3) -> void:
 	_sync_to_visual_anchor()
 	var ranged_definition := definition as RangedWeaponDefinition
-	var ray_origin := _sync_muzzle_to_capsule()
+	var ray_origin := get_ray_origin()
+	_sync_muzzle_to_weapon_front()
 	var aim := WeaponMath.flat_direction(shot_direction)
 	# 开火事件只携带玩家的瞄准方向，不携带散布后的方向：
 	# 散布由各客户端在 Stream.WEAPON_SPREAD 上各自确定性地算出。
@@ -220,14 +237,19 @@ func _fire(shot_direction: Vector3) -> void:
 ##
 ## 墙面弹着音也在这里播，而不是在 _fire() 里：开火那一刻本机还不知道子弹
 ## 会停在哪——那是模拟层的判定。表现层再补一次射线来自己判断，就等于在
-## 确定性解算之外又开了一条会分叉的路径。
+## 确定性解算之外又开了一条会分叉的路径。模拟层提供命中终点；可见枪线的
+## 起点重新读取独立武器的实时 MuzzleSocket，避免从功能胶囊旁边冒出来。
 func show_tracer(
 	from_position: Vector3,
 	to_position: Vector3,
 	hit_blocker: bool = false
 ) -> void:
+	_sync_to_visual_anchor()
+	var visual_from := from_position
+	if visual_muzzle_socket != null and is_instance_valid(visual_muzzle_socket):
+		visual_from = _sync_muzzle_to_weapon_front()
 	var tracer := _acquire_tracer()
-	tracer.setup(from_position, to_position)
+	tracer.setup(visual_from, to_position)
 	if not hit_blocker or spatial_sfx_pool == null:
 		return
 	spatial_sfx_pool.play_at(
@@ -242,12 +264,13 @@ func _sync_to_visual_anchor() -> void:
 	if visual_anchor != null and is_instance_valid(visual_anchor):
 		global_transform = visual_anchor.global_transform
 
-func _sync_muzzle_to_capsule() -> Vector3:
+func _sync_muzzle_to_weapon_front() -> Vector3:
 	var origin := get_ray_origin()
+	if visual_muzzle_socket != null and is_instance_valid(visual_muzzle_socket):
+		origin = visual_muzzle_socket.global_position
 	muzzle.global_position = origin
-	# 位置与朝向都以弹道胶囊（WeaponCollision）为准——那才是子弹真正飞出的轴，
-	# 与曳光、命中严格同源。不能用外观模型节点的朝向：内嵌武器网格的局部 -Z
-	# 指向握把（建模习惯），并非枪管前向，压平后只是噪声方向，会把火光带偏。
+	# 火光位置属于表现层，必须跟随独立武器模型的真实前端；朝向仍以
+	# 功能弹道轴为准，避免 glTF 网格的局部建模轴影响水平射击表现。
 	muzzle.global_basis = Basis.looking_at(_get_barrel_direction(), Vector3.UP)
 	return origin
 

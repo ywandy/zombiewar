@@ -14,8 +14,19 @@
 	],
 	"nodes":[
 		{
+			"children":[
+				1
+			],
 			"mesh":0,
 			"name":"Shotgun"
+		},
+		{
+			"name":"MuzzleSocket",
+			"translation":[
+				0.799,
+				0.2648,
+				0.5322
+			]
 		}
 	],
 	"materials":[

@@ -14,8 +14,19 @@
 	],
 	"nodes":[
 		{
+			"children":[
+				1
+			],
 			"mesh":0,
 			"name":"Rifle"
+		},
+		{
+			"name":"MuzzleSocket",
+			"translation":[
+				0.84,
+				0.31,
+				0.61
+			]
 		}
 	],
 	"materials":[

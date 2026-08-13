@@ -8,7 +8,7 @@ extends SceneTree
 ##
 ## 检查表来自 weapon-qa skill，全部是**几何与资源契约**，不做像素比对：
 ## 要判断枪火有没有对准枪口，必须先知道枪口的正确位置，而那个真值只能从
-## MuzzleSocket 的 global_transform 算出来——一旦算出来了，直接比 transform
+## 独立武器模型的 MuzzleSocket.global_transform 算出来——一旦算出来了，直接比 transform
 ## 就比截图更准，截图那一步只会引入分辨率、抗锯齿与粒子随机偏移的噪声。
 ##
 ## 武器清单取自 Player 的 EquipmentController.loadout，不是硬编码：
@@ -255,15 +255,27 @@ func _test_ranged_weapon(
 			flash.transform.is_equal_approx(Transform3D.IDENTITY)
 		)
 
-	# 装配接头 3：枪火位置必须与送进模拟层的弹道起点是同一个点。
-	# _fire() 里两者都取自 _sync_muzzle_to_capsule() 的返回值，这里验证那条绑定
-	# 没有在后续改动里被拆开——拆开的症状就是「子弹从枪口出，火光从别处冒」。
-	var ray_origin: Vector3 = weapon._sync_muzzle_to_capsule()
+	# 装配接头 3：解耦后的枪火必须跟随独立武器模型自己的前端挂点。
+	# 功能弹道仍从通用 WeaponCollision 胶囊出发；两者职责不同，不能再强制重合。
+	var visual_socket: Node3D
+	if weapon.visual_anchor != null and is_instance_valid(weapon.visual_anchor):
+		visual_socket = weapon.visual_anchor.find_child(
+			"MuzzleSocket",
+			true,
+			false
+		) as Node3D
+	_check("%s: visual model must expose MuzzleSocket" % label, visual_socket != null)
+	var visual_origin: Vector3 = weapon._sync_muzzle_to_weapon_front()
+	var ray_origin: Vector3 = weapon.get_ray_origin()
 	_check("%s: ray origin must be finite" % label, ray_origin.is_finite())
-	_check(
-		"%s: muzzle flash origin must equal the ballistic origin" % label,
-		(muzzle as Marker3D).global_position.is_equal_approx(ray_origin)
-	)
+	_check("%s: visual muzzle origin must be finite" % label, visual_origin.is_finite())
+	if visual_socket != null:
+		_check(
+			"%s: muzzle flash origin must equal MuzzleSocket" % label,
+			(muzzle as Marker3D).global_position.is_equal_approx(
+				visual_socket.global_position
+			)
+		)
 
 	# 装配接头 4：枪口朝向压平到水平，与模拟层的 WeaponMath.flat_direction 一致。
 	var muzzle_forward := -(muzzle as Marker3D).global_basis.z
