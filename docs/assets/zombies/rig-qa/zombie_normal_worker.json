@@ -1,0 +1,107 @@
+{
+  "character": "zombie_normal_worker",
+  "bones": 50,
+  "actions": 16,
+  "action_names": [
+    "Crawl",
+    "Death",
+    "HitReact",
+    "Idle",
+    "Idle_Attack",
+    "Jump",
+    "Jump_Idle",
+    "Jump_Land",
+    "No",
+    "Punch",
+    "Run",
+    "Run_Arms",
+    "Run_Attack",
+    "Walk",
+    "Wave",
+    "Yes"
+  ],
+  "triangles_before": 795815,
+  "triangles_after": 12000,
+  "budget": 12000,
+  "weight_method": "geometric_smoothed",
+  "facing": {
+    "yaw_deg": -90.0,
+    "flipped_180": false
+  },
+  "within_budget": true,
+  "weight_regions": [
+    {
+      "region": "arm_left",
+      "verts": 323,
+      "top_bones": [
+        [
+          "Eyelid.L",
+          323
+        ],
+        [
+          "Head",
+          95
+        ],
+        [
+          "Eyelid.R",
+          10
+        ]
+      ]
+    },
+    {
+      "region": "arm_right",
+      "verts": 423,
+      "top_bones": [
+        [
+          "Eyelid.R",
+          423
+        ],
+        [
+          "Head",
+          44
+        ],
+        [
+          "Eyelid.L",
+          24
+        ]
+      ]
+    },
+    {
+      "region": "torso",
+      "verts": 4158,
+      "top_bones": [
+        [
+          "Eyelid.L",
+          4158
+        ],
+        [
+          "Eyelid.R",
+          4158
+        ],
+        [
+          "Head",
+          4158
+        ]
+      ]
+    },
+    {
+      "region": "legs",
+      "verts": 3195,
+      "top_bones": [
+        [
+          "Head",
+          3195
+        ],
+        [
+          "Eyelid.L",
+          2867
+        ],
+        [
+          "Eyelid.R",
+          2867
+        ]
+      ]
+    }
+  ],
+  "out": "assets/enemies/generated/zombie_normal_worker.glb"
+}
