@@ -9,15 +9,6 @@ enum BloodRequestType {
 
 const SPLAT_SCENE := preload("res://scenes/fx/GroundBloodSplat.tscn")
 const BLOOD_IMPACT_SCENE := preload("res://scenes/fx/BloodImpact.tscn")
-const HIT_TEXTURES: Array[Texture2D] = [
-	preload("res://assets/fx/blood/kenney_splat26.png"),
-	preload("res://assets/fx/blood/kenney_splat29.png"),
-	preload("res://assets/fx/blood/kenney_splat34.png"),
-]
-const TRAIL_TEXTURES: Array[Texture2D] = [
-	preload("res://assets/fx/blood/kenney_splat20.png"),
-	preload("res://assets/fx/blood/kenney_splat29.png"),
-]
 
 @export_range(1, 512, 1) var max_splats := 192
 @export_flags_3d_physics var surface_collision_mask := 1
@@ -52,53 +43,32 @@ func _ready() -> void:
 ## 记录 prewarm() 里建的那些 splat，供 finish_prewarm() 在 force_draw 之后统一隐藏。
 var _prewarmed_splats: Array[GroundBloodSplat] = []
 
-## 开局预建并预热地面血迹池。共享材质重构后（见 ground_blood_splat.gd），
-## 同一贴图的所有 splat 只编译一次着色器，明暗/透明度走 instance_color 不再
-## 触发重编译——所以这里只需：
-##  1) 预建一批实例，覆盖一枪命中的峰值复用，避免开枪瞬间首次 instantiate 的
-##     GL 资源创建开销；
-##  2) 每种血迹贴图各取一个摆进视野，让紧随其后的 force_draw 把每个共享材质的
-##     着色器/纹理各编译一次（共 ≤4 次，而非过去的每实例一次）。
-## 之后真实命中全部复用池里已建好的实例，开枪零新增实例化、零新增编译。
+## 开局预建并预热地面血迹池。所有血迹共享一份程序化材质，所以只需让一个实例
+## 进入视野触发 shader 编译；之后真实命中复用池中实例，不再创建材质或上传贴图。
 const PREWARM_POOL_SIZE := 64
 
 func prewarm(context: FxWarmupContext) -> void:
-	# 1) 预建一批实例（不必建满 max_splats：实例化开销已摊到热身期）。
 	var target := mini(PREWARM_POOL_SIZE, maxi(max_splats, 1))
 	while splats.size() < target:
 		_acquire_splat()
-	# 2) 每种贴图各取一个摆进视野，触发其共享材质编译。
-	var all_textures: Array[Texture2D] = []
-	all_textures.append_array(HIT_TEXTURES)
-	all_textures.append_array(TRAIL_TEXTURES)
-	var seen: Dictionary = {}
-	var index := 0
-	for texture in all_textures:
-		if texture == null or seen.has(texture.get_instance_id()):
-			continue
-		seen[texture.get_instance_id()] = true
-		var splat := splats[index] as GroundBloodSplat
-		var lateral := float(index % 4) * 0.3 - 0.45
-		var depth := 3.0 + float(index / 4) * 0.3
-		splat.setup(
-			context.position_in_view(depth, Vector2(lateral, -0.3)),
-			Vector3.UP,
-			Vector2.ONE,
-			0.0,
-			Color(0.42, 0.008, 0.015, 0.92),
-			texture,
-			0.4
-		)
-		splat.visible = true
-		_prewarmed_splats.append(splat)
-		index += 1
+	var splat := splats[0] as GroundBloodSplat
+	splat.setup(
+		context.position_in_view(3.0, Vector2(0.0, -0.3)),
+		-context.forward_direction(),
+		Vector2.ONE * 1.8,
+		0.0,
+		Color(0.42, 0.005, 0.01, 0.96),
+		Color(0.58, 0.012, 0.018, 0.26),
+		0.30
+	)
+	_prewarmed_splats.append(splat)
 
 ## force_draw 完成之后调用：把预热用的 splat 隐藏。它们留在池里（已编译），
 ## 后续真实命中直接复用，不进模拟层、不影响判定。
 func finish_prewarm() -> void:
 	for splat in _prewarmed_splats:
 		if is_instance_valid(splat):
-			splat.visible = false
+			splat.finish_render_warmup()
 	_prewarmed_splats.clear()
 
 func spawn_blood_impact(
@@ -136,15 +106,15 @@ func _process(_delta: float) -> void:
 		set_process(false)
 
 func queue_hit_splat(
-	hit_position: Vector3,
-	shot_direction: Vector3,
-	intensity: float = 1.0
+	world_position: Vector3,
+	intensity: float = 1.0,
+	killed: bool = false
 ) -> void:
 	_queue_blood_request({
 		"type": BloodRequestType.HIT,
-		"position": hit_position,
-		"direction": shot_direction,
+		"position": world_position,
 		"intensity": intensity,
+		"killed": killed,
 	})
 
 func queue_trail_splat(
@@ -187,8 +157,8 @@ func _process_blood_request(request: Dictionary) -> void:
 		BloodRequestType.HIT:
 			spawn_hit_splat(
 				request["position"],
-				request["direction"],
-				request["intensity"]
+				request["intensity"],
+				bool(request.get("killed", false))
 			)
 		BloodRequestType.TRAIL:
 			spawn_trail_splat(
@@ -205,9 +175,9 @@ func place_splat(
 	surface_normal: Vector3,
 	size: Vector2,
 	rotation_radians: float,
-	tint: Color,
-	texture: Texture2D,
-	roughness: float
+	center_tint: Color,
+	edge_tint: Color,
+	duration_seconds: float
 ) -> GroundBloodSplat:
 	var cell := _cell_for_position(surface_position)
 	var existing_layers: Array = cell_splats.get(cell, [])
@@ -223,39 +193,42 @@ func place_splat(
 		surface_normal,
 		size,
 		rotation_radians,
-		tint,
-		texture,
-		roughness
+		center_tint,
+		edge_tint,
+		duration_seconds
 	)
 	_register_splat(splat, cell)
 	return splat
 
 func spawn_hit_splat(
-	hit_position: Vector3,
-	shot_direction: Vector3,
-	intensity: float = 1.0
+	world_position: Vector3,
+	intensity: float = 1.0,
+	killed: bool = false
 ) -> GroundBloodSplat:
-	var surface := _find_blood_surface(hit_position)
+	var surface := _find_blood_surface(world_position)
 	if surface.is_empty():
 		return null
-	var resolved_intensity := clampf(intensity, 0.75, 1.35)
-	# 单发命中的血点直径。玩家角色约 1 米宽，原来的 0.9~1.25 米让一发子弹的血
-	# 比僵尸本身还大，冲锋枪 10 发/秒时几帧就能铺满脚下一片地。
-	# 收到半米以内，血迹才读作「弹着点」而不是「泼了一桶漆」。
-	var diameter := minf(randf_range(0.42, 0.68) * resolved_intensity, 0.8)
-	var horizontal_direction := Vector3(shot_direction.x, 0.0, shot_direction.z)
-	var rotation_radians := 0.0
-	if horizontal_direction.length_squared() > 0.000001:
-		rotation_radians = atan2(horizontal_direction.x, horizontal_direction.z)
-	rotation_radians += randf_range(-0.12, 0.12)
+	var resolved_intensity := clampf(intensity, 0.85, 1.15)
+	var diameter_range := Vector2(1.60, 1.90)
+	var center_tint := Color(0.42, 0.005, 0.01, 0.96)
+	var edge_tint := Color(0.58, 0.012, 0.018, 0.26)
+	if killed:
+		diameter_range = Vector2(1.90, 2.15)
+		center_tint = Color(0.36, 0.003, 0.008, 0.98)
+		edge_tint = Color(0.52, 0.008, 0.014, 0.32)
+	var diameter := clampf(
+		randf_range(diameter_range.x, diameter_range.y) * resolved_intensity,
+		diameter_range.x,
+		diameter_range.y
+	)
 	return place_splat(
 		surface["position"],
 		surface["normal"],
 		Vector2.ONE * diameter,
-		rotation_radians,
-		Color(0.42, 0.008, 0.015, randf_range(0.86, 0.96)),
-		HIT_TEXTURES.pick_random(),
-		randf_range(0.32, 0.42)
+		0.0,
+		center_tint,
+		edge_tint,
+		0.30
 	)
 
 func spawn_trail_splat(
@@ -278,8 +251,8 @@ func spawn_trail_splat(
 		Vector2(width, length),
 		rotation_radians,
 		Color(0.38, 0.006, 0.012, lerpf(0.92, 0.82, resolved_progress)),
-		TRAIL_TEXTURES.pick_random(),
-		lerpf(0.45, 0.6, resolved_progress)
+		Color(0.55, 0.012, 0.018, lerpf(0.28, 0.20, resolved_progress)),
+		0.22
 	)
 
 func spawn_death_pool(
@@ -289,21 +262,20 @@ func spawn_death_pool(
 	var surface := _find_blood_surface(world_position)
 	if surface.is_empty():
 		return null
-	var resolved_intensity := clampf(intensity, 0.8, 1.35)
-	# 尸血池保持明显大于单发血点（约两倍），让「这里死过一只」和「这里中过一枪」
-	# 在地面上一眼可分。收窄的是绝对尺寸，不是这个对比关系。
-	var size := Vector2(
-		clampf(randf_range(0.85, 1.05) * resolved_intensity, 0.85, 1.05),
-		clampf(randf_range(0.85, 1.05) * resolved_intensity, 0.85, 1.05)
+	var resolved_intensity := clampf(intensity, 0.85, 1.15)
+	var diameter := clampf(
+		randf_range(2.00, 2.30) * resolved_intensity,
+		2.00,
+		2.30
 	)
 	return place_splat(
 		surface["position"],
 		surface["normal"],
-		size,
-		randf_range(-PI, PI),
-		Color(0.36, 0.004, 0.01, 0.95),
-		HIT_TEXTURES.pick_random(),
-		randf_range(0.34, 0.44)
+		Vector2.ONE * diameter,
+		0.0,
+		Color(0.34, 0.003, 0.008, 0.98),
+		Color(0.50, 0.008, 0.014, 0.34),
+		0.30
 	)
 
 func _acquire_splat() -> GroundBloodSplat:

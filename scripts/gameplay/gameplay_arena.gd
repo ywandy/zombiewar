@@ -1019,6 +1019,7 @@ func _offer_index_of(offer: ShopOfferDefinition) -> int:
 func _on_sim_hit_event(event: Dictionary) -> void:
 	var planar: Vector2 = event["position"]
 	var hit_position := Vector3(planar.x, float(event["height"]), planar.y)
+	var foot_position := Vector3(planar.x, 0.0, planar.y)
 	var planar_direction: Vector2 = event["direction"]
 	var direction := Vector3(planar_direction.x, 0.0, planar_direction.y)
 	var view := zombie_renderer.get_near_view(int(event["zombie_id"]))
@@ -1040,9 +1041,7 @@ func _on_sim_hit_event(event: Dictionary) -> void:
 	# 模拟层一 tick 能打死一整片僵尸，逐个立刻实例化血迹会把这一帧顶爆；
 	# GroundBloodManager 的帧预算就是为这个场景准备的。
 	manager.spawn_blood_impact(hit_position, direction, 1.0)
-	manager.queue_hit_splat(hit_position, direction, 1.0)
-	if bool(event["killed"]):
-		manager.queue_death_pool(Vector3(planar.x, 0.0, planar.y), 1.25)
+	manager.queue_hit_splat(foot_position, 1.0, bool(event["killed"]))
 	# 伤害数字飘字：肉鸽爽点核心。数值来自模拟层（已确定），表现层只负责飘升淡出。
 	var damage := float(event.get("damage", 0.0))
 	if damage > 0.0:
