@@ -43,6 +43,17 @@ func set_accent_color(value: Color) -> void:
 	accent_color = value
 	_apply_status()
 
+func set_character_definition(definition: CharacterDefinition) -> void:
+	if character_model != null and is_instance_valid(character_model):
+		character_model.free()
+	character_model = null
+	var selected := (
+		definition.model_scene
+		if definition != null and definition.model_scene != null
+		else character_scene
+	)
+	_instantiate_character(selected)
+
 ## 座位卡里名字由卡片自己的 2D 标签画，Label3D 要能关掉，
 ## 否则同一个名字会在卡里出现两次。
 func set_label_visible(value: bool) -> void:
@@ -83,11 +94,12 @@ func _visible_within_preview(node: Node3D) -> bool:
 		cursor = cursor.get_parent()
 	return true
 
-func _instantiate_character() -> void:
-	if character_scene == null:
+func _instantiate_character(scene: PackedScene = null) -> void:
+	var selected := scene if scene != null else character_scene
+	if selected == null:
 		_warn_missing_resource()
 		return
-	var instance := character_scene.instantiate() as Node3D
+	var instance := selected.instantiate() as Node3D
 	if instance == null:
 		_warn_missing_resource()
 		return

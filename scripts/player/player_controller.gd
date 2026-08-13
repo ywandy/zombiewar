@@ -12,6 +12,9 @@ const RangedWeaponDefinition = preload(
 	"res://scripts/combat/weapons/ranged_weapon_definition.gd"
 )
 const PlayerInputStateScript = preload("res://scripts/input/player_input_state.gd")
+const CharacterVisualHostScript = preload(
+	"res://scripts/player/character_visual_host.gd"
+)
 const DEATH_VOICE_SOUNDS := [
 	preload("res://assets/sfx/boxhead/player_scream_1.mp3"),
 	preload("res://assets/sfx/boxhead/player_scream_2.mp3"),
@@ -143,6 +146,11 @@ func apply_character_definition(def: CharacterDefinition) -> void:
 	set_accent_color(def.accent_color)
 
 func _ready() -> void:
+	var visual_host := visual_root as CharacterVisualHostScript
+	if visual_host != null:
+		visual_host.install(
+			character_definition.model_scene if character_definition != null else null
+		)
 	_ensure_health_initialized()
 	_sync_health_bar(false)
 	health_bar_initialized = true
