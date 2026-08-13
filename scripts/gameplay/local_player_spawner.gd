@@ -30,14 +30,7 @@ func spawn_players(
 	if session == null:
 		return _fail_spawn(spawned, "GameSession is unavailable")
 	session.last_error = ""
-	var descriptors: Array = []
-	if session.mode in [
-		GameSessionScript.Mode.LOCAL_MULTIPLAYER,
-		GameSessionScript.Mode.ONLINE_MULTIPLAYER,
-	]:
-		descriptors = session.local_players
-	else:
-		descriptors = [null]
+	var descriptors: Array = session.local_players
 	if descriptors.is_empty() or descriptors.size() > spawn_points.size():
 		return _fail_spawn(spawned, "Local player session has no valid spawn slots")
 	if player_scene == null:
@@ -50,7 +43,9 @@ func spawn_players(
 	for index in range(descriptors.size()):
 		var input_source = single_player_input
 		var descriptor = descriptors[index]
-		if descriptor != null:
+		if session.mode == GameSessionScript.Mode.SINGLE:
+			input_source = single_player_input
+		elif descriptor != null:
 			# 联机的本机座位刻意返回 null：它要复用竞技场那一个已经接好触屏
 			# 摇杆的输入源实例，而不是新建一个没人给它喂输入的。
 			# 只认 is_local 这一条替换理由——本地多人下 create_input_source()
@@ -74,7 +69,7 @@ func spawn_players(
 			return _fail_spawn(spawned, "Player %d could not be instantiated" % (index + 1))
 		player.name = "P%d" % (index + 1)
 		player.player_index = index
-		# 两个描述符同形，都带 character_id；单机的 descriptor 为 null，走默认角色。
+		# 三种模式的描述符同形，都带 character_id；只有输入源创建按模式分叉。
 		var catalog = ContentCatalogsScript.characters()
 		var character_id: StringName = catalog.default_id()
 		if descriptor != null and "character_id" in descriptor and String(descriptor.character_id) != "":
