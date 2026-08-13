@@ -193,6 +193,7 @@ func _hit_event(killed: bool) -> Dictionary:
 	return {
 		"zombie_id": 1,
 		"position": Vector2(1.0, -1.0),
+		"zombie_position": Vector2(1.0, -1.0),
 		"height": 1.1,
 		"direction": Vector2.RIGHT,
 		"damage": 25.0,

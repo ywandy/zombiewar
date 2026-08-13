@@ -1019,7 +1019,8 @@ func _offer_index_of(offer: ShopOfferDefinition) -> int:
 func _on_sim_hit_event(event: Dictionary) -> void:
 	var planar: Vector2 = event["position"]
 	var hit_position := Vector3(planar.x, float(event["height"]), planar.y)
-	var foot_position := Vector3(planar.x, 0.0, planar.y)
+	var zombie_planar: Vector2 = event["zombie_position"]
+	var foot_position := Vector3(zombie_planar.x, 0.0, zombie_planar.y)
 	var planar_direction: Vector2 = event["direction"]
 	var direction := Vector3(planar_direction.x, 0.0, planar_direction.y)
 	var view := zombie_renderer.get_near_view(int(event["zombie_id"]))

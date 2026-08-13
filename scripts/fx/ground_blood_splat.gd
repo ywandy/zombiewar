@@ -89,9 +89,6 @@ func setup(
 	current_edge_tint = edge_tint
 	current_surface_normal = normal
 	current_rotation = rotation_radians
-	expansion_duration = maxf(duration_seconds, 0.001)
-	expansion_elapsed = 0.0
-	expansion_progress = 0.0
 	var resolved_position := surface_position + normal * surface_offset
 	if is_inside_tree():
 		global_position = resolved_position
@@ -101,6 +98,12 @@ func setup(
 	material_override = _get_shared_material()
 	set_instance_shader_parameter("center_tint", current_tint)
 	set_instance_shader_parameter("edge_tint", current_edge_tint)
+	retrigger_expansion(duration_seconds)
+
+func retrigger_expansion(duration_seconds: float = 0.30) -> void:
+	expansion_duration = maxf(duration_seconds, 0.001)
+	expansion_elapsed = 0.0
+	expansion_progress = 0.0
 	set_instance_shader_parameter("reveal_radius", MIN_REVEAL_RADIUS)
 	visible = true
 	set_process(true)

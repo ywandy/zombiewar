@@ -184,6 +184,7 @@ func place_splat(
 	if existing_layers.size() >= maxi(max_layers_per_cell, 1):
 		var merged := _size_matched_layer(existing_layers, size)
 		merged.merge_limited(1.15, 0.015)
+		merged.retrigger_expansion(duration_seconds)
 		return merged
 
 	var splat := _acquire_splat()
@@ -209,11 +210,11 @@ func spawn_hit_splat(
 	if surface.is_empty():
 		return null
 	var resolved_intensity := clampf(intensity, 0.85, 1.15)
-	var diameter_range := Vector2(1.60, 1.90)
+	var diameter_range := Vector2(2.40, 2.80)
 	var center_tint := Color(0.42, 0.005, 0.01, 0.96)
 	var edge_tint := Color(0.58, 0.012, 0.018, 0.26)
 	if killed:
-		diameter_range = Vector2(1.90, 2.15)
+		diameter_range = Vector2(2.80, 3.20)
 		center_tint = Color(0.36, 0.003, 0.008, 0.98)
 		edge_tint = Color(0.52, 0.008, 0.014, 0.32)
 	var diameter := clampf(
