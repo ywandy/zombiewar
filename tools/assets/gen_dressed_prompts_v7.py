@@ -19,10 +19,18 @@ Codex 的版本 kit 比身体宽 29%，脚本装配的版本部件散落。
 
 体型也不再需要独立基体：矮壮、精瘦直接写进提示词。
 
-## 姿势约定
+## 姿势约定：必须是 T-pose
 
-姿势必须贴近骨架自带 Body 网格的姿势（手臂略微张开，不是外张 30 度的 A-pose），
-否则按邻近度转移权重会错位。因此用现有基体图当姿势参考，并逐字要求复制其姿势。
+蒙皮的绑定姿势就是骨架的 rest pose，网格不处在 rest pose 上，形变必然崩。实测骨架
+自带的 Lis 网格尺寸 X=2.043 / Z=1.718，宽度大于身高，是标准 T-pose（手臂完全水平）。
+
+首版 v7 按"手臂略张 15-20 度"出图，与 rest pose 差 70 多度，按邻近度转移权重会把
+手臂顶点映射到躯干骨上，20 个动画的手臂形变全错。因此改为严格 T-pose，并把骨架
+rest pose 的渲染图直接当姿势模板喂进去——姿势和比例靠文字压不住，必须用图锁，这
+一点在 female_slim 三连败和女性角色比例上已经验证过两次。
+
+代价：侧视图里手臂正对镜头，透视压缩严重，手臂的重建信息主要靠正视与背视承担。
+这个代价必须接受，因为绑定正确性没有商量余地。
 """
 
 from __future__ import annotations
@@ -58,10 +66,12 @@ BUILD = {
 }
 
 POSE = (
-    "Pose: copy the standing pose of Image 2 exactly. Upright compact torso, arms hanging only "
-    "slightly away from the body (roughly 15 to 20 degrees, NOT a wide 30-degree A-pose), elbows "
-    "straight, fingers relaxed and separated, legs apart, feet parallel and flat on the same "
-    "ground line. Symmetrical. No held object, no weapon, no leaning, no action pose."
+    "Pose: strict T-pose, copied from Image 2. Both arms raised straight out to the sides and "
+    "held perfectly HORIZONTAL at shoulder height, elbows locked straight, arms fully extended so "
+    "the total arm span is wider than the character is tall. Palms face down, fingers straight and "
+    "separated. Torso upright and symmetrical, legs straight and slightly apart, feet parallel and "
+    "flat on the same ground line. No held object, no weapon, no leaning, no action pose, arms must "
+    "NOT hang down and must NOT be in a 30-degree A-pose."
 )
 
 RENDERING = (
@@ -105,7 +115,8 @@ def front_prompt(c: dict, data: dict) -> str:
             "Asset type: front orthographic full character source art for image-to-3D",
             f"Input images: Image 1 is the approved equipment design sheet for {c['id']} and is "
             "authoritative for the face, hair, equipment shapes, colors and wear. Image 2 is the "
-            "approved base body and is authoritative for proportion, height and standing pose.",
+            "target rig rest pose and is authoritative for the T-pose arm angle: the mesh must be "
+            "built in this exact pose so it can be skinned onto the existing skeleton.",
             f"Subject: ONE complete {cls} survivor character, fully wearing every piece of equipment "
             "shown in Image 1, assembled onto the body. This is a single connected figure, NOT a "
             "layout of separated parts.",

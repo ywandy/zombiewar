@@ -1,0 +1,32 @@
+{
+  "character": "female_demolition",
+  "bones": 43,
+  "actions": 20,
+  "action_names": [
+    "Death",
+    "Duck",
+    "HitReact",
+    "Idle",
+    "Idle_Gun",
+    "Jump",
+    "Jump_Idle",
+    "Jump_Land",
+    "No",
+    "Punch",
+    "Run",
+    "Run_Gun",
+    "Run_Slash",
+    "Run_Stab",
+    "Slash",
+    "Stab",
+    "Walk",
+    "Walk_Gun",
+    "Wave",
+    "Yes"
+  ],
+  "triangles_before": 975414,
+  "triangles_after": 30000,
+  "budget": 30000,
+  "within_budget": true,
+  "out": "assets/characters/generated/female_demolition.glb"
+}
