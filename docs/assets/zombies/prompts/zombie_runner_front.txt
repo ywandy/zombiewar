@@ -1,0 +1,13 @@
+Use case: stylized-concept
+Asset type: front orthographic full character source art for image-to-3D
+Input images: Image 1 is the approved survivor art style and is authoritative for the ink weight, cel shading and hand-painted wear. Image 2 is the target rig rest pose and is authoritative for the T-pose arm angle.
+Subject: ONE complete zombie, a single connected figure. 疾行僵尸.
+Build: gaunt and wiry, noticeably LEANER and slightly shorter than the baseline, deep hunch with the head thrust forward ahead of the shoulders, long thin arms trailing back behind the body, coiled sprinter stance.
+Clothing: almost no clothing left, only shredded rags at the waist, exposed ribs and sinew.
+Colours: pale bloodless grey-tan skin, raw dark red exposed muscle along the arms and ribs, ragged brown scraps — skin #C7B9A6, clothing #5A4B3C, dried blood #8E2A20. Decay language shared across the whole horde: hand-painted rot: sunken cheeks, exposed teeth, torn clothing, dried blood, dirt. Absolutely no purple, violet or magenta anywhere.
+Silhouette intent: the thinnest and most forward-leaning shape in the roster. Even as a small dark shape in a crowd it must read as 'this one is fast', by hunch and thinness alone, not by colour.
+Pose: strict T-pose copied from Image 2. Both arms raised straight out to the sides and held HORIZONTAL at shoulder height, elbows straight, arm span wider than the figure is tall. Legs straight and slightly apart, feet flat on the same ground line. The undead character of the figure comes from the body shape, the hunch of the spine and the head angle, NOT from lowering or bending the arms — the arms must stay horizontal so the mesh can be skinned to the existing skeleton.
+Rendering: rough uneven thick black ink outer line, scratchy internal ink, flat two-step cel shading with a hard shadow edge, hand-painted rot and grime. Bold inked cartoon game character, not a rendered product photo, not smooth low-poly flat colour.
+Camera: true orthographic exact front view, eye level, no perspective, no tilt. Full body centered with generous padding.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Avoid: purple, violet, magenta, cute, friendly, mascot, smooth untextured low-poly flat colour, held weapon, photorealism, glossy 3D render, smooth vector art, soft airbrush, smooth gradient shading, three-quarter view, perspective distortion, dramatic action pose, arms hanging down, bent elbows, extra limbs, fused fingers, letters or typographic glyphs.

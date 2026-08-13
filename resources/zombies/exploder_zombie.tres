@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ZombieDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/map/zombie_definition.gd" id="1_definition"]
+[ext_resource type="PackedScene" path="res://scenes/targets/ZombieTarget.tscn" id="2_zombie_target"]
+
+[resource]
+script = ExtResource("1_definition")
+type_id = &"exploder"
+display_name = "爆破僵尸"
+view_scene = ExtResource("2_zombie_target")
+max_health = 35
+move_speed_scale_per_10000 = 11000
+explodes_on_death = true
+explosion_radius = 3.5
+explosion_center_damage = 70.0
+explosion_edge_damage = 22.0

@@ -1146,8 +1146,32 @@ func apply_zombie_damage(
 		zombie_radius[index] = 0.0
 		zombie_velocity[index] = Vector2.ZERO
 		_resolve_zombie_death_groups(index)
+		_queue_zombie_death_explosion(index)
 		tick_death_events.append(zombie_id[index])
 	return true
+
+## 爆破型僵尸死亡时入队一次爆炸。
+##
+## 走 queue_explosion_event() 而不是直接结算，有两个原因：
+## 一是爆炸在下一 tick 处理，连锁引爆不会在本 tick 内递归，与油桶连锁同一套设计；
+## 二是入队后与油桶爆炸共用同一条确定性结算路径，不引入第二套伤害逻辑。
+func _queue_zombie_death_explosion(index: int) -> void:
+	var profile_index := zombie_profile_index[index]
+	if profile_index < 0 or profile_index >= zombie_profiles.size():
+		return
+	var profile: Dictionary = zombie_profiles[profile_index]
+	if not bool(profile.get("explodes_on_death", false)):
+		return
+	var radius := float(profile.get("explosion_radius", 0.0))
+	if radius <= 0.0:
+		return
+	queue_explosion_event(
+		zombie_position[index],
+		zombie_height[index],
+		radius,
+		float(profile.get("explosion_center_damage", 0.0)),
+		float(profile.get("explosion_edge_damage", 0.0))
+	)
 
 ## 唯一的油桶命中入口，语义逐条对应基线 ExplosiveBarrel.apply_hit()：
 ##   - 已上引信或已销毁的桶算未命中（基线 `state >= State.EXPLODING` 返回 miss）；
@@ -1794,10 +1818,15 @@ func _compact_dead() -> void:
 	zombie_move_speed = new_move_speed
 	zombie_attack_state = new_attack_state
 
+## 爆炸参数是可选的，缺省即不爆炸，因此现有三个调用点无需改动。
 func configure_zombie_profile(
 	profile_index: int,
 	max_health: int,
-	move_speed: float
+	move_speed: float,
+	explodes_on_death: bool = false,
+	explosion_radius: float = 0.0,
+	explosion_center_damage: float = 0.0,
+	explosion_edge_damage: float = 0.0
 ) -> void:
 	if profile_index < 0:
 		return
@@ -1806,6 +1835,10 @@ func configure_zombie_profile(
 	zombie_profiles[profile_index] = {
 		"max_health": maxi(max_health, 1),
 		"move_speed": maxf(move_speed, 0.0),
+		"explodes_on_death": explodes_on_death,
+		"explosion_radius": maxf(explosion_radius, 0.0),
+		"explosion_center_damage": maxf(explosion_center_damage, 0.0),
+		"explosion_edge_damage": maxf(explosion_edge_damage, 0.0),
 	}
 
 ## 每个组独立掷触发概率；单个命中组仅按正整数权重选择一个事件。

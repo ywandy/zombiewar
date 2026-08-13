@@ -1,0 +1,12 @@
+Use case: stylized-concept
+Asset type: back orthographic full character source art for image-to-3D
+Input images: Image 1 is the approved FRONT view of zombie_normal_police. It is the identity reference and must be matched exactly.
+Subject: the same single zombie as Image 1, same body, same clothing, same wounds, same colours, same height and same scale, redrawn seen from the back.
+Build: average adult build, stiff upright shoulders, jaw hanging open.
+Colours: rotted olive-grey skin, dark navy uniform faded to grey-blue, dried blood dark red — skin #7E8C63, clothing #33404F, dried blood #7A2318. Decay language shared across the whole horde: hand-painted rot: sunken cheeks, exposed teeth, torn clothing, dried blood, dirt. Absolutely no purple, violet or magenta anywhere.
+Pose: strict T-pose copied from Image 2. Both arms raised straight out to the sides and held HORIZONTAL at shoulder height, elbows straight, arm span wider than the figure is tall. Legs straight and slightly apart, feet flat on the same ground line. The undead character of the figure comes from the body shape, the hunch of the spine and the head angle, NOT from lowering or bending the arms — the arms must stay horizontal so the mesh can be skinned to the existing skeleton.
+Rendering: rough uneven thick black ink outer line, scratchy internal ink, flat two-step cel shading with a hard shadow edge, hand-painted rot and grime. Bold inked cartoon game character, not a rendered product photo, not smooth low-poly flat colour.
+Camera: true orthographic exact rear view, eye level, no perspective, no tilt, identical scale and identical crop to Image 1. The figure must occupy exactly the same image height as in Image 1 so the four views register against each other.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Consistency: torn edges, wound positions, clothing remnants and colours must all match Image 1. Do not add, remove or restyle any part.
+Avoid: purple, violet, magenta, cute, friendly, mascot, smooth untextured low-poly flat colour, held weapon, photorealism, glossy 3D render, smooth vector art, soft airbrush, smooth gradient shading, three-quarter view, perspective distortion, dramatic action pose, arms hanging down, bent elbows, extra limbs, fused fingers, letters or typographic glyphs, new parts not present in Image 1.

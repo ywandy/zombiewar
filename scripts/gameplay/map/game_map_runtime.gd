@@ -232,7 +232,15 @@ func load(
 			* float(zombie.move_speed_scale_per_10000)
 			/ 10000.0
 		)
-		world.configure_zombie_profile(profile_index, zombie.max_health, move_speed)
+		world.configure_zombie_profile(
+			profile_index,
+			zombie.max_health,
+			move_speed,
+			zombie.explodes_on_death,
+			zombie.explosion_radius,
+			zombie.explosion_center_damage,
+			zombie.explosion_edge_damage
+		)
 	world.set_perception_range(definition.zombie_perception_range)
 	world.configure_wave_schedule(
 		compiled_waves,
