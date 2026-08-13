@@ -151,6 +151,34 @@ func get_direction(cell: Vector2i) -> Vector2:
 		_compute_direction(index, cell)
 	return Vector2(direction_x[index], direction_z[index])
 
+## 亚格平滑方向：取僵尸所在世界点周围 4 个 cell 的方向做双线性插值。
+##
+## `get_direction()` 每格只存坡度最陡的**单个量化方向**。僵尸贴着墙时，这个方向常常
+## 正指墙面，而碰撞推离是纯径向的、不提供任何切向滑动——两者叠加就把僵尸钉在墙上
+## 原地抖。业界流场游戏（Planetary Annihilation / SupCom2 一路下来）都会对相邻格方向
+## 做插值，得到随亚格位置连续变化的方向场；插值后贴墙方向会自然偏成沿墙切向，僵尸
+## 被推开的同时仍在「顺墙往前」，从而绕出死角而不是卡死。
+##
+## 数学上只用加、减、乘（无除法、无三角），保持跨端逐位一致。
+func get_direction_smooth(world_xz: Vector2) -> Vector2:
+	var gx := (world_xz.x - grid.origin.x) / grid.cell_size - 0.5
+	var gz := (world_xz.y - grid.origin.y) / grid.cell_size - 0.5
+	var base_x := floori(gx)
+	var base_z := floori(gz)
+	var frac_x := clampf(gx - float(base_x), 0.0, 1.0)
+	var frac_z := clampf(gz - float(base_z), 0.0, 1.0)
+	var c00 := Vector2i(base_x, base_z)
+	var c10 := Vector2i(base_x + 1, base_z)
+	var c01 := Vector2i(base_x, base_z + 1)
+	var c11 := Vector2i(base_x + 1, base_z + 1)
+	var top := get_direction(c00).lerp(get_direction(c10), frac_x)
+	var bottom := get_direction(c01).lerp(get_direction(c11), frac_x)
+	var blended := top.lerp(bottom, frac_z)
+	# 源点附近四格方向相互抵消时，退回所在格的量化方向，避免近距离出零向量。
+	if blended.length_squared() <= 0.0001:
+		return get_direction(grid.world_to_cell(world_xz))
+	return blended.normalized()
+
 func get_rebuild_count() -> int:
 	return rebuild_count
 

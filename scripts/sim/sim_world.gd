@@ -1486,7 +1486,7 @@ func _update_zombies() -> void:
 					index,
 					distance_to_target,
 					direction_to_target,
-					attack_path_clear
+					target_position
 				)
 
 		var facing_direction := direction_to_target
@@ -1586,12 +1586,21 @@ func _wander_velocity(index: int) -> Vector2:
 
 ## 追击只查自己所在 cell 的方向向量，成本与僵尸数量无关。
 ## 流场不可达（例如被临时封死）时退回直线方向，行为与旧的导航不可用回退一致。
+##
+## 直线追击（ZOMBIE_DIRECT_CHASE_RANGE 内）只在**视线通畅**时用：视线被墙挡住还直冲，
+## 僵尸会沿直线贴到玩家背后的墙上，被 `resolve_circle_push()` 的纯径向推离顶住——
+## 前进速度与推离完全抵消，又因为直线区不查流场而永远绕不回去，永久死锁。所以贴身
+## 但看不见玩家时落回流场绕行，流场会把它带回能直视玩家的位置再收拢。
 func _approach_velocity(
 	index: int,
 	distance_to_target: float,
 	direction_to_target: Vector2,
-	attack_path_clear: bool
+	target_position: Vector2
 ) -> Vector2:
+	var attack_path_clear := (
+		distance_to_target <= ZOMBIE_ATTACK_RANGE and
+		line_is_clear(zombie_position[index], target_position)
+	)
 	var stop_range := ZombieBehaviorMathScript.approach_stop_range(
 		distance_to_target, ZOMBIE_ATTACK_RANGE, attack_path_clear
 	)
@@ -1599,13 +1608,17 @@ func _approach_velocity(
 	if gap <= 0.0:
 		return Vector2.ZERO
 	var speed_factor := clampf(gap / ZOMBIE_PERCEPTION_SLOW_RADIUS, 0.25, 1.0)
-	# 贴身范围内直接追，不查流场：流场是节流重建的，近距离用它会追着玩家一个
-	# 重建间隔之前的位置跑。
+	var chase_directly := (
+		distance_to_target <= ZOMBIE_DIRECT_CHASE_RANGE and
+		line_is_clear(zombie_position[index], target_position)
+	)
+	# 贴身范围内且看得见才直线追，不查流场：流场是节流重建的，近距离用它会追着玩家
+	# 一个重建间隔之前的位置跑。看不见就走亚格平滑流场方向绕行。
 	var direction := direction_to_target
-	if distance_to_target > ZOMBIE_DIRECT_CHASE_RANGE:
-		direction = flow_field.get_direction(
-			grid.world_to_cell(zombie_position[index])
-		)
+	if not chase_directly:
+		# 用亚格平滑方向而不是单格量化方向：贴墙僵尸的方向会随亚格位置连续偏成
+		# 沿墙切向，配合径向推离就能顺墙滑出死角，而不是被钉在墙上原地抖。
+		direction = flow_field.get_direction_smooth(zombie_position[index])
 		# 给流场方向叠一个侧向偏移，让尸群沿不同弧线逼近。
 		#
 		# 流场对所有僵尸给出同一条最短路径，于是整群会压成一条线鱼贯而来，玩家
