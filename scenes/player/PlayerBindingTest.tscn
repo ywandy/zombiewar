@@ -1,0 +1,76 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_binding_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2_player"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(16, 16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial_ground"]
+albedo_color = Color(0.13, 0.16, 0.18, 1)
+roughness = 0.88
+
+[sub_resource type="BoxShape3D" id="BoxShape_ground"]
+size = Vector3(16, 0.2, 16)
+
+[sub_resource type="SphereMesh" id="SphereMesh_socket"]
+radius = 0.06
+height = 0.12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial_socket"]
+shading_mode = 0
+albedo_color = Color(1, 0.22, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.08, 0.02, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 1
+background_color = Color(0.025, 0.035, 0.05, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.62, 0.68, 0.8, 1)
+ambient_light_energy = 0.72
+
+[node name="PlayerBindingTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -28, 0)
+light_energy = 1.8
+shadow_enabled = true
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_ground")
+material_override = SubResource("StandardMaterial_ground")
+
+[node name="GroundBody" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundBody"]
+position = Vector3(0, -0.1, 0)
+shape = SubResource("BoxShape_ground")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+
+[node name="SocketMarker" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_socket")
+material_override = SubResource("StandardMaterial_socket")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 2.2, 5.8)
+current = true
+fov = 42.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Status" type="Label" parent="CanvasLayer"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 500.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0.92, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Decoupled Player Binding Test"

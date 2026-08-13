@@ -19,7 +19,7 @@ func _run() -> void:
 	var character_model := preview.get_node_or_null("ModelAnchor/CharacterModel")
 	_expect(character_model != null, "preview must instantiate the real character GLTF", failures)
 	if character_model != null:
-		_expect(character_model.scene_file_path == "res://assets/characters/Characters_Lis_SingleWeapon.gltf", "preview character must come from the approved GLTF", failures)
+		_expect(character_model.scene_file_path == "res://scenes/player/PlayerVisual.tscn", "preview character must come from the decoupled player visual scene", failures)
 		_expect(character_model.find_child("AnimationPlayer", true, false) is AnimationPlayer, "real character preview must contain AnimationPlayer", failures)
 		# 待机动画必须**循环**。GLTF 导进来的 Idle_Gun 是 loop_mode = NONE：
 		# 长 1 秒、播完停死在最后一帧，而它幅度只有 0.034，停住就和静态图一样。
@@ -48,11 +48,12 @@ func _run() -> void:
 			"ModelAnchor 不得旋转，否则角色背对镜头",
 			failures
 		)
-		var smg := character_model.find_child("SMG", true, false) as Node3D
-		_expect(smg != null and smg.visible, "preview must show SMG", failures)
-		for hidden_weapon in ["Axe", "Guitar", "Knife", "Pistol", "Ri" + "fle", "Shotgun", "Spear", "WoodenBat_Barbed", "WoodenBat_Saw"]:
-			var weapon := character_model.find_child(hidden_weapon, true, false) as Node3D
-			_expect(weapon == null or not weapon.visible, "%s must be hidden in lobby preview" % hidden_weapon, failures)
+		var smg := character_model.find_child("SMGVisual", true, false) as Node3D
+		_expect(smg != null and smg.visible, "preview must show the independently bound SMG", failures)
+		var socket := character_model.find_child("WeaponSocket.L", true, false) as Node3D
+		if socket == null:
+			socket = character_model.find_child("WeaponSocket_L", true, false) as Node3D
+		_expect(socket != null and smg != null and smg.get_parent() == socket, "preview SMG must be parented to WeaponSocket.L", failures)
 
 	_expect(preview.find_children("*", "CollisionShape3D", true, false).is_empty(), "preview must not contain collision shapes", failures)
 	_expect(preview.find_child("EquipmentController", true, false) == null, "preview must not contain EquipmentController", failures)

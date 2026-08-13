@@ -2,19 +2,10 @@ extends Node3D
 class_name LobbyPlayerPreview
 
 const DISPLAY_WEAPON := "SMG"
-const LEGACY_LONG_GUN_MODEL_NAME := "Ri" + "fle"
-const WEAPON_NAMES := [
-	"Axe",
-	"Guitar",
-	"Knife",
-	"Pistol",
-	LEGACY_LONG_GUN_MODEL_NAME,
-	"Shotgun",
-	"SMG",
-	"Spear",
-	"WoodenBat_Barbed",
-	"WoodenBat_Saw",
-]
+const WeaponVisualBindingScript = preload(
+	"res://scripts/combat/weapons/weapon_visual_binding.gd"
+)
+const DISPLAY_WEAPON_DEFINITION = preload("res://resources/weapons/smg.tres")
 
 @export var character_scene: PackedScene
 
@@ -24,6 +15,7 @@ var accent_color := Color(1.0, 0.43, 0.24, 1.0)
 var character_model: Node3D
 var missing_resource_warned := false
 var missing_animation_warned := false
+var preview_weapon_binding: WeaponVisualBinding
 
 func _ready() -> void:
 	_instantiate_character()
@@ -100,10 +92,13 @@ func _instantiate_character() -> void:
 func _configure_weapons() -> void:
 	if character_model == null:
 		return
-	for weapon_name in WEAPON_NAMES:
-		var weapon := character_model.find_child(weapon_name, true, false) as Node3D
-		if weapon != null:
-			weapon.visible = weapon_name == DISPLAY_WEAPON
+	preview_weapon_binding = WeaponVisualBindingScript.new()
+	preview_weapon_binding.bind(
+		character_model,
+		DISPLAY_WEAPON_DEFINITION.visual_model_scene,
+		DISPLAY_WEAPON_DEFINITION.visual_socket_name,
+		DISPLAY_WEAPON_DEFINITION.get_visual_relative_transform()
+	)
 
 ## 待机动画必须循环播放。
 ##

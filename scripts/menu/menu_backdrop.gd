@@ -1,5 +1,10 @@
 extends Node3D
 
+const WeaponVisualBindingScript = preload(
+	"res://scripts/combat/weapons/weapon_visual_binding.gd"
+)
+const DISPLAY_WEAPON_DEFINITION = preload("res://resources/weapons/smg.tres")
+
 ## The menu backdrop is a living diorama: the camera never stops drifting, the
 ## red warning light sweeps and breathes like an alarm state, and ash motes rise
 ## through the frame. All of it is cheap ambient motion so the menu feels alive
@@ -14,13 +19,24 @@ var elapsed := 0.0
 var base_camera_yaw := 0.0
 var base_light_energy := 6.2
 var base_fill_energy := 3.0
+var player_weapon_binding: WeaponVisualBinding
 
 func _ready() -> void:
 	base_camera_yaw = camera_rig.rotation.y
 	camera.look_at(Vector3(0.0, 1.35, -1.5), Vector3.UP)
+	_bind_player_weapon()
 	_play_model_animation($SetDressing/PlayerHero, &"Idle_Gun")
 	_play_model_animation($SetDressing/ZombieBasic, &"Walk")
 	_play_model_animation($SetDressing/ZombieChubby, &"Idle_Attack")
+
+func _bind_player_weapon() -> void:
+	player_weapon_binding = WeaponVisualBindingScript.new()
+	player_weapon_binding.bind(
+		$SetDressing/PlayerHero,
+		DISPLAY_WEAPON_DEFINITION.visual_model_scene,
+		DISPLAY_WEAPON_DEFINITION.visual_socket_name,
+		DISPLAY_WEAPON_DEFINITION.get_visual_relative_transform()
+	)
 
 func _process(delta: float) -> void:
 	elapsed += delta

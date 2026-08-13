@@ -5,12 +5,6 @@ const HitResult = preload("res://scripts/combat/hit_result.gd")
 const EquipmentItemScript = preload("res://scripts/player/equipment_item.gd")
 const WeaponBaseScript = preload("res://scripts/combat/weapons/weapon_base.gd")
 const RangedWeaponScript = preload("res://scripts/combat/weapons/ranged_weapon.gd")
-const LEGACY_LONG_GUN_MODEL_NAME := StringName("Ri" + "fle")
-const EMBEDDED_WEAPON_NAMES: Array[StringName] = [
-	&"Axe", &"Guitar", &"Knife", &"Pistol", LEGACY_LONG_GUN_MODEL_NAME, &"Shotgun", &"SMG",
-	&"Spear", &"WoodenBat_Barbed", &"WoodenBat_Saw",
-]
-
 signal attack_started(animation_name: StringName, lock_duration: float)
 signal attack_resolved(
 	origin: Vector3,
@@ -59,7 +53,6 @@ func setup(
 		return
 	initialized = true
 	switch_guard = value_switch_guard
-	_hide_embedded_weapons(visual_root)
 	for item_scene in loadout:
 		if item_scene == null:
 			push_warning("EquipmentController skipped a null equipment scene")
@@ -237,12 +230,6 @@ func _on_item_count_changed(_remaining_count: int, item) -> void:
 			_clear_current()
 		return
 	_emit_equipment_changed()
-
-func _hide_embedded_weapons(visual_root: Node3D) -> void:
-	for weapon_name in EMBEDDED_WEAPON_NAMES:
-		var embedded_visual := visual_root.find_child(String(weapon_name), true, false) as Node3D
-		if embedded_visual != null:
-			embedded_visual.visible = false
 
 func _on_attack_started(animation_name: StringName, lock_duration: float) -> void:
 	attack_started.emit(animation_name, lock_duration)
