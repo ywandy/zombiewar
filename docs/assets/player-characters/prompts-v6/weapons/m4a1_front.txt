@@ -1,0 +1,10 @@
+Use case: stylized-concept
+Asset type: broadside orthographic weapon source art for image-to-3D
+Input images: Image 1 is the user's supplied Zombie War menu screenshot and Image 2 is the approved v5 style gate. Use both only as drawing-style references. Do not reproduce their menu, logo, text, scene, characters or exact weapon meshes.
+Subject: one original chunky stylized M4A1 carbine game prop, a single complete weapon and nothing else.
+Gameplay role this silhouette must communicate: same role as the AK-47; an alternate rifle presentation, not a separate weapon.
+Materials: black polymer with flat dark earth rail. Read as a real, used piece of hardware, not painted plastic. Shared material palette across the whole armoury: gunmetal #3A3E44, blued steel #2B3138, worn wood #6B4A2A, bare metal edges #9AA0A8 where paint has rubbed through, black polymer #22252A, brass #B08D3F for cartridges. Identifier colour is cream stencil mark #E8DFC8, used on one small area only. Absolutely no purple, violet or magenta anywhere.
+Camera: broadside exact orthographic, weapon horizontal, muzzle pointing to image right, eye level, no perspective, no tilt, centered with generous padding.
+Rendering: rough uneven thick black ink outer line, scratchy internal ink, flat two-step cel shading, hand-painted grime, scratches, chipped paint and rust streaks, angular simplified readable shapes. Match the drawing effect of the style reference, not its props.
+Backdrop: flat uniform light gray, no horizon, no floor, no cast shadow, no vignette, no gradient, no scenery, no text, no logo, no watermark.
+Avoid: purple, violet, magenta, purple-black metal, hands, arms, character, sling, loose ammunition, smoke, muzzle flash, photorealism, glossy 3D render, smooth vector art, soft airbrush, perspective distortion, three-quarter view, letters or typographic glyphs.

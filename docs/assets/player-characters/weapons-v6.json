@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "revision": "v6",
+  "supersedes": "v5 武器提示词的 purple-black metal + restrained red paint",
+  "design_basis": {
+    "pillar": "zombie-crisis-reference 支柱 3：武器差异化是角色差异，不是数值差异",
+    "test": "bullets-to-kill = ceil(zombie_hp / damage)。两把武器对基础僵尸算出同一个数，对玩家就是同一把武器。",
+    "consequence": "新武器必须填补空缺的角色，不能再来一把突击步枪。M4A1 与 AK-47 若接同一套 rifle 数值，bullets-to-kill 必然相同，M4A1 因此只是 rifle 的皮肤，不计为独立武器。"
+  },
+  "material_language": {
+    "note": "武器不套用角色主色。武器要读作真实器械，识别色只在小面积点缀，指向它服务的兵种。",
+    "gunmetal": "#3A3E44",
+    "blued_steel": "#2B3138",
+    "worn_wood": "#6B4A2A",
+    "bare_metal_edge": "#9AA0A8",
+    "polymer_black": "#22252A",
+    "brass": "#B08D3F",
+    "hard_ban": [
+      "purple",
+      "violet",
+      "magenta",
+      "purple-black metal"
+    ]
+  },
+  "shared_view_spec": {
+    "front": "broadside exact orthographic, weapon horizontal, muzzle pointing to image right",
+    "left": "opposite broadside of the approved front, muzzle pointing to image left, same crop and scale",
+    "back": "top-down exact orthographic view of the same weapon, muzzle to image right, same length and scale",
+    "right": "under-side exact orthographic view of the same weapon, muzzle to image right, same length and scale",
+    "why": "长条形武器没有可用的正/背视差。沿用 v5 已跑通的做法：两侧 broadside + 顶视 + 底视，仍按 Tripo 的 front/left/back/right 接口顺序提交。"
+  },
+  "existing": [
+    {
+      "id": "hk45c",
+      "display_name": "HK-45C 紧凑型战术手枪",
+      "gameplay_id": "pistol",
+      "role": "精确 / 单体 / 保底",
+      "body": "blued steel slide with polymer frame",
+      "accent": {
+        "name": "muted red slide marking",
+        "hex": "#B3231E"
+      },
+      "action": "recolor_v6",
+      "name_en": "HK-45C compact tactical pistol",
+      "role_en": "precise / single target / reliable fallback",
+      "proposed_stats": {
+        "damage": 35,
+        "note": "保持不变，保底武器",
+        "btk_normal_50": 2,
+        "btk_runner_30": 1,
+        "btk_tank_260": 8
+      }
+    },
+    {
+      "id": "mp5",
+      "display_name": "MP-5 冲锋枪",
+      "gameplay_id": "smg",
+      "role": "压制 / 高射速 / 弹药压力",
+      "body": "matte gunmetal receiver with polymer furniture",
+      "accent": {
+        "name": "olive sling loop",
+        "hex": "#4F5B32"
+      },
+      "action": "recolor_v6",
+      "name_en": "MP-5 submachine gun",
+      "role_en": "suppression / high rate of fire / ammo pressure",
+      "proposed_stats": {
+        "damage": 14,
+        "note": "保持不变，BTK 4 档，压制角色",
+        "btk_normal_50": 4,
+        "btk_runner_30": 3,
+        "btk_tank_260": 19
+      }
+    },
+    {
+      "id": "ak47",
+      "display_name": "AK-47",
+      "gameplay_id": "rifle",
+      "role": "通用中距 / 稳定输出",
+      "body": "gunmetal receiver with worn orange-brown wood furniture",
+      "accent": {
+        "name": "brick red tape wrap",
+        "hex": "#8E3B2E"
+      },
+      "action": "recolor_v6",
+      "name_en": "AK-47 assault rifle",
+      "role_en": "general mid-range / steady output",
+      "proposed_stats": {
+        "damage": 50,
+        "note": "从 45 提到 50，落进 BTK 1 档：一枪一个普通僵尸，与手枪彻底分开",
+        "btk_normal_50": 1,
+        "btk_runner_30": 1,
+        "btk_tank_260": 6
+      }
+    },
+    {
+      "id": "m4a1",
+      "display_name": "M4A1 卡宾枪",
+      "gameplay_id": null,
+      "role": "高射速 / 低单发 / 散布增长小 / 换弹快",
+      "body": "black polymer with flat dark earth rail",
+      "accent": {
+        "name": "cream stencil mark",
+        "hex": "#E8DFC8"
+      },
+      "action": "recolor_v6",
+      "name_en": "M4A1 carbine",
+      "role_en": "high rate of fire / low per-shot damage / slow spread growth / fast reload",
+      "silhouette": "最短的护木和可伸缩枪托，比 AK-47 明显紧凑",
+      "silhouette_en": "the shortest handguard and a collapsible stock, visibly more compact than the AK-47",
+      "note": "与 AK-47 同属突击步枪家族但不共用数值：AK 走高单发慢射速，M4A1 走低单发高射速，BTK 分别落在 1 和 3 档。",
+      "proposed_stats": {
+        "damage": 20,
+        "note": "BTK 3 档，单发最弱，靠约 2.5 倍于 AK 的射速和更小的散布增长换取持续命中",
+        "btk_normal_50": 3,
+        "btk_runner_30": 2,
+        "btk_tank_260": 13
+      }
+    },
+    {
+      "id": "tactical_knife",
+      "display_name": "战术匕首",
+      "gameplay_id": "knife",
+      "role": "近战单击 / 无弹药保底",
+      "body": "bare steel blade with wrapped grip",
+      "accent": {
+        "name": "dark red grip wrap",
+        "hex": "#B3231E"
+      },
+      "action": "recolor_v6",
+      "name_en": "tactical combat knife",
+      "role_en": "single-strike melee / ammo-free fallback",
+      "proposed_stats": {
+        "damage": 35,
+        "note": "保持不变",
+        "btk_normal_50": 2,
+        "btk_runner_30": 1,
+        "btk_tank_260": 8
+      }
+    },
+    {
+      "id": "rpg",
+      "display_name": "RPG",
+      "gameplay_id": null,
+      "role": "AoE / 删除 horde / 稀缺 / 自伤风险",
+      "body": "olive drab tube with worn wood grip",
+      "accent": {
+        "name": "hazard yellow warhead band",
+        "hex": "#D9A521"
+      },
+      "action": "recolor_v6",
+      "name_en": "RPG rocket launcher",
+      "role_en": "area of effect / horde deletion / scarce / self-damage risk",
+      "proposed_stats": {
+        "damage": 200,
+        "aoe": true,
+        "note": "AoE 上限，壮硕僵尸 BTK 2，弹药最稀缺"
+      }
+    },
+    {
+      "id": "landmine",
+      "display_name": "地雷",
+      "gameplay_id": null,
+      "role": "布置 / 区域控制 / 把地图变成武器",
+      "body": "olive drab casing with dark rubber pressure plate",
+      "accent": {
+        "name": "hazard yellow stripe",
+        "hex": "#D9A521"
+      },
+      "action": "recolor_v6",
+      "name_en": "anti-personnel landmine",
+      "role_en": "placement / area denial / turns the map into the weapon",
+      "proposed_stats": {
+        "damage": 150,
+        "aoe": true,
+        "note": "踩触发"
+      }
+    }
+  ],
+  "new": [
+    {
+      "id": "spas12",
+      "display_name": "SPAS-12 霰弹枪",
+      "gameplay_id": "shotgun",
+      "priority": 1,
+      "role": "近距 / 击退 / 锥形清场 / 惩罚糟糕站位",
+      "gap": "shotgun 玩法资源已存在（damage 16 × pellet_count 6），但没有对应模型。这是唯一玩法齐备却缺模型的武器，补上零玩法风险。",
+      "body": "heavy matte gunmetal receiver, thick ribbed pump forend, folding stock, wide bore muzzle",
+      "accent": {
+        "name": "brick red shell carrier",
+        "hex": "#8E3B2E"
+      },
+      "silhouette": "最粗的枪管口径和最厚的前护木，一眼读出近距武器",
+      "name_en": "SPAS-12 combat shotgun",
+      "role_en": "close range / knockback / cone clear / punishes bad positioning",
+      "silhouette_en": "the widest bore and the thickest pump forend in the armoury, readable as a close-range weapon at a glance",
+      "proposed_stats": {
+        "damage": 16,
+        "pellet_count": 6,
+        "note": "沿用现有 shotgun 数值，近距全中一发带走普通僵尸，远距衰减为惩罚",
+        "btk_normal_50": 1,
+        "btk_runner_30": 1,
+        "btk_tank_260": 3,
+        "btk_note": "按近距 6 颗全中结算（16×6=96）。远距只命中 1-2 颗时退化到 3-4 发，这个衰减本身就是它的站位惩罚。"
+      }
+    },
+    {
+      "id": "m249",
+      "display_name": "M249 轻机枪",
+      "gameplay_id": null,
+      "priority": 2,
+      "role": "持续压制 / 大弹量 / 移动惩罚",
+      "gap": "机枪手兵种现在的展示武器是 MP-5，和冲锋枪角色重复。轻机枪才是这个兵种的本命：靠弹链容量和持续火力压制，代价是边走边打精度差。",
+      "body": "long heavy gunmetal barrel with carry handle, bipod folded under, box magazine and hanging ammo belt",
+      "accent": {
+        "name": "mustard ammo belt",
+        "hex": "#C9A227"
+      },
+      "silhouette": "最长的枪身加垂下的弹链，轮廓上和其他枪完全不会混",
+      "name_en": "M249 light machine gun",
+      "role_en": "sustained suppression / large ammo capacity / movement penalty",
+      "silhouette_en": "the longest body plus a hanging ammo belt, never confused with any other gun in silhouette",
+      "proposed_stats": {
+        "damage": 25,
+        "note": "BTK 2 档但射速与弹量远高，移动开火散布惩罚最重，压制角色的上位版",
+        "btk_normal_50": 2,
+        "btk_runner_30": 2,
+        "btk_tank_260": 11
+      }
+    },
+    {
+      "id": "flamethrower",
+      "display_name": "火焰喷射器",
+      "gameplay_id": null,
+      "priority": 3,
+      "role": "锥形持续伤害 / 群体控制 / 对单体弱",
+      "gap": "锥形角色目前只有霰弹枪的瞬发版本。持续型锥形是另一种玩法：不是清一次场，是封住一条通路。",
+      "body": "compact nozzle unit with pilot flame tip, thick corrugated fuel hose, twin pressure tanks",
+      "accent": {
+        "name": "hazard yellow tank band",
+        "hex": "#D9A521"
+      },
+      "silhouette": "唯一带软管和背罐的武器",
+      "name_en": "flamethrower",
+      "role_en": "cone-shaped sustained damage / crowd control / weak against single targets",
+      "silhouette_en": "the only weapon carrying a hose and pressure tanks",
+      "proposed_stats": {
+        "damage": 8,
+        "tick_damage": true,
+        "note": "锥形持续，单体 DPS 低于电锯，同时命中多体时总伤最高"
+      }
+    },
+    {
+      "id": "svd_sniper",
+      "display_name": "SVD 狙击步枪",
+      "gameplay_id": null,
+      "priority": 4,
+      "role": "远距单点 / 穿透多体 / 慢射速 / 需要站定",
+      "gap": "远程角色空缺。与 AK-47 的区分不在伤害而在穿透和站桩惩罚——移动中开火散布急剧放大。",
+      "body": "long slender gunmetal barrel, skeletonised worn wood stock, large top-mounted scope",
+      "accent": {
+        "name": "olive scope cover strap",
+        "hex": "#4F5B32"
+      },
+      "silhouette": "最细最长的枪身加最大的瞄准镜",
+      "name_en": "SVD sniper rifle",
+      "role_en": "long range single target / penetrates multiple bodies / slow rate of fire / must stand still",
+      "silhouette_en": "the thinnest and longest barrel paired with the largest scope",
+      "proposed_stats": {
+        "damage": 120,
+        "penetration": 3,
+        "note": "BTK 1 档且穿透 3 体，对壮硕僵尸 BTK 3 为全武器最优；射速最慢，移动开火散布急剧放大",
+        "btk_normal_50": 1,
+        "btk_runner_30": 1,
+        "btk_tank_260": 3
+      }
+    },
+    {
+      "id": "chainsaw",
+      "display_name": "电锯",
+      "gameplay_id": null,
+      "priority": 5,
+      "role": "持续近战 / 高 DPS / 移速惩罚",
+      "gap": "近战目前只有匕首的单击角色。电锯是持续接触伤害，玩法上要求玩家贴住目标，风险收益完全不同。",
+      "body": "orange engine housing with pull cord, long steel chain bar with visible teeth, twin grip handles",
+      "accent": {
+        "name": "burnt orange housing",
+        "hex": "#B45A18"
+      },
+      "silhouette": "唯一的长条锯条加发动机块，近战里最抢眼",
+      "name_en": "chainsaw",
+      "role_en": "sustained melee contact damage / high DPS / movement penalty",
+      "silhouette_en": "the only long toothed bar with an engine block, the loudest silhouette among melee weapons",
+      "proposed_stats": {
+        "damage": 18,
+        "tick_damage": true,
+        "note": "按 tick 持续伤害而非单击，DPS 最高但必须贴身，移速惩罚"
+      }
+    },
+    {
+      "id": "frag_grenade",
+      "display_name": "破片手雷",
+      "gameplay_id": null,
+      "priority": 6,
+      "role": "投掷 AoE / 弧线越障 / 自伤风险",
+      "gap": "与 RPG 同为 AoE，但区分在投掷弧线和短射程：能绕过掩体，代价是近身使用会伤到自己。",
+      "body": "segmented olive drab body with steel spoon and pull ring",
+      "accent": {
+        "name": "hazard yellow fuse band",
+        "hex": "#D9A521"
+      },
+      "silhouette": "小而圆，和所有长条武器形成对比",
+      "name_en": "fragmentation grenade",
+      "role_en": "thrown area of effect / arcs over cover / self-damage risk",
+      "silhouette_en": "small and round, contrasting with every long weapon in the set",
+      "proposed_stats": {
+        "damage": 90,
+        "aoe": true,
+        "note": "投掷 AoE，一发清掉一小群普通僵尸，自伤风险"
+      }
+    },
+    {
+      "id": "fuel_barrel",
+      "display_name": "汽油桶",
+      "gameplay_id": null,
+      "priority": 7,
+      "role": "布置 / 区域控制 / 把地图变成武器",
+      "gap": "参考里点名的 setup/zoning 角色。与地雷的区别：地雷是踩触发，油桶是打触发，玩家可以主动引爆并选择时机。",
+      "body": "dented steel drum with ribbed bands, rusted seams, screw cap on top",
+      "accent": {
+        "name": "hazard yellow flammable stripe",
+        "hex": "#D9A521"
+      },
+      "silhouette": "圆桶，读作场景道具而非手持武器",
+      "name_en": "fuel barrel",
+      "role_en": "placement / area denial / turns the map into the weapon",
+      "silhouette_en": "a round drum that reads as a scene prop rather than a held weapon",
+      "proposed_stats": {
+        "damage": 120,
+        "aoe": true,
+        "note": "打触发，玩家可选择引爆时机，与地雷区分"
+      }
+    },
+    {
+      "id": "sentry_turret",
+      "display_name": "哨戒炮塔",
+      "gameplay_id": null,
+      "priority": 8,
+      "role": "布置 / 自动火力 / 改变空间控制",
+      "gap": "Boxhead 的灵魂机制。放下后自动交火，让玩家能同时守两个方向——这是任何手持武器都给不了的能力。",
+      "body": "squat tripod base with armoured ammo box, short twin barrels on a rotating yoke",
+      "accent": {
+        "name": "cobalt blue armour plate",
+        "hex": "#2B4C7E"
+      },
+      "silhouette": "三脚架加旋转炮身，明确读作可放置物",
+      "name_en": "sentry turret",
+      "role_en": "placement / automatic fire / changes spatial control",
+      "silhouette_en": "tripod base plus a rotating gun body, clearly reads as a deployable",
+      "proposed_stats": {
+        "damage": 12,
+        "note": "自动交火，单发弱，价值在于同时守住第二个方向",
+        "btk_normal_50": 5,
+        "btk_runner_30": 3,
+        "btk_tank_260": 22
+      }
+    }
+  ],
+  "btk_baseline": {
+    "normal_zombie_hp": 50,
+    "runner_zombie_hp": 30,
+    "tank_zombie_hp": 260,
+    "existing_conflict": "pistol(35) 与 rifle(45) 对普通僵尸和疾行僵尸的 BTK 完全相同（2 与 1），仅在壮硕僵尸上差 2 发。按支柱 3 的判据，这两把枪目前对玩家是同一把。建议把 rifle 提到 50 让它落进 BTK 1 档，一枪一个普通僵尸。",
+    "banding": "50 HP 下 BTK 分档很窄：>=50 为 1 档，25-49 为 2 档，17-24 为 3 档，13-16 为 4 档。因此差异化不能只靠 damage，必须同时用射速、散布、穿透、击退和弹匣拉开。"
+  },
+  "stats_disclaimer": "proposed_stats 是基于 BTK 判据的建议值，不是已接入的数值。改动 resources/weapons/*.tres 属于玩法层，会影响平衡与确定性模拟，需单独决定并跑校验，本分支只交付模型与源图。",
+  "residual_btk_collisions": [
+    "M249(25) 与 HK-45C(35) 对普通僵尸同为 BTK 2。50 HP 下分档只有 4 档，无法靠 damage 拉开，二者的区分放在射速、弹量和移动开火散布惩罚上。",
+    "战术匕首(35) 与 HK-45C(35) 数值完全相同，区分只靠射程。电锯补上后近战内部才有真差异。"
+  ]
+}
