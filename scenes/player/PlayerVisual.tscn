@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/characters/decoupled/Lis_WeaponSocket_L.gltf" id="1_character"]
+
+[node name="PlayerVisual" type="Node3D"]
+
+[node name="CharacterModel" parent="." instance=ExtResource("1_character")]
+
+[node name="WeaponHandAttachment" type="BoneAttachment3D" parent="."]
+bone_name = "Middle1.L"
+bone_idx = 13
+use_external_skeleton = true
+external_skeleton = NodePath("../CharacterModel/CharacterArmature/Skeleton3D")
+
+[node name="WeaponSocket.L" type="Node3D" parent="WeaponHandAttachment"]
+transform = Transform3D(-0.00711043, -0.00608799, 0.999956, 0.971326, 0.237606, 0.00835337, -0.237647, 0.971342, 0.00422374, 0.0357486, 0.0454898, -0.0450469)

@@ -20,7 +20,7 @@ extends SceneTree
 
 const PlayerScene := preload("res://scenes/player/Player.tscn")
 const ArenaScript := preload("res://scripts/gameplay/gameplay_arena.gd")
-const CHARACTER_MODEL_PATH := "res://assets/characters/Characters_Lis_SingleWeapon.gltf"
+const CHARACTER_MODEL_PATH := "res://scenes/player/PlayerVisual.tscn"
 const RangedWeaponDefinitionScript = preload(
 	"res://scripts/combat/weapons/ranged_weapon_definition.gd"
 )
@@ -123,18 +123,29 @@ func _test_weapon(weapon: WeaponBase, model_node_names: Dictionary) -> void:
 	if definition == null:
 		return
 
-	# 装配接头 1：definition 指名的视觉节点必须真的在角色模型里。
+	# 装配接头 1：独立模型与角色 socket 必须都存在。
 	# 找不到时 bind_context() 把 visual_anchor 留成 null，武器不再跟随外观模型,
 	# 枪口火光与弹道起点一起漂到世界原点——而这条路径一句错误都不会报。
-	var visual_node_name := String(definition.visual_node_name)
+	var visual_node_name := String(definition.visual_socket_name)
 	_check(
-		"%s: visual_node_name '%s' must exist in the character model" % [label, visual_node_name],
-		model_node_names.has(visual_node_name)
+		"%s: visual socket '%s' must exist in the character model" % [label, visual_node_name],
+		model_node_names.has(visual_node_name) or
+		model_node_names.has(visual_node_name.replace(".", "_"))
 	)
 	_check(
-		"%s: bind_context must resolve a visual anchor" % label,
+		"%s: visual_model_scene must be assigned" % label,
+		definition.visual_model_scene != null
+	)
+	_check(
+		"%s: bind_context must resolve an independent visual anchor" % label,
 		weapon.visual_anchor != null and is_instance_valid(weapon.visual_anchor)
 	)
+	if weapon.visual_anchor != null:
+		_check(
+			"%s: visual anchor must be parented to the declared socket" % label,
+			weapon.visual_anchor.get_parent().name == definition.visual_socket_name or
+			weapon.visual_anchor.get_parent().name == String(definition.visual_socket_name).replace(".", "_")
+		)
 	_check(
 		"%s: weapon_id must be set" % label,
 		not String(definition.weapon_id).is_empty()
