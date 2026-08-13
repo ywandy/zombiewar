@@ -39,19 +39,19 @@ func _initialize() -> void:
 	_check("origin is finite", origin.is_finite())
 
 	var muzzle: Marker3D = weapon.muzzle
-	var anchor: Node3D = weapon.visual_anchor
-	if anchor == null:
-		failures.append("visual_anchor is null")
+	var weapon_collision := player.get_node_or_null("WeaponCollision") as CollisionShape3D
+	if weapon_collision == null:
+		failures.append("WeaponCollision missing")
 		_report()
 		return
 
-	var expected_dir := WeaponMathScript.flat_direction(-anchor.global_basis.z)
+	var barrel_dir := -weapon_collision.global_basis.y.normalized()
 	var muzzle_dir := -muzzle.global_basis.z
 
 	_check(
-		"muzzle direction matches flattened visual-anchor forward",
-		muzzle_dir.distance_to(expected_dir) < 0.001,
-		"muzzle_dir=%s expected=%s" % [muzzle_dir, expected_dir]
+		"muzzle direction matches WeaponCollision barrel axis",
+		muzzle_dir.distance_to(barrel_dir) < 0.001,
+		"muzzle_dir=%s barrel=%s" % [muzzle_dir, barrel_dir]
 	)
 	_check(
 		"muzzle direction is horizontal (matches flat trajectory)",

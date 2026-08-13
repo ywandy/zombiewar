@@ -195,14 +195,22 @@ func _sync_to_visual_anchor() -> void:
 func _sync_muzzle_to_capsule() -> Vector3:
 	var origin := get_ray_origin()
 	muzzle.global_position = origin
-	# 朝向取自外观模型并压平到水平，与模拟层弹道（flat_direction）保持一致。
-	# 不能用 WeaponCollision 的朝向：收枪/举枪时外观模型绕 Y 偏航、而胶囊绕 X
-	# 俯仰（见 WeaponClearanceController._commit_pose），两者不在同一旋转平面，
-	# 若火光跟着胶囊就会出现「枪口斜向上、火光却仍照水平轴」的脱节。
-	if visual_anchor != null and is_instance_valid(visual_anchor):
-		var flat := WeaponMath.flat_direction(-visual_anchor.global_basis.z)
-		muzzle.global_basis = Basis.looking_at(flat, Vector3.UP)
+	# 位置与朝向都以弹道胶囊（WeaponCollision）为准——那才是子弹真正飞出的轴，
+	# 与曳光、命中严格同源。不能用外观模型节点的朝向：内嵌武器网格的局部 -Z
+	# 指向握把（建模习惯），并非枪管前向，压平后只是噪声方向，会把火光带偏。
+	muzzle.global_basis = Basis.looking_at(_get_barrel_direction(), Vector3.UP)
 	return origin
+
+## 枪管前向 = 弹道胶囊轴线。收枪/举枪时胶囊绕 X 俯仰（见
+## WeaponClearanceController），与曳光同源，跟模拟层水平弹道一致。
+func _get_barrel_direction() -> Vector3:
+	if wielder != null:
+		var clearance := wielder.get_node_or_null(
+			"WeaponClearanceController"
+		) as WeaponClearanceController
+		if clearance != null and clearance.weapon_collision != null:
+			return -clearance.weapon_collision.global_basis.y.normalized()
+	return WeaponMath.flat_direction(-global_basis.z)
 
 func _prewarm_tracers() -> void:
 	if not tracer_pool.is_empty():
