@@ -1,16 +1,16 @@
 {
   "weapon": "mp5",
-  "length_before": 0.9996,
-  "length_after": 0.6001,
+  "length_before": 1.0002,
+  "length_after": 0.602,
   "target_length": 0.6,
-  "scale": 0.60026,
+  "scale": 0.59988,
   "grip_along_axis": 0.3,
   "origin_offset": [
-    0.0,
-    0.0009,
-    -0.1198
+    -0.0016,
+    -0.0005,
+    -0.1199
   ],
-  "triangles_before": 362226,
+  "triangles_before": 11806,
   "triangles_after": 5000,
   "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/mp5.glb"

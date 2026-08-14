@@ -1,16 +1,16 @@
 {
   "weapon": "fuel_barrel",
-  "length_before": 0.9979,
-  "length_after": 0.8806,
+  "length_before": 1.0002,
+  "length_after": 0.8804,
   "target_length": 0.88,
-  "scale": 0.88184,
+  "scale": 0.87981,
   "grip_along_axis": 0.5,
   "origin_offset": [
     -0.0,
     -0.0001,
-    0.001
+    0.0001
   ],
-  "triangles_before": 976860,
+  "triangles_before": 9889,
   "triangles_after": 5000,
   "socket": "GroundSocket",
   "out": "assets/weapons/generated/fuel_barrel.glb"

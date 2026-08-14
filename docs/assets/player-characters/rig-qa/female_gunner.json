@@ -24,8 +24,8 @@
     "Wave",
     "Yes"
   ],
-  "triangles_before": 790930,
-  "triangles_after": 29999,
+  "triangles_before": 13545,
+  "triangles_after": 13545,
   "budget": 30000,
   "weight_method": "geometric_smoothed",
   "weapon_sockets": [
@@ -41,73 +41,73 @@
   "weight_regions": [
     {
       "region": "arm_left",
-      "verts": 899,
+      "verts": 946,
       "top_bones": [
         [
           "LowerArm.L",
-          899
+          946
         ],
         [
           "UpperArm.L",
-          899
+          946
         ],
         [
           "Shoulder.L",
-          178
+          82
         ]
       ]
     },
     {
       "region": "arm_right",
-      "verts": 802,
+      "verts": 937,
       "top_bones": [
         [
           "LowerArm.R",
-          802
+          937
         ],
         [
           "UpperArm.R",
-          802
+          937
         ],
         [
           "Shoulder.R",
-          139
+          91
         ]
       ]
     },
     {
       "region": "torso",
-      "verts": 12845,
+      "verts": 10437,
       "top_bones": [
         [
           "Neck",
-          11779
+          9033
         ],
         [
           "Head",
-          11106
+          8808
         ],
         [
           "UpperArm.L",
-          5040
+          4403
         ]
       ]
     },
     {
       "region": "legs",
-      "verts": 5881,
+      "verts": 5788,
       "top_bones": [
         [
           "UpperLeg.R",
-          2258
+          2399
         ],
         [
           "UpperLeg.L",
-          2062
+          2381
         ],
         [
-          "Body",
-          2015
+          "LowerLeg.R",
+          1916
         ]
       ]
     }

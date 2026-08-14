@@ -20,9 +20,9 @@
     "Wave",
     "Yes"
   ],
-  "triangles_before": 864133,
-  "triangles_after": 12000,
-  "budget": 12000,
+  "triangles_before": 14307,
+  "triangles_after": 14307,
+  "budget": 16000,
   "weight_method": "geometric_smoothed",
   "weapon_sockets": [
     "WeaponHandSocket",
@@ -37,73 +37,73 @@
   "weight_regions": [
     {
       "region": "arm_left",
-      "verts": 464,
+      "verts": 1119,
       "top_bones": [
         [
-          "Eyelid.L",
-          464
+          "LowerArm.L",
+          1119
         ],
         [
-          "Head",
-          464
+          "UpperArm.L",
+          1119
         ],
         [
-          "Eyelid.R",
-          65
+          "Shoulder.L",
+          6
         ]
       ]
     },
     {
       "region": "arm_right",
-      "verts": 474,
+      "verts": 1122,
       "top_bones": [
         [
-          "Eyelid.R",
-          474
+          "LowerArm.R",
+          1122
         ],
         [
-          "Head",
-          179
+          "UpperArm.R",
+          1122
         ],
         [
-          "Eyelid.L",
-          92
+          "Shoulder.R",
+          121
         ]
       ]
     },
     {
       "region": "torso",
-      "verts": 3094,
+      "verts": 6115,
       "top_bones": [
         [
-          "Eyelid.R",
-          3094
-        ],
-        [
-          "Eyelid.L",
-          3094
+          "Neck",
+          4759
         ],
         [
           "Head",
-          3094
+          4288
+        ],
+        [
+          "Torso",
+          3298
         ]
       ]
     },
     {
       "region": "legs",
-      "verts": 2805,
+      "verts": 5766,
       "top_bones": [
         [
-          "Head",
-          2805
+          "LowerLeg.L",
+          2341
         ],
         [
-          "Eyelid.R",
-          2561
+          "UpperLeg.L",
+          1945
         ],
         [
-          "Eyelid.L",
-          2502
+          "LowerLeg.R",
+          1943
         ]
       ]
     }

@@ -1,16 +1,16 @@
 {
   "weapon": "frag_grenade",
-  "length_before": 0.997,
-  "length_after": 0.11,
+  "length_before": 1.0002,
+  "length_after": 0.1101,
   "target_length": 0.11,
-  "scale": 0.11033,
+  "scale": 0.10998,
   "grip_along_axis": 0.5,
   "origin_offset": [
-    -0.0007,
-    0.0002,
-    -0.0002
+    -0.0001,
+    -0.0006,
+    -0.0
   ],
-  "triangles_before": 966864,
+  "triangles_before": 9342,
   "triangles_after": 5000,
   "socket": "GroundSocket",
   "out": "assets/weapons/generated/frag_grenade.glb"

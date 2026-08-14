@@ -120,7 +120,13 @@ def fit_to(objects: list[bpy.types.Object], lo: Vector, hi: Vector) -> None:
 
 
 def decimate(obj: bpy.types.Object, target: int) -> int:
-    """减面到预算内。细节由 Tripo 烘出的法线贴图承担，不靠面数刻磨损。"""
+    """减面到预算内，仅作兜底。
+
+    走 smart_low_poly 生成的模型约 1.5 万面，本就在预算内，这一步不会触发。
+    只有退回 geometry_quality=standard（74 万面）时才需要它，而那条路径产出的
+    拓扑很差：Collapse Decimate 不看拓扑只按误差合并边，护膝会糊成圆片、弹链会
+    连成模糊带子，且是形变撕裂的根源。因此除非必要不要退回。
+    """
     obj.data.calc_loop_triangles()
     current = len(obj.data.loop_triangles)
     if current <= target or current == 0:
@@ -134,7 +140,14 @@ def decimate(obj: bpy.types.Object, target: int) -> int:
     return len(obj.data.loop_triangles)
 
 
+# 折叠到父骨的细节骨。它们要么太小撑不起顶点（减面后手部只剩几十个顶点），
+# 要么密集堆在一处，几何权重按最短距离取最近骨时会把邻近顶点整块拽走。
+# 实测：僵尸的 Eyelid/Tongue 挤在头部一小团，导致疾行僵尸右臂权重落到 Eyelid.R、
+# 壮硕僵尸躯干落到 Eyelid.L——动画里那些部位跟着眼皮走。
 FINGER_STEMS = ("Thumb", "Index", "Middle", "Ring", "Pinky")
+FACIAL_STEMS = ("Eyelid", "Tongue", "Jaw", "Eye")
+# IK 辅助骨不参与蒙皮，参与了会把腿部顶点吸到膝盖前方的空中控制点上。
+EXCLUDED_STEMS = ("PoleTarget", "IK_", "Target")
 
 
 def deform_segments(armature: bpy.types.Object) -> list[tuple[str, Vector, Vector]]:
@@ -145,11 +158,12 @@ def deform_segments(armature: bpy.types.Object) -> list[tuple[str, Vector, Vecto
     撕裂的面。
     """
     world = armature.matrix_world
+    collapse_stems = FINGER_STEMS + FACIAL_STEMS
     collapse: dict[str, str] = {}
     for bone in armature.data.bones:
-        if any(stem in bone.name for stem in FINGER_STEMS):
+        if any(stem in bone.name for stem in collapse_stems):
             parent = bone.parent
-            while parent is not None and any(stem in parent.name for stem in FINGER_STEMS):
+            while parent is not None and any(stem in parent.name for stem in collapse_stems):
                 parent = parent.parent
             if parent is not None:
                 collapse[bone.name] = parent.name
@@ -157,6 +171,8 @@ def deform_segments(armature: bpy.types.Object) -> list[tuple[str, Vector, Vecto
     segments: dict[str, tuple[Vector, Vector]] = {}
     for bone in armature.data.bones:
         if not bone.use_deform or bone.name in collapse:
+            continue
+        if any(stem in bone.name for stem in EXCLUDED_STEMS):
             continue
         segments[bone.name] = (world @ bone.head_local, world @ bone.tail_local)
     return [(name, a, b) for name, (a, b) in segments.items()], collapse
@@ -420,9 +436,15 @@ def main() -> None:
     if armature is None:
         raise SystemExit(f"{args.rig} 里没有骨架")
     rig_meshes = [o for o in rig_objects if o.type == "MESH"]
-    rig_body = next((o for o in rig_meshes if o.vertex_groups), None)
+    # 取顶点最多的那个带权重网格，不是第一个。僵尸骨架里 Eyelid（146 顶点的眼皮）
+    # 和 Tongue 也带权重，取第一个会把整只僵尸按眼皮的包围盒缩小约 11 倍，权重随之
+    # 落到面部骨上，动画里手臂完全不动。角色骨架只有 Lis 一个带权重网格，所以之前
+    # 没暴露这个问题。
+    weighted = [o for o in rig_meshes if o.vertex_groups and o.data.vertices]
+    rig_body = max(weighted, key=lambda o: len(o.data.vertices), default=None)
     if rig_body is None:
         raise SystemExit(f"{args.rig} 里没有带权重的网格")
+    print(f"[rig] 参考身体网格 = {rig_body.name}（{len(rig_body.data.vertices)} 顶点）", flush=True)
     # 骨架源文件自带 Axe/Guitar/Knife/Pistol/Rifle/Shotgun/SMG/Spear 等占位武器网格。
     # 只删 Body 会把它们一起导出去，成品里会挂着一把不属于这个角色的武器。
     for extra in rig_meshes:

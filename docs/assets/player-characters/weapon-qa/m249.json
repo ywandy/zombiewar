@@ -1,16 +1,16 @@
 {
   "weapon": "m249",
-  "length_before": 1.0002,
-  "length_after": 1.0386,
+  "length_before": 0.9998,
+  "length_after": 1.0402,
   "target_length": 1.04,
-  "scale": 1.03975,
+  "scale": 1.04018,
   "grip_along_axis": 0.28,
   "origin_offset": [
-    -0.0006,
-    -0.0012,
-    -0.2287
+    -0.003,
+    -0.0004,
+    -0.2286
   ],
-  "triangles_before": 811576,
+  "triangles_before": 12850,
   "triangles_after": 5000,
   "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/m249.glb"

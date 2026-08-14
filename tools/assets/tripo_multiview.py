@@ -89,7 +89,7 @@ def upload_views(name: str, view_dir: Path, env: dict[str, str]) -> list[str]:
     return urls
 
 
-def submit(name: str, urls: list[str], attempts: int = 8) -> str:
+def submit(name: str, urls: list[str], smart_low_poly: bool = True, attempts: int = 8) -> str:
     payload = {
         "type": "multiview_to_model",
         # 四个独立文件对象，不能把四视图拼成一张图提交。
@@ -98,6 +98,14 @@ def submit(name: str, urls: list[str], attempts: int = 8) -> str:
         "texture": True,
         "texture_quality": "detailed",
     }
+    if smart_low_poly:
+        # 智能网格：生成时就规划拓扑，直接给出约 1.5 万面的可用低模。
+        # 默认的 geometry_quality=standard 会产出 74 万面，必须靠 Blender 的 Collapse
+        # Decimate 硬压 96%——那不看拓扑，只按误差合并边，护膝会糊成圆片、弹链会连成
+        # 一条模糊带子，而且是形变撕裂问题的根源（碎壳、UV 接缝、权重不连续都被它加剧）。
+        #
+        # 注意：smart_low_poly 与 face_limit 互斥，同时传会失败并返回 error_code 1004。
+        payload["smart_low_poly"] = True
     # 全量并发时会撞并发/额度上限。撞上就退避重排队，不能让任务直接失败丢掉。
     delay = 15
     for attempt in range(1, attempts + 1):
@@ -174,14 +182,16 @@ def download(name: str, data: dict, out: Path) -> Path:
     raise SystemExit(f"[{name}] 下载失败：重试用尽")
 
 
-def run_one(name: str, view_dir: Path, out: Path, env: dict[str, str]) -> dict:
+def run_one(name: str, view_dir: Path, out: Path, env: dict[str, str],
+            smart_low_poly: bool = True) -> dict:
     urls = upload_views(name, view_dir, env)
-    task_id = submit(name, urls)
+    task_id = submit(name, urls, smart_low_poly)
     print(f"[{name}] task_id={task_id}", flush=True)
     data = wait(name, task_id)
     path = download(name, data, out)
     print(f"[{name}] 完成 -> {path}", flush=True)
-    return {"name": name, "task_id": task_id, "glb": str(path), "views": urls}
+    return {"name": name, "task_id": task_id, "glb": str(path), "views": urls,
+            "smart_low_poly": smart_low_poly}
 
 
 def main() -> None:
@@ -192,6 +202,8 @@ def main() -> None:
     ap.add_argument("--batch", help="TSV: name<TAB>view_dir<TAB>out_glb")
     ap.add_argument("--resume-task", help="已成功的 task_id，只重新下载，不重跑生成")
     ap.add_argument("--concurrency", type=int, default=3, help="Tripo 同时运行任务数，建议 2-3")
+    ap.add_argument("--no-smart-low-poly", action="store_true",
+                    help="关闭智能网格，退回 74 万面的高精度模型（需自行减面）")
     ap.add_argument("--record", default="docs/assets/player-characters/tripo-tasks.jsonl")
     args = ap.parse_args()
 
@@ -220,7 +232,7 @@ def main() -> None:
 
     results, failures = [], []
     with ThreadPoolExecutor(max_workers=args.concurrency) as pool:
-        futures = {pool.submit(run_one, n, d, o, env): n for n, d, o in jobs}
+        futures = {pool.submit(run_one, n, d, o, env, not args.no_smart_low_poly): n for n, d, o in jobs}
         for fut in as_completed(futures):
             name = futures[fut]
             try:

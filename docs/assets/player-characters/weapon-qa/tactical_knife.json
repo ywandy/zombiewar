@@ -1,17 +1,17 @@
 {
   "weapon": "tactical_knife",
-  "length_before": 0.9894,
+  "length_before": 0.999,
   "length_after": 0.3,
   "target_length": 0.3,
-  "scale": 0.30321,
+  "scale": 0.30029,
   "grip_along_axis": 0.15,
   "origin_offset": [
     0.0,
-    0.0,
-    -0.1066
+    0.0001,
+    -0.1049
   ],
-  "triangles_before": 226446,
-  "triangles_after": 5000,
+  "triangles_before": 11343,
+  "triangles_after": 4999,
   "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/tactical_knife.glb"
 }

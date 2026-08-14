@@ -20,10 +20,15 @@
     "Wave",
     "Yes"
   ],
-  "triangles_before": 652946,
-  "triangles_after": 12000,
-  "budget": 12000,
+  "triangles_before": 15176,
+  "triangles_after": 15176,
+  "budget": 16000,
   "weight_method": "geometric_smoothed",
+  "weapon_sockets": [
+    "WeaponHandSocket",
+    "WeaponBackSocket",
+    "MineHipSocket"
+  ],
   "facing": {
     "yaw_deg": -90.0,
     "flipped_180": false
@@ -32,73 +37,69 @@
   "weight_regions": [
     {
       "region": "arm_left",
-      "verts": 516,
+      "verts": 1238,
       "top_bones": [
         [
-          "Eyelid.L",
-          516
+          "LowerArm.L",
+          1238
         ],
         [
-          "Head",
-          102
-        ],
-        [
-          "Eyelid.R",
-          6
+          "UpperArm.L",
+          948
         ]
       ]
     },
     {
       "region": "arm_right",
-      "verts": 490,
+      "verts": 1444,
       "top_bones": [
         [
-          "Eyelid.R",
-          490
+          "LowerArm.R",
+          1444
         ],
         [
-          "Head",
-          48
+          "UpperArm.R",
+          1444
         ],
         [
-          "Eyelid.L",
-          37
+          "Shoulder.R",
+          1444
         ]
       ]
     },
     {
       "region": "torso",
-      "verts": 4300,
+      "verts": 7467,
       "top_bones": [
         [
-          "Eyelid.R",
-          4300
-        ],
-        [
-          "Eyelid.L",
-          4300
+          "Neck",
+          5638
         ],
         [
           "Head",
-          4300
+          4638
+        ],
+        [
+          "Shoulder.L",
+          1793
         ]
       ]
     },
     {
       "region": "legs",
-      "verts": 3180,
+      "verts": 5847,
       "top_bones": [
         [
-          "Head",
-          3170
+          "LowerLeg.L",
+          2592
         ],
         [
-          "Eyelid.L",
-          2979
+          "LowerLeg.R",
+          2472
         ],
         [
-          "Tongue2",
-          2757
+          "Foot.L",
+          2215
         ]
       ]
     }

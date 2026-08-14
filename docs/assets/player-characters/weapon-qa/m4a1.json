@@ -1,17 +1,17 @@
 {
   "weapon": "m4a1",
-  "length_before": 1.0,
-  "length_after": 0.8015,
+  "length_before": 0.999,
+  "length_after": 0.8037,
   "target_length": 0.8,
-  "scale": 0.79998,
+  "scale": 0.80077,
   "grip_along_axis": 0.3,
   "origin_offset": [
-    -0.0027,
-    0.0011,
-    -0.1599
+    -0.0001,
+    -0.0002,
+    -0.1595
   ],
-  "triangles_before": 644130,
-  "triangles_after": 4999,
+  "triangles_before": 13095,
+  "triangles_after": 5000,
   "socket": "MuzzleSocket",
   "out": "assets/weapons/generated/m4a1.glb"
 }
